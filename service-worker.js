@@ -49,9 +49,6 @@ if (cached) return cached;
       return caches.match('./index.html');
     }
 
-    return Response.error();
-  });
-})
-
-);
+return Response.error();
+});
 });
