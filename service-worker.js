@@ -32,23 +32,28 @@ const url = new URL(request.url);
 if (url.origin !== self.location.origin) return;
 
 event.respondWith(
-caches.match(request).then(cached => {
+caches.open(CACHE).then(cache => {
+return cache.match(request).then(cached => {
 if (cached) return cached;
 
-  return fetch(request).then(response => {
-    if (response.ok) {
-      const copy = response.clone();
-      caches.open(CACHE).then(cache => {
-        cache.put(request, copy);
-      });
-    }
+    return fetch(request).then(response => {
+      if (response.ok) {
+        const copy = response.clone();
+        cache.put(request, copy).catch(() => {});
+      }
 
-    return response;
-  }).catch(() => {
-    if (request.mode === 'navigate') {
-      return caches.match('./index.html');
-    }
+      return response;
+    }).catch(() => {
+      if (request.mode === 'navigate') {
+        return cache.match('./index.html').then(page => {
+          return page || Response.error();
+        });
+      }
 
-return Response.error();
-});
+      return Response.error();
+    });
+  });
+})
+
+);
 });
