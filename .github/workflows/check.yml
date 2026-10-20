@@ -1,0 +1,36 @@
+name: Проверка безопасного обновления
+
+on:
+  push:
+    branches:
+      - safe-auto-update
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Проверка кода
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Получить код
+        uses: actions/checkout@v4
+
+      - name: Настроить Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Проверить синтаксис сервис-воркера
+        run: node --check service-worker.js
+
+      - name: Проверить наличие защиты запуска
+        run: |
+          grep -q "TIRECALC_BOOT_OK" index.html
+          grep -q "TIRECALC_BOOT_FAIL" index.html
+          grep -q "TIRECALC_ROLLBACK" index.html
+
+      - name: Проверить версию кэша
+        run: grep -q "tirecalc-shared-v5" service-worker.js
