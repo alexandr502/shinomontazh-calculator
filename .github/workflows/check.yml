@@ -26,6 +26,28 @@ jobs:
       - name: Проверить синтаксис сервис-воркера
         run: node --check service-worker.js
 
+              - name: Проверить синтаксис JavaScript приложения
+        run: |
+          node --input-type=commonjs <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+
+          const html = fs.readFileSync('index.html', 'utf8');
+          const scripts = [...html.matchAll(/<script(?![^>]*\bsrc\s*=)[^>]*>([\s\S]*?)<\/script>/gi)];
+
+          if (!scripts.length) {
+            throw new Error('В index.html не найдены встроенные скрипты');
+          }
+
+          scripts.forEach((match, index) => {
+            new vm.Script(match[1], {
+              filename: `index.html:script-${index + 1}`
+            });
+          });
+
+          console.log(`Проверено встроенных скриптов: ${scripts.length}`);
+          NODE
+
       - name: Проверить наличие защиты запуска
         run: |
           grep -q "TIRECALC_BOOT_OK" index.html
