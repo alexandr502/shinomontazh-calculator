@@ -1,6 +1,56 @@
 <!doctype html>
 <html lang="ru">
 <head>
+ <script>
+(function () {
+  let bootReported = false;
+
+  function sendBootStatus(type) {
+    if (!('serviceWorker' in navigator)) return;
+
+    const worker = navigator.serviceWorker.controller;
+
+    if (worker) {
+      worker.postMessage({ type: type });
+      return;
+    }
+
+    navigator.serviceWorker.ready.then(function (registration) {
+      const activeWorker = registration.active;
+
+      if (activeWorker) {
+        activeWorker.postMessage({ type: type });
+      }
+    }).catch(function () {});
+  }
+
+  window.__tireAppBootOk = function () {
+    if (bootReported) return;
+    bootReported = true;
+    sendBootStatus('TIRECALC_BOOT_OK');
+  };
+
+  window.addEventListener('error', function (event) {
+    if (!bootReported) {
+      sendBootStatus('TIRECALC_BOOT_FAIL');
+    }
+  });
+
+  window.addEventListener('unhandledrejection', function () {
+    if (!bootReported) {
+      sendBootStatus('TIRECALC_BOOT_FAIL');
+    }
+  });
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', function (event) {
+      if (event.data && event.data.type === 'TIRECALC_ROLLBACK') {
+        location.reload();
+      }
+    });
+  }
+})();
+ </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#111827">
@@ -159,6 +209,11 @@ $('export').onclick=()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:'
 $('importFile').onchange=async e=>{try{let obj=JSON.parse(await e.target.files[0].text());if(!obj.prices||!obj.extras)throw Error();data=obj;save();if(!data.rimRepair)data.rimRepair=fresh().rimRepair;renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();syncRepairPrices();calculate();alert('Настройки импортированы')}catch(err){alert('Не удалось прочитать файл настроек')}};
 $('defaults').onclick=()=>{if(confirm('Восстановить исходные цены? Текущие настройки будут заменены.')){data=fresh();save();renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();calculate()}};
 renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();syncRepairPrices();calculate();
+ setTimeout(() => {
+  if (window.__tireAppBootOk) {
+    window.__tireAppBootOk();
+  }
+}, 2500);
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
