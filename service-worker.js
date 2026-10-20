@@ -62,16 +62,25 @@ self.addEventListener('activate', event => {
       .sort()
       .reverse();
 
-    const lastGood =
-      oldState && oldState.lastGood && oldState.lastGood !== CACHE
+        const lastGood =
+      oldState &&
+      oldState.lastGood &&
+      oldState.lastGood !== CACHE &&
+      keys.includes(oldState.lastGood)
         ? oldState.lastGood
+        : null;
+
+    const oldActive =
+      oldState &&
+      oldState.active &&
+      oldState.active !== CACHE &&
+      keys.includes(oldState.active)
+        ? oldState.active
         : null;
 
     const previous =
       lastGood ||
-      (oldState && oldState.active && oldState.active !== CACHE
-        ? oldState.active
-        : null) ||
+      oldActive ||
       previousCaches[0] ||
       null;
 
