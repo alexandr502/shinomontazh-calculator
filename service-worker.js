@@ -62,12 +62,18 @@ self.addEventListener('activate', event => {
       .sort()
       .reverse();
 
+    const lastGood =
+      oldState && oldState.lastGood && oldState.lastGood !== CACHE
+        ? oldState.lastGood
+        : null;
+
     const previous =
-      oldState &&
-      oldState.active &&
-      oldState.active !== CACHE
+      lastGood ||
+      (oldState && oldState.active && oldState.active !== CACHE
         ? oldState.active
-        : (previousCaches[0] || null);
+        : null) ||
+      previousCaches[0] ||
+      null;
 
     await writeState({
       active: CACHE,
