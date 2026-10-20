@@ -31,16 +31,16 @@
   };
 
     window.addEventListener('error', function (event) {
-    if (!bootReported && !event.filename) {
-      sendBootStatus('TIRECALC_BOOT_FAIL');
-    }
-  });
+if (!bootReported && event.error) {
+sendBootStatus('TIRECALC_BOOT_FAIL');
+}
+});
 
-  window.addEventListener('unhandledrejection', function (event) {
-    if (!bootReported && event.reason instanceof Error) {
-      sendBootStatus('TIRECALC_BOOT_FAIL');
-    }
-  });
+window.addEventListener('unhandledrejection', function (event) {
+if (!bootReported && event.reason instanceof Error) {
+sendBootStatus('TIRECALC_BOOT_FAIL');
+}
+});
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('message', function (event) {
