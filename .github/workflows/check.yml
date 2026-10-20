@@ -26,7 +26,7 @@ jobs:
       - name: Проверить синтаксис сервис-воркера
         run: node --check service-worker.js
 
-              - name: Проверить синтаксис JavaScript приложения
+      - name: Проверить синтаксис JavaScript приложения
         run: |
           node --input-type=commonjs <<'NODE'
           const fs = require('fs');
