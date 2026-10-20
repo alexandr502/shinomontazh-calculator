@@ -51,9 +51,8 @@ if (cached) return cached;
       }
 
       return Response.error();
-    });
-  });
+});
+});
 })
-
 );
 });
