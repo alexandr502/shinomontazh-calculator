@@ -30,14 +30,14 @@
     sendBootStatus('TIRECALC_BOOT_OK');
   };
 
-  window.addEventListener('error', function (event) {
-    if (!bootReported) {
+    window.addEventListener('error', function (event) {
+    if (!bootReported && !event.filename) {
       sendBootStatus('TIRECALC_BOOT_FAIL');
     }
   });
 
-  window.addEventListener('unhandledrejection', function () {
-    if (!bootReported) {
+  window.addEventListener('unhandledrejection', function (event) {
+    if (!bootReported && event.reason instanceof Error) {
       sendBootStatus('TIRECALC_BOOT_FAIL');
     }
   });
