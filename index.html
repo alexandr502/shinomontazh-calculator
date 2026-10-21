@@ -221,14 +221,13 @@ $('export').onclick=()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:'
 $('importFile').onchange=async e=>{try{let obj=JSON.parse(await e.target.files[0].text());if(!obj.prices||!obj.extras)throw Error();data=obj;save();if(!data.rimRepair)data.rimRepair=fresh().rimRepair;renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();syncRepairPrices();calculate();alert('Настройки импортированы')}catch(err){alert('Не удалось прочитать файл настроек')}};
 $('defaults').onclick=()=>{if(confirm('Восстановить исходные цены? Текущие настройки будут заменены.')){data=fresh();save();renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();calculate()}};
 renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();syncRepairPrices();calculate();
-</script>
 setTimeout(function () {
   if (window.__tireAppBootOk) {
     window.__tireAppBootOk();
   }
 }, 2500);
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
 if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')) addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 (()=>{
  const $c=id=>document.getElementById(id); let sb=null, owner=false, busy=false;
