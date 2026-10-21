@@ -18,6 +18,7 @@ const FILES = [
 
 const LEGACY_CACHE = 'tirecalc-shared-v3';
 const PREVIOUS_PRODUCTION_CACHE = 'tirecalc-prod-v3';
+const BOOT_TIMEOUT_MS = 20000;
 
 function urlInScope(path) {
   return new URL(path, self.registration.scope).href;
@@ -54,7 +55,8 @@ async function readState() {
     previous: null,
     lastGood: null,
     candidate: null,
-    rollbackAvailable: false
+candidateStartedAt: null,
+rollbackAvailable: false
   };
 }
 
@@ -126,7 +128,8 @@ self.addEventListener('activate', event => {
       previous,
       lastGood: previousGood,
       candidate: CACHE,
-      rollbackAvailable: Boolean(previous)
+candidateStartedAt: Date.now(),
+rollbackAvailable: Boolean(previous)
     });
 
     // Не удаляем старые кэши:
@@ -213,7 +216,58 @@ self.addEventListener('message', event => {
     }
   })());
 });
+async function recoverTimedOutCandidate(state) {
+  if (
+    state.candidate !== CACHE ||
+    state.active !== CACHE ||
+    !state.candidateStartedAt ||
+    Date.now() - state.candidateStartedAt < BOOT_TIMEOUT_MS
+  ) {
+    return state;
+  }
 
+  let fallback =
+    state.previous &&
+    state.previous !== CACHE &&
+    await isComplete(state.previous)
+      ? state.previous
+      : null;
+
+  if (
+    !fallback &&
+    state.lastGood &&
+    state.lastGood !== CACHE &&
+    await isComplete(state.lastGood)
+  ) {
+    fallback = state.lastGood;
+  }
+
+  state.candidate = null;
+  state.candidateStartedAt = null;
+  state.rollbackAvailable = false;
+
+  if (fallback) {
+    state.active = fallback;
+  }
+
+  await writeState(state);
+
+  if (fallback) {
+    const clients = await self.clients.matchAll({
+      type: 'window',
+      includeUncontrolled: true
+    });
+
+    for (const client of clients) {
+      client.postMessage({
+        type: 'TIRECALC_ROLLBACK',
+        version: fallback
+      });
+    }
+  }
+
+  return state;
+}
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') {
     return;
@@ -232,10 +286,12 @@ self.addEventListener('fetch', event => {
   }
 
   event.respondWith((async () => {
-    const state = await readState();
+    let state = await readState();
+state = await recoverTimedOutCandidate(state);
 
-    const activeCache = await caches.open(
-      state.active || CACHE
+const activeCache = await caches.open(
+  state.active || CACHE
+);
     );
 
     const cached = await activeCache.match(
