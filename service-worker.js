@@ -192,6 +192,7 @@ self.addEventListener('message', event => {
     }
 
     state.candidate = null;
+    state.candidateStartedAt = null;
     state.rollbackAvailable = false;
 
     if (fallback) {
