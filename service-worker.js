@@ -288,13 +288,12 @@ self.addEventListener('fetch', event => {
   }
 
   event.respondWith((async () => {
-      let state = await readState();
+    let state = await readState();
     state = await recoverTimedOutCandidate(state);
 
     const activeCache = await caches.open(
       state.active || CACHE
-    );
-
+      );
     const cached = await activeCache.match(
       event.request,
       { ignoreSearch: true }
