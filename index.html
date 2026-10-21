@@ -88,10 +88,52 @@ button.secondary{border:1px solid var(--line);background:#fff;border-radius:10px
 .price-row{display:grid;grid-template-columns:1fr 90px 90px;gap:6px;align-items:center;margin:8px 0}.price-row span{font-size:14px}.price-row input{padding:7px;min-height:40px}
 details summary{font-weight:700;cursor:pointer;padding:3px 0 10px}.save-note{font-size:12px;color:var(--muted);margin-top:8px}
 @media(max-width:380px){.grid{grid-template-columns:1fr}.price-row{grid-template-columns:1fr 75px 75px}.amount{font-size:28px}}
+  /* Строка заголовка и номер версии */
+.header-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.header-title-row h1 {
+  margin: 0;
+  min-width: 0;
+}
+
+.app-version {
+  flex-shrink: 0;
+  padding-top: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #c3ccda;
+  white-space: nowrap;
+}
+
+@media (max-width: 420px) {
+  .header-title-row {
+    gap: 8px;
+  }
+
+  .header-title-row h1 {
+    font-size: clamp(18px, 4.5vw, 27px);
+  }
+
+  .app-version {
+    font-size: 10px;
+    padding-top: 4px;
+  }
+}
 </style>
 </head>
 <body>
-<header><h1>🛞 Калькулятор шиномонтажа</h1><p>Расчёт для клиента · цены сохраняются на этом устройстве</p></header>
+<header>
+  <div class="header-title-row">
+    <h1>🛞 Калькулятор шиномонтажа</h1>
+    <span class="app-version">Версия 1.1.0</span>
+  </div>
+  <p>Расчёт для клиента · цены сохраняются на этом устройстве</p>
+</header>
 <main>
 <div class="tabs"><button class="active" data-tab="calc">Калькулятор</button><button data-tab="prices">Прайс и настройки</button></div>
 <section id="calc">
@@ -274,4 +316,9 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
  }
 })();
 </script>
+  <footer style="max-width:1100px;margin:18px auto 10px;padding:0 14px;text-align:right;font-size:11px;color:#6b7280">
+  <span style="display:inline-block;border:1px solid #d8dee8;background:#f8fafc;border-radius:999px;padding:5px 9px">
+    Шиномонтаж · версия 1.1.0 · релиз 21.10.2026
+  </span>
+  </footer>
 </body></html>
