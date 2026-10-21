@@ -45,10 +45,6 @@
     sendBootStatus('TIRECALC_BOOT_OK');
   };
 
-    bootReported = true;
-    sendBootStatus('TIRECALC_BOOT_OK');
-  };
-
   window.addEventListener('error', function (event) {
     if (event.error) {
       reportFailure();
