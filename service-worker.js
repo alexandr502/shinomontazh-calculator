@@ -3,7 +3,7 @@
    Не удаляет кэши других приложений.
 */
 
-const CACHE = 'tirecalc-prod-v2';
+const CACHE = 'tirecalc-prod-v3';
 const CONTROL_CACHE = 'tirecalc-prod-control-v1';
 const CONTROL_KEY = './__tirecalc_prod_state__';
 
