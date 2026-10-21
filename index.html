@@ -245,7 +245,33 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
  $c('ownerLogout').addEventListener('click',async()=>{try{if(sb)await sb.auth.signOut();owner=false;status('Вы вышли из режима владельца.');}catch(e){status(e.message||String(e));}});
  $c('cloudPublish').addEventListener('click',publish);
  // If a project was configured previously, load the shared price on start. Local price remains available offline.
- if($c('cloudUrl').value&&$c('cloudKey').value){try{makeClient();fetchPrice();}catch(e){status(e.message||String(e));}}
+  // При запуске загружаем общий прайс и восстанавливаем сессию владельца.
+ if ($c('cloudUrl').value && $c('cloudKey').value) {
+  try {
+   makeClient();
+
+   (async function () {
+    await fetchPrice();
+
+    try {
+     const { data: sessionData, error } = await sb.auth.getSession();
+
+     if (error) throw error;
+
+     owner = !!sessionData.session;
+
+     if (owner) {
+      status('Вход владельца восстановлен. Можно менять цены и публиковать их для всех.');
+     }
+    } catch (e) {
+     status('Не удалось восстановить сессию владельца: ' + (e.message || e));
+    }
+   })();
+
+  } catch (e) {
+   status(e.message || String(e));
+  }
+ }
 })();
 </script>
 </body></html>
