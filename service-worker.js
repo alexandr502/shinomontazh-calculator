@@ -174,19 +174,7 @@ self.addEventListener('message', event => {
       return;
     }
 
-    // Новая версия сообщила об ошибке запуска.
-    let fallback =
-      state.previous &&
-      state.previous !== CACHE &&
-      await isComplete(state.previous)
-        ? state.previous
-        : null;
-
-    if (
-      !fallback &&
-      state.lastGood &&
-      state.lastGood !== CACHE &&
-      await isComplete(state.lastGood)
+    
        // Новая версия сообщила об ошибке запуска.
     let fallback =
       state.previous &&
