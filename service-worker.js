@@ -163,6 +163,7 @@ self.addEventListener('message', event => {
     if (type === 'TIRECALC_BOOT_OK') {
       state.lastGood = CACHE;
       state.candidate = null;
+      state.candidateStartedAt = null;
 
       state.rollbackAvailable = Boolean(
         state.previous &&
