@@ -218,7 +218,6 @@ self.addEventListener('message', event => {
     }
   })());
 });
-});
 async function recoverTimedOutCandidate(state) {
   if (
     state.candidate !== CACHE ||
