@@ -293,7 +293,7 @@ self.addEventListener('fetch', event => {
 
     const activeCache = await caches.open(
       state.active || CACHE
-      );
+    );
     const cached = await activeCache.match(
       event.request,
       { ignoreSearch: true }
