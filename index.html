@@ -25,15 +25,25 @@
       .catch(function () {});
   }
 
-  function reportFailure() {
+    function reportFailure() {
     if (bootReported) return;
 
     bootReported = true;
+    clearTimeout(bootTimeoutId);
     sendBootStatus('TIRECALC_BOOT_FAIL');
   }
 
+  // Если приложение не запустилось за 20 секунд,
+  // сообщаем Service Worker об ошибке.
+  const bootTimeoutId = setTimeout(reportFailure, 20000);
+
   window.__tireAppBootOk = function () {
     if (bootReported) return;
+
+    bootReported = true;
+    clearTimeout(bootTimeoutId);
+    sendBootStatus('TIRECALC_BOOT_OK');
+  };
 
     bootReported = true;
     sendBootStatus('TIRECALC_BOOT_OK');
