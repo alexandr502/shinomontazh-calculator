@@ -187,16 +187,28 @@ self.addEventListener('message', event => {
       state.lastGood &&
       state.lastGood !== CACHE &&
       await isComplete(state.lastGood)
+       // Новая версия сообщила об ошибке запуска.
+    let fallback =
+      state.previous &&
+      state.previous !== CACHE &&
+      await isComplete(state.previous)
+        ? state.previous
+        : null;
+
+    if (
+      !fallback &&
+      state.lastGood &&
+      state.lastGood !== CACHE &&
+      await isComplete(state.lastGood)
     ) {
       fallback = state.lastGood;
     }
 
-    state.candidate = null;
-    state.candidateStartedAt = null;
-    state.rollbackAvailable = false;
-
     if (fallback) {
       state.active = fallback;
+      state.candidate = null;
+      state.candidateStartedAt = null;
+      state.rollbackAvailable = false;
 
       await writeState(state);
 
@@ -212,11 +224,12 @@ self.addEventListener('message', event => {
         });
       }
     } else {
-      // Если старой копии нет, не удаляем
-      // текущий кэш и не очищаем хранилище.
+      // Нет полной резервной копии — сохраняем состояние кандидата.
+      state.rollbackAvailable = false;
       await writeState(state);
     }
   })());
+});
 });
 async function recoverTimedOutCandidate(state) {
   if (
