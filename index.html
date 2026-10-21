@@ -228,6 +228,7 @@ setTimeout(function () {
 }, 2500);
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
 if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')) addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 (()=>{
  const $c=id=>document.getElementById(id); let sb=null, owner=false, busy=false;
