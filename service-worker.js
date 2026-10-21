@@ -244,12 +244,14 @@ async function recoverTimedOutCandidate(state) {
     fallback = state.lastGood;
   }
 
-  state.candidate = null;
-  state.candidateStartedAt = null;
-  state.rollbackAvailable = false;
-
-  if (fallback) {
+    if (fallback) {
     state.active = fallback;
+    state.candidate = null;
+    state.candidateStartedAt = null;
+    state.rollbackAvailable = false;
+  } else {
+    // Нет полной резервной копии — сохраняем состояние кандидата.
+    state.rollbackAvailable = false;
   }
 
   await writeState(state);
