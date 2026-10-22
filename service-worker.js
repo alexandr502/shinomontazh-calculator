@@ -1,9 +1,10 @@
-/* TireCalc production service worker.
-   Изолированный кэш рабочего калькулятора.
-   Не удаляет кэши других приложений.
+/* TireCalc safe update test.
+   Отдельный кэш каждой версии.
+   Предыдущую рабочую версию сохраняем для отката.
+   Чужие кэши не удаляем.
 */
 
-const CACHE = 'tirecalc-prod-v3';
+const CACHE = 'tirecalc-prod-v11';
 const CONTROL_CACHE = 'tirecalc-prod-control-v1';
 const CONTROL_KEY = './__tirecalc_prod_state__';
 
@@ -16,12 +17,16 @@ const FILES = [
 ];
 
 const LEGACY_CACHE = 'tirecalc-shared-v3';
+const PREVIOUS_PRODUCTION_CACHE = 'tirecalc-prod-v3';
+const BOOT_TIMEOUT_MS = 20000;
 
 function urlInScope(path) {
   return new URL(path, self.registration.scope).href;
 }
 
 async function isComplete(cacheName) {
+  if (!cacheName) return false;
+
   try {
     const cache = await caches.open(cacheName);
 
@@ -46,11 +51,12 @@ async function readState() {
   } catch (_) {}
 
   return {
-    active: CACHE,
+    active: PREVIOUS_PRODUCTION_CACHE,
     previous: null,
     lastGood: null,
-    candidate: CACHE,
-    rollbackAvailable: false
+    candidate: null,
+candidateStartedAt: null,
+rollbackAvailable: false
   };
 }
 
@@ -69,6 +75,8 @@ async function writeState(state) {
 
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
+    // Загружаем файлы в новый отдельный кэш.
+    // Старый кэш при этом не изменяется.
     const cache = await caches.open(CACHE);
 
     await cache.addAll(FILES);
@@ -81,35 +89,51 @@ self.addEventListener('activate', event => {
   event.waitUntil((async () => {
     const oldState = await readState();
 
-    const legacyAvailable = await isComplete(LEGACY_CACHE);
-
-    const previous =
-      oldState.lastGood &&
-      oldState.lastGood !== CACHE &&
-      await isComplete(oldState.lastGood)
-        ? oldState.lastGood
-        : (legacyAvailable ? LEGACY_CACHE : null);
-
-    const previousGood =
+    const oldLastGood =
       oldState.lastGood &&
       oldState.lastGood !== CACHE &&
       await isComplete(oldState.lastGood)
         ? oldState.lastGood
         : null;
 
+    const oldActive =
+      oldState.active &&
+      oldState.active !== CACHE &&
+      await isComplete(oldState.active)
+        ? oldState.active
+        : null;
+
+    const productionFallback =
+      await isComplete(PREVIOUS_PRODUCTION_CACHE)
+        ? PREVIOUS_PRODUCTION_CACHE
+        : null;
+
+    const legacyAvailable = await isComplete(LEGACY_CACHE);
+
+    const previous =
+      oldLastGood ||
+      oldActive ||
+      productionFallback ||
+      (legacyAvailable ? LEGACY_CACHE : null);
+
+    const previousGood =
+      oldLastGood ||
+      oldActive ||
+      productionFallback;
+
+    // Новая версия становится кандидатом.
+    // Предыдущую рабочую версию сохраняем.
     await writeState({
       active: CACHE,
       previous,
       lastGood: previousGood,
       candidate: CACHE,
-      rollbackAvailable: Boolean(previous)
+candidateStartedAt: Date.now(),
+rollbackAvailable: Boolean(previous)
     });
 
-    /*
-      CacheStorage общий для приложений на одном origin.
-      Поэтому чужие кэши не удаляем.
-    */
-
+    // Не удаляем старые кэши:
+    // они могут понадобиться для восстановления.
     await self.clients.claim();
   })());
 });
@@ -127,6 +151,8 @@ self.addEventListener('message', event => {
   event.waitUntil((async () => {
     const state = await readState();
 
+    // Обрабатываем сообщения только для текущей
+    // версии, которая проходит проверку запуска.
     if (
       state.active !== CACHE ||
       state.candidate !== CACHE
@@ -137,6 +163,7 @@ self.addEventListener('message', event => {
     if (type === 'TIRECALC_BOOT_OK') {
       state.lastGood = CACHE;
       state.candidate = null;
+      state.candidateStartedAt = null;
 
       state.rollbackAvailable = Boolean(
         state.previous &&
@@ -147,6 +174,8 @@ self.addEventListener('message', event => {
       return;
     }
 
+    
+       // Новая версия сообщила об ошибке запуска.
     let fallback =
       state.previous &&
       state.previous !== CACHE &&
@@ -163,11 +192,11 @@ self.addEventListener('message', event => {
       fallback = state.lastGood;
     }
 
-    state.candidate = null;
-    state.rollbackAvailable = false;
-
     if (fallback) {
       state.active = fallback;
+      state.candidate = null;
+      state.candidateStartedAt = null;
+      state.rollbackAvailable = false;
 
       await writeState(state);
 
@@ -183,11 +212,66 @@ self.addEventListener('message', event => {
         });
       }
     } else {
+      // Нет полной резервной копии — сохраняем состояние кандидата.
+      state.rollbackAvailable = false;
       await writeState(state);
     }
   })());
 });
+async function recoverTimedOutCandidate(state) {
+  if (
+    state.candidate !== CACHE ||
+    state.active !== CACHE ||
+    !state.candidateStartedAt ||
+    Date.now() - state.candidateStartedAt < BOOT_TIMEOUT_MS
+  ) {
+    return state;
+  }
 
+  let fallback =
+    state.previous &&
+    state.previous !== CACHE &&
+    await isComplete(state.previous)
+      ? state.previous
+      : null;
+
+  if (
+    !fallback &&
+    state.lastGood &&
+    state.lastGood !== CACHE &&
+    await isComplete(state.lastGood)
+  ) {
+    fallback = state.lastGood;
+  }
+
+    if (fallback) {
+    state.active = fallback;
+    state.candidate = null;
+    state.candidateStartedAt = null;
+    state.rollbackAvailable = false;
+  } else {
+    // Нет полной резервной копии — сохраняем состояние кандидата.
+    state.rollbackAvailable = false;
+  }
+
+  await writeState(state);
+
+  if (fallback) {
+    const clients = await self.clients.matchAll({
+      type: 'window',
+      includeUncontrolled: true
+    });
+
+    for (const client of clients) {
+      client.postMessage({
+        type: 'TIRECALC_ROLLBACK',
+        version: fallback
+      });
+    }
+  }
+
+  return state;
+}
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') {
     return;
@@ -196,6 +280,8 @@ self.addEventListener('fetch', event => {
   const requestUrl = new URL(event.request.url);
   const scopeUrl = new URL(self.registration.scope);
 
+  // Не вмешиваемся в запросы других сайтов
+  // и за пределами каталога калькулятора.
   if (
     requestUrl.origin !== scopeUrl.origin ||
     !requestUrl.href.startsWith(scopeUrl.href)
@@ -204,12 +290,12 @@ self.addEventListener('fetch', event => {
   }
 
   event.respondWith((async () => {
-    const state = await readState();
+    let state = await readState();
+    state = await recoverTimedOutCandidate(state);
 
     const activeCache = await caches.open(
       state.active || CACHE
     );
-
     const cached = await activeCache.match(
       event.request,
       { ignoreSearch: true }
