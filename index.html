@@ -26,8 +26,8 @@
   }
 
     function reportFailure() {
-    if (bootReported) return;
-
+  return;
+}
     bootReported = true;
     clearTimeout(bootTimeoutId);
     sendBootStatus('TIRECALC_BOOT_FAIL');
