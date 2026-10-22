@@ -6,38 +6,37 @@
   let bootReported = false;
 
   function sendBootStatus(type) {
-  if (!('serviceWorker' in navigator)) return;
+    if (!('serviceWorker' in navigator)) return;
 
-  const message = { type: type };
-  const worker = navigator.serviceWorker.controller;
+    const message = { type: type };
+    const worker = navigator.serviceWorker.controller;
 
-  if (worker) {
-    worker.postMessage(message);
+    if (worker) {
+      worker.postMessage(message);
+      return;
+    }
+
+    navigator.serviceWorker.ready
+      .then(function (registration) {
+        if (registration.active) {
+          registration.active.postMessage(message);
+        }
+      })
+      .catch(function () {});
   }
 
-  navigator.serviceWorker.ready
-    .then(function (registration) {
-      const activeWorker = registration.active;
+    function reportFailure() {
+  if (bootReported) return;
 
-      if (activeWorker && activeWorker !== worker) {
-        activeWorker.postMessage(message);
-      }
-    })
-    .catch(function () {});
-}
+    bootReported = true;
+    clearTimeout(bootTimeoutId);
+    sendBootStatus('TIRECALC_BOOT_FAIL');
+  }
 
-  function reportFailure() {
-if (bootReported) return;
+  // Если приложение не запустилось за 20 секунд,
+  // сообщаем Service Worker об ошибке.
+  const bootTimeoutId = setTimeout(reportFailure, 20000);
 
-bootReported = true;
-clearTimeout(bootTimeoutId);
-sendBootStatus('TIRECALC_BOOT_FAIL');
-    
-}
-  
-  // Если приложение не запустилось за 20 секунд — сообщаем об ошибке.
-const bootTimeoutId = setTimeout(reportFailure, 20000);
-  
   window.__tireAppBootOk = function () {
     if (bootReported) return;
 
@@ -45,6 +44,18 @@ const bootTimeoutId = setTimeout(reportFailure, 20000);
     clearTimeout(bootTimeoutId);
     sendBootStatus('TIRECALC_BOOT_OK');
   };
+
+  window.addEventListener('error', function (event) {
+    if (event.error) {
+      reportFailure();
+    }
+  });
+
+  window.addEventListener('unhandledrejection', function (event) {
+    if (event.reason instanceof Error) {
+      reportFailure();
+    }
+  });
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('message', function (event) {
@@ -258,11 +269,7 @@ $('export').onclick=()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:'
 $('importFile').onchange=async e=>{try{let obj=JSON.parse(await e.target.files[0].text());if(!obj.prices||!obj.extras)throw Error();data=obj;save();if(!data.rimRepair)data.rimRepair=fresh().rimRepair;renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();syncRepairPrices();calculate();alert('Настройки импортированы')}catch(err){alert('Не удалось прочитать файл настроек')}};
 $('defaults').onclick=()=>{if(confirm('Восстановить исходные цены? Текущие настройки будут заменены.')){data=fresh();save();renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();calculate()}};
 renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();syncRepairPrices();calculate();
-setTimeout(function () {
-  if (window.__tireAppBootOk) {
-    window.__tireAppBootOk();
-  }
-}, 2500);
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -310,6 +317,13 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
   }
  }
 })();
+
+  if (window.__tireAppBootOk) {
+  // Даём приложению время проявить ранние ошибки.
+  setTimeout(function () {
+    window.__tireAppBootOk();
+  }, 2500);
+}
 </script>
   <footer style="max-width:1100px;margin:18px auto 10px;padding:0 14px;text-align:right;font-size:11px;color:#6b7280">
   <span style="display:inline-block;border:1px solid #d8dee8;background:#f8fafc;border-radius:999px;padding:5px 9px">
