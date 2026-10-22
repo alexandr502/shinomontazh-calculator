@@ -4,7 +4,7 @@
    Чужие кэши не удаляем.
 */
 
-const CACHE = 'tirecalc-prod-v12';
+const CACHE = 'tirecalc-prod-v13';
 const CONTROL_CACHE = 'tirecalc-prod-control-v1';
 const CONTROL_KEY = './__tirecalc_prod_state__';
 
