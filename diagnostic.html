@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Диагностика обновления</title>
+<style>
+body{font:16px system-ui,sans-serif;max-width:760px;margin:24px auto;padding:0 16px;color:#18202b;background:#f3f5f8}
+section{background:white;padding:16px;border-radius:12px;margin:12px 0;overflow-wrap:anywhere}
+button{padding:12px 16px;border:0;border-radius:8px;background:#1463e8;color:white;font-size:16px}
+pre{white-space:pre-wrap;overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<h1>Диагностика обновления</h1>
+<p>Только чтение. Страница не изменяет и не удаляет кэши.</p>
+<button id="check">Проверить состояние</button>
+<section id="result">Нажми «Проверить состояние».</section>
+
+<script>
+const FILES = [
+  './',
+  './index.html',
+  './manifest.webmanifest',
+  './icon-192.png',
+  './icon-512.png'
+];
+
+const CONTROL_CACHE = 'tirecalc-prod-control-v1';
+const CONTROL_KEY = './__tirecalc_prod_state__';
+
+async function runCheck() {
+  const result = document.getElementById('result');
+  result.innerHTML = 'Проверяю…';
+
+  try {
+    if (!('caches' in window)) {
+      throw new Error('Cache Storage не поддерживается этим браузером.');
+    }
+
+    const names = await caches.keys();
+    const control = await caches.open(CONTROL_CACHE);
+    const keyUrl = new URL(CONTROL_KEY, location.href);
+    const response = await control.match(keyUrl);
+    const state = response ? await response.json() : null;
+
+    const currentUrl = new URL('./service-worker.js', location.href);
+    currentUrl.searchParams.set('diagnostic', Date.now());
+
+    let workerVersion = 'Не удалось прочитать';
+    try {
+      const workerResponse = await fetch(currentUrl, {cache:'no-store'});
+      const workerText = await workerResponse.text();
+      const match = workerText.match(/const CACHE\s*=\s*['"]([^'"]+)/);
+      if (match) workerVersion = match[1];
+    } catch (_) {}
+
+    const cacheChecks = await Promise.all(
+      names.map(async name => {
+        const cache = await caches.open(name);
+        const files = await Promise.all(
+          FILES.map(async path => {
+            const url = new URL(path, location.href);
+            return Boolean(await cache.match(url));
+          })
+        );
+        return {
+          name,
+          complete: files.every(Boolean),
+          found: files.filter(Boolean).length,
+          total: FILES.length
+        };
+      })
+    );
+
+    result.innerHTML = '';
+    const pre = document.createElement('pre');
+    pre.textContent = JSON.stringify({
+      checkedAt: new Date().toLocaleString('ru-RU'),
+      publishedWorkerCache: workerVersion,
+      savedState: state || 'Состояние ещё не записано',
+      availableCaches: cacheChecks,
+      note: 'Version ID в Chrome не является номером кэша.'
+    }, null, 2);
+    result.appendChild(pre);
+  } catch (error) {
+    result.textContent = 'Ошибка диагностики: ' + (error.message || error);
+  }
+}
+
+document.getElementById('check').addEventListener('click', runCheck);
+</script>
+</body>
+</html>
