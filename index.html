@@ -35,7 +35,7 @@
 
   // Если приложение не запустилось за 20 секунд,
   // сообщаем Service Worker об ошибке.
-  const bootTimeoutId = setTimeout(reportFailure, 120000);
+  const bootTimeoutId = setTimeout(reportFailure, 20000);
 
   window.__tireAppBootOk = function () {
     if (bootReported) return;
@@ -319,7 +319,10 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
 })();
 
 if (window.__tireAppBootOk) {
-// Временно отключено для теста тайм-аута Service Worker.
+  // Даём приложению время проявить ранние ошибки.
+  setTimeout(function () {
+    window.__tireAppBootOk();
+  }, 2500);
 }
 </script>
   <footer style="max-width:1100px;margin:18px auto 10px;padding:0 14px;text-align:right;font-size:11px;color:#6b7280">
