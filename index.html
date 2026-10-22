@@ -6,24 +6,25 @@
   let bootReported = false;
 
   function sendBootStatus(type) {
-    if (!('serviceWorker' in navigator)) return;
+  if (!('serviceWorker' in navigator)) return;
 
-    const message = { type: type };
-    const worker = navigator.serviceWorker.controller;
+  const message = { type: type };
+  const worker = navigator.serviceWorker.controller;
 
-    if (worker) {
-      worker.postMessage(message);
-      return;
-    }
-
-    navigator.serviceWorker.ready
-      .then(function (registration) {
-        if (registration.active) {
-          registration.active.postMessage(message);
-        }
-      })
-      .catch(function () {});
+  if (worker) {
+    worker.postMessage(message);
   }
+
+  navigator.serviceWorker.ready
+    .then(function (registration) {
+      const activeWorker = registration.active;
+
+      if (activeWorker && activeWorker !== worker) {
+        activeWorker.postMessage(message);
+      }
+    })
+    .catch(function () {});
+}
 
   function reportFailure() {
 if (bootReported) return;
