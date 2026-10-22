@@ -35,7 +35,7 @@
 
   // Если приложение не запустилось за 20 секунд,
   // сообщаем Service Worker об ошибке.
-  const bootTimeoutId = setTimeout(reportFailure, 20000);
+  const bootTimeoutId = setTimeout(reportFailure, 120000);
 
   window.__tireAppBootOk = function () {
     if (bootReported) return;
