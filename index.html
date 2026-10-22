@@ -359,10 +359,14 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
     }
    })();
 
-  } catch (e) {
-   status(e.message || String(e));
+     } catch (e) {
+    status(e.message || String(e));
+   }
   }
- 
+  if (window.__tireAppBootOk) {
+    window.__tireAppBootOk();
+  }
+})();
 </script>
   <footer style="max-width:1100px;margin:18px auto 10px;padding:0 14px;text-align:right;font-size:11px;color:#6b7280">
   <span style="display:inline-block;border:1px solid #d8dee8;background:#f8fafc;border-radius:999px;padding:5px 9px">
