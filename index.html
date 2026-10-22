@@ -4,37 +4,90 @@
 <script>
 (function () {
   let bootReported = false;
+  let bootStatus = null;
+  let bootRetryTimer = null;
 
   function sendBootStatus(type) {
     if (!('serviceWorker' in navigator)) return;
 
-    const message = { type: type };
-    const worker = navigator.serviceWorker.controller;
+    bootStatus = type;
 
-    if (worker) {
-      worker.postMessage(message);
+    function deliver() {
+      if (!bootStatus) return;
+
+      const message = { type: bootStatus };
+      const worker = navigator.serviceWorker.controller;
+
+      if (worker) {
+        try {
+          worker.postMessage(message);
+        } catch (_) {}
+      }
+
+      navigator.serviceWorker.ready
+        .then(function (registration) {
+          if (
+            registration.active &&
+            registration.active !== worker
+          ) {
+            try {
+              registration.active.postMessage(message);
+            } catch (_) {}
+          }
+        })
+        .catch(function () {});
     }
 
-    navigator.serviceWorker.ready
-      .then(function (registration) {
-        if (registration.active) {
-          registration.active.postMessage(message);
-        }
-      })
-      .catch(function () {});
+    deliver();
+
+    if (bootRetryTimer) {
+      clearInterval(bootRetryTimer);
+    }
+
+    let attempts = 0;
+
+    bootRetryTimer = setInterval(function () {
+      deliver();
+      attempts += 1;
+
+      if (attempts >= 10) {
+        clearInterval(bootRetryTimer);
+        bootRetryTimer = null;
+      }
+    }, 1000);
   }
 
-    function reportFailure() {
-  if (bootReported) return;
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener(
+      'controllerchange',
+      function () {
+        if (bootStatus) {
+          try {
+            const worker = navigator.serviceWorker.controller;
+
+            if (worker) {
+              worker.postMessage({
+                type: bootStatus
+              });
+            }
+          } catch (_) {}
+        }
+      }
+    );
+  }
+
+  function reportFailure() {
+    if (bootReported) return;
 
     bootReported = true;
     clearTimeout(bootTimeoutId);
     sendBootStatus('TIRECALC_BOOT_FAIL');
   }
 
-  // Если приложение не запустилось за 20 секунд,
-  // сообщаем Service Worker об ошибке.
-  const bootTimeoutId = setTimeout(reportFailure, 20000);
+  const bootTimeoutId = setTimeout(
+    reportFailure,
+    20000
+  );
 
   window.__tireAppBootOk = function () {
     if (bootReported) return;
@@ -50,21 +103,27 @@
     }
   });
 
-  window.addEventListener('unhandledrejection', function (event) {
-    if (event.reason instanceof Error) {
-      reportFailure();
+  window.addEventListener(
+    'unhandledrejection',
+    function (event) {
+      if (event.reason instanceof Error) {
+        reportFailure();
+      }
     }
-  });
+  );
 
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.addEventListener('message', function (event) {
-      if (
-        event.data &&
-        event.data.type === 'TIRECALC_ROLLBACK'
-      ) {
-        location.reload();
+    navigator.serviceWorker.addEventListener(
+      'message',
+      function (event) {
+        if (
+          event.data &&
+          event.data.type === 'TIRECALC_ROLLBACK'
+        ) {
+          location.reload();
+        }
       }
-    });
+    );
   }
 })();
 </script>
