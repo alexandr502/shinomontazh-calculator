@@ -46,18 +46,6 @@ const bootTimeoutId = setTimeout(reportFailure, 20000);
     sendBootStatus('TIRECALC_BOOT_OK');
   };
 
-  window.addEventListener('error', function (event) {
-    if (event.error) {
-      reportFailure();
-    }
-  });
-
-  window.addEventListener('unhandledrejection', function (event) {
-    if (event.reason instanceof Error) {
-      reportFailure();
-    }
-  });
-
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('message', function (event) {
       if (
