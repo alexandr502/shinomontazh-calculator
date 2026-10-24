@@ -128,7 +128,7 @@ self.addEventListener('activate', event => {
       previous,
       lastGood: previousGood,
       candidate: CACHE,
-candidateStartedAt: Date.now(),
+candidateStartedAt: null,
 rollbackAvailable: Boolean(previous)
     });
 
