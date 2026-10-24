@@ -90,14 +90,14 @@
   );
 
     window.__tireAppBootOk = function () {
-    // TEST ONLY: проверка автоматического отката.
-    if (bootReported) return;
+if (bootReported) return;
 
-    bootReported = true;
-    clearTimeout(bootTimeoutId);
-    sendBootStatus('TIRECALC_BOOT_FAIL');
-  };
+bootReported = true;
+clearTimeout(bootTimeoutId);
+sendBootStatus('TIRECALC_BOOT_OK');
 
+};
+  
   // Не запускаем откат из-за отдельной ранней JavaScript-ошибки.
 // Если приложение не сообщит об успешном запуске,
 // сработает контрольный таймер выше.
