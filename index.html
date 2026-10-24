@@ -61,22 +61,11 @@
     }, 1000);
   }
 
-  if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener(
       'controllerchange',
       function () {
-        if (bootStatus) {
-          try {
-            const worker = navigator.serviceWorker.controller;
-
-            if (worker) {
-              worker.postMessage({
-  type: bootStatus,
-  version: bootVersion
-});
-            }
-          } catch (_) {}
-        }
+        window.location.reload();
       }
     );
   }
