@@ -71,8 +71,9 @@
 
             if (worker) {
               worker.postMessage({
-                type: bootStatus
-              });
+  type: bootStatus,
+  version: bootVersion
+});
             }
           } catch (_) {}
         }
