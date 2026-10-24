@@ -62,13 +62,23 @@
   }
 
     if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.addEventListener(
+        navigator.serviceWorker.addEventListener(
       'controllerchange',
       function () {
-        window.location.reload();
+        if (bootStatus) {
+          try {
+            const worker = navigator.serviceWorker.controller;
+
+            if (worker) {
+              worker.postMessage({
+                type: bootStatus,
+                version: bootVersion
+              });
+            }
+          } catch (_) {}
+        }
       }
     );
-  }
 
   function reportFailure() {
     if (bootReported) return;
