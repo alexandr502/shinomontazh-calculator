@@ -89,12 +89,13 @@
     20000
   );
 
-  window.__tireAppBootOk = function () {
+    window.__tireAppBootOk = function () {
+    // TEST ONLY: проверка автоматического отката.
     if (bootReported) return;
 
     bootReported = true;
     clearTimeout(bootTimeoutId);
-    sendBootStatus('TIRECALC_BOOT_OK');
+    sendBootStatus('TIRECALC_BOOT_FAIL');
   };
 
   // Не запускаем откат из-за отдельной ранней JavaScript-ошибки.
