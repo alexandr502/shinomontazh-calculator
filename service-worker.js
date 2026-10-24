@@ -4,7 +4,7 @@
    Чужие кэши не удаляем.
 */
 
-const CACHE = 'tirecalc-rollback-test-v7';
+const CACHE = 'tirecalc-rollback-test-v8';
 const CONTROL_CACHE = 'tirecalc-prod-control-v1';
 const CONTROL_KEY = './__tirecalc_prod_state__';
 
@@ -146,7 +146,8 @@ self.addEventListener('message', event => {
     return;
   }
 
-  if (
+    if (
+    type !== 'TIRECALC_BOOT_START' &&
     type !== 'TIRECALC_BOOT_OK' &&
     type !== 'TIRECALC_BOOT_FAIL'
   ) {
@@ -165,6 +166,13 @@ self.addEventListener('message', event => {
       return;
     }
 
+         if (type === 'TIRECALC_BOOT_START') {
+      if (!state.candidateStartedAt) {
+        state.candidateStartedAt = Date.now();
+        await writeState(state);
+      }
+      return;
+         }
     if (type === 'TIRECALC_BOOT_OK') {
       state.lastGood = CACHE;
       state.candidate = null;
