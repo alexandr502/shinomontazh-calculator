@@ -4,7 +4,7 @@
    Чужие кэши не удаляем.
 */
 
-const CACHE = 'tirecalc-rollback-test-v5';
+const CACHE = 'tirecalc-rollback-test-v6';
 const CONTROL_CACHE = 'tirecalc-prod-control-v1';
 const CONTROL_KEY = './__tirecalc_prod_state__';
 
@@ -140,6 +140,11 @@ rollbackAvailable: Boolean(previous)
 
 self.addEventListener('message', event => {
   const type = event.data && event.data.type;
+     const version = event.data && event.data.version;
+
+  if (version !== CACHE) {
+    return;
+  }
 
   if (
     type !== 'TIRECALC_BOOT_OK' &&
