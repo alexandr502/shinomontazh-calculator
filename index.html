@@ -4,7 +4,7 @@
 <script>
 (function () {
   let bootReported = false;
-  const bootVersion = 'tirecalc-rollback-test-v7';
+  const bootVersion = 'tirecalc-rollback-test-v8';
   let bootStatus = null;
   let bootRetryTimer = null;
 
@@ -93,6 +93,7 @@
     reportFailure,
     20000
   );
+    sendBootStatus('TIRECALC_BOOT_START');
 
     window.__tireAppBootOk = function () {
 if (bootReported) return;
