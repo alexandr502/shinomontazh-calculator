@@ -16,7 +16,10 @@
     function deliver() {
       if (!bootStatus) return;
 
-      const message = { type: bootStatus };
+            const message = {
+        type: bootStatus,
+        version: bootVersion
+      };
       const worker = navigator.serviceWorker.controller;
 
       if (worker) {
@@ -67,8 +70,9 @@
             const worker = navigator.serviceWorker.controller;
 
             if (worker) {
-              worker.postMessage({
-                type: bootStatus
+                worker.postMessage({
+                type: bootStatus,
+                version: bootVersion
               });
             }
           } catch (_) {}
@@ -89,6 +93,7 @@
     reportFailure,
     20000
   );
+    sendBootStatus('TIRECALC_BOOT_START');
 
   window.__tireAppBootOk = function () {
     if (bootReported) return;
