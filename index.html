@@ -184,6 +184,181 @@ details summary{font-weight:700;cursor:pointer;padding:3px 0 10px}.save-note{fon
     padding-top: 4px;
   }
 }
+/* Новый дизайн калькулятора: графит и красные акценты */
+:root {
+--bg: #17191d;
+--card: #23262c;
+--ink: #f3f4f6;
+--muted: #a5abb5;
+--accent: #e53935;
+--line: #3a3e46;
+}
+
+body {
+background: var(--bg);
+color: var(--ink);
+}
+
+header {
+background: #101113;
+border-bottom: 2px solid #e53935;
+}
+
+header p {
+color: #b8bdc6;
+}
+
+#calc .card {
+background: var(--card);
+color: var(--ink);
+border-color: var(--line);
+box-shadow: 0 5px 18px #0003;
+}
+
+#calc h2,
+#calc details summary {
+color: #fff;
+}
+
+#calc .field label,
+#calc .muted {
+color: var(--muted);
+}
+
+#calc select,
+#calc input[type="number"],
+#calc input[type="text"] {
+background: #181a1f;
+color: #f5f5f5;
+border-color: #484d57;
+color-scheme: dark;
+min-height: 48px;
+}
+
+#calc select:focus,
+#calc input:focus {
+outline: 2px solid #e53935;
+outline-offset: 1px;
+}
+
+#calc .chips button,
+#calc .secondary {
+background: #2b2e35;
+color: #f4f4f5;
+border-color: #484d57;
+min-height: 48px;
+}
+
+#calc .chips button.active {
+background: #4a2021;
+border-color: #f04444;
+color: #fff;
+}
+
+.tabs button.active {
+background: #e53935;
+border-color: #e53935;
+color: #fff;
+}
+
+#calc button.primary {
+background: #e53935;
+color: #fff;
+border-color: #e53935;
+min-height: 50px;
+box-shadow: 0 3px 0 #9f2522;
+}
+
+#calc .check {
+min-height: 42px;
+gap: 11px;
+}
+
+#calc .check input {
+width: 22px;
+height: 22px;
+accent-color: #ef4444;
+}
+
+#calc .total {
+background: linear-gradient(145deg, #292d34, #17191d);
+border: 1px solid #e53935;
+border-radius: 18px;
+padding: 20px 17px;
+box-shadow: 0 8px 24px #0004;
+}
+
+#calc .total small {
+color: #ffb4b1;
+font-weight: 800;
+letter-spacing: 1.1px;
+}
+
+#calc .amount {
+color: #fff;
+font-size: clamp(38px, 9vw, 48px);
+line-height: 1.12;
+font-variant-numeric: tabular-nums;
+margin: 9px 0 12px;
+}
+
+#calc .summary {
+color: #e0e3e8;
+line-height: 1.55;
+}
+
+#calc #share {
+margin-top: 16px;
+}
+
+#calc #saveCalculation,
+#calc #copy,
+#calc #reset {
+background: #292d34;
+color: #f4f4f5;
+border-color: #555b66;
+min-height: 48px;
+}
+
+#calc .item input {
+background: #181a1f;
+color: #fff;
+border-color: #484d57;
+}
+
+#calc .remove {
+background: #552625;
+color: #ffd7d5;
+}
+
+#calc hr {
+border-color: var(--line);
+}
+
+@media (max-width: 420px) {
+#calc .card {
+padding: 14px;
+border-radius: 15px;
+margin-bottom: 10px;
+}
+
+#calc .grid {
+gap: 9px;
+}
+
+#calc .chips button {
+min-height: 50px;
+padding: 10px 7px;
+}
+
+#calc .total {
+padding: 19px 15px;
+}
+
+#calc .amount {
+font-size: clamp(38px, 10vw, 46px);
+}
+}
 </style>
 </head>
 <body>
