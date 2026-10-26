@@ -359,13 +359,15 @@ padding: 19px 15px;
 font-size: clamp(38px, 10vw, 46px);
 }
 }
-/* Единый тёмный дизайн вкладки «Прайс и настройки» */
-#prices {
+/* Единый тёмный дизайн вкладок «Прайс» и «Настройки» */
+#prices,
+#settings {
   background: #17191d;
   color: #f3f4f6;
 }
 
-#prices .card {
+#prices .card,
+#settings .card {
   background: #23262c;
   color: #f3f4f6;
   border: 1px solid #3a3e46;
@@ -378,18 +380,30 @@ font-size: clamp(38px, 10vw, 46px);
 #prices p,
 #prices span,
 #prices strong,
-#prices summary {
+#prices summary,
+#settings h2,
+#settings h3,
+#settings label,
+#settings p,
+#settings span,
+#settings strong,
+#settings summary {
   color: #f3f4f6;
 }
 
 #prices .muted,
-#prices small {
+#prices small,
+#settings .muted,
+#settings small {
   color: #a5abb5;
 }
 
 #prices input,
 #prices select,
-#prices textarea {
+#prices textarea,
+#settings input,
+#settings select,
+#settings textarea {
   background: #181a1f;
   color: #f5f5f5;
   border: 1px solid #484d57;
@@ -398,19 +412,23 @@ font-size: clamp(38px, 10vw, 46px);
 }
 
 #prices button,
-#prices .secondary {
+#prices .secondary,
+#settings button,
+#settings .secondary {
   background: #2b2e35;
   color: #f4f4f5;
   border-color: #484d57;
 }
 
-#prices button.primary {
+#prices button.primary,
+#settings button.primary {
   background: #e53935;
   color: #fff;
   border-color: #e53935;
 }
 
-#prices hr {
+#prices hr,
+#settings hr {
   border-color: #3a3e46 !important;
 }
 </style>
