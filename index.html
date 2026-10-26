@@ -552,13 +552,13 @@ function calculate(){
  $('summary').textContent=`${v} · ${labels[r]} · ${qty} колёс${special?' · RunFlat / низкий профиль (<45)':''}\n`+(lines.length?lines.join('\n'):'Выберите работы или заполните цены в настройках.');
 }
 function updatePriceAccess(){
-const isOwner=localStorage.getItem('tireCalcOwnerAccess')==='true';
-document.querySelectorAll('#priceEditor input, #surchargeEditor input, #catalogExtras input, #catalogExtras button, #addCatalogExtra').forEach(el=>{
-el.disabled=!isOwner;
-});
-const publishCard=$('publishPriceCard');
-if(publishCard) publishCard.classList.toggle('hidden',!isOwner);
-  }
+  const isOwner=window.__tireCalcIsOwner===true;
+  document.querySelectorAll('#priceEditor input, #surchargeEditor input, #catalogExtras input, #catalogExtras button, #addCatalogExtra').forEach(el=>{
+    el.disabled=!isOwner;
+  });
+  const publishCard=$('publishPriceCard');
+  if(publishCard) publishCard.classList.toggle('hidden',!isOwner);
+}
 function renderPriceEditor(){let v=$('priceVehicle').value, box=$('priceEditor');box.innerHTML='';let names=[['remove','Снятие / установка'],['mount','Шиномонтаж'],['balance','Балансировка'],['one','Полный комплекс за 1 колесо'],['four','Полный комплекс за 4 колеса'],['rfOne','RunFlat за 1 колесо / от'],['rfFour','Комплекс RunFlat за 4 колеса'],['valve','Установка одного вентиля']];rims.forEach(r=>{let h=document.createElement('h3');h.style.fontSize='15px';h.textContent=labels[r];box.appendChild(h);names.forEach(([key,name])=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<span>${name}</span><input type="number" min="0" step="10" data-price="${r}|${key}" value="${data.prices[v][r][key]||0}" aria-label="${name}"><span class="muted">₽</span>`;box.appendChild(row)})});box.querySelectorAll('[data-price]').forEach(inp=>inp.addEventListener('change',()=>{let [r,k]=inp.dataset.price.split('|');data.prices[v][r][k]=Math.max(0,+inp.value||0);save();calculate()}))}
 function renderSurcharges(){let box=$('surchargeEditor');box.innerHTML='';
  let title=document.createElement('h3');title.textContent='Правка дисков — цены по диаметру';title.style.fontSize='15px';box.appendChild(title);
