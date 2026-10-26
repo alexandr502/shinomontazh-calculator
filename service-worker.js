@@ -139,8 +139,8 @@ rollbackAvailable: Boolean(previous)
 });
 
 self.addEventListener('message', event => {
-    const version = event.data && event.data.version;
-
+const type = event.data && event.data.type;
+const version = event.data && event.data.version;
   if (version !== CACHE) {
     return;
   }
