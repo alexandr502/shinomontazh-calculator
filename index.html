@@ -563,7 +563,7 @@ $('vehicle').addEventListener('change',calculate);['rim','tireCategory','qty','b
 function syncRepairPrices(){const rp=data.rimRepair[$('repairRim').value]||{rim:0,eight:0};$('rimRepairPrice').value=rp.rim||0;$('eightRepairPrice').value=rp.eight||0;calculate()}
 $('repairRim').addEventListener('change',syncRepairPrices);
 $('unitButtons').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{unit=+b.dataset.unit;$('unitButtons').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));if(unit===4)$('qty').value=4;else if(+$('qty').value===4)$('qty').value=1;calculate()}));
-document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));$('calc').classList.toggle('hidden',b.dataset.tab!=='calc');$('prices').classList.toggle('hidden',b.dataset.tab!=='prices')}));
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));['calc','prices','settings'].forEach(id=>$(id).classList.toggle('hidden',b.dataset.tab!==id))}));
 $('addExtra').onclick=()=>{data.extras.push({name:'Новая работа',price:0});save();renderExtras();renderCatalog()};
 $('addCatalogExtra').onclick=()=>{data.extras.push({name:'Новая услуга',price:0});save();renderCatalog();renderExtras()};
 function getCalculationText(){return `РАСЧЁТ ШИНОМОНТАЖА\n${$('summary').textContent}\n\nИТОГО: ${$('total').textContent}\n\nСтоимость предварительная.`; }
