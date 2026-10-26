@@ -4,7 +4,7 @@
 <script>
 (function () {
   let bootReported = false;
-  const bootVersion = 'tirecalc-prod-v17';
+ const bootVersion = 'tirecalc-prod-v18';
   let bootStatus = null;
   let bootRetryTimer = null;
 
@@ -16,10 +16,10 @@
     function deliver() {
       if (!bootStatus) return;
 
-            const message = {
-        type: bootStatus,
-        version: bootVersion
-      };
+const message = {
+  type: bootStatus,
+  version: bootVersion
+};
       const worker = navigator.serviceWorker.controller;
 
       if (worker) {
@@ -61,8 +61,8 @@
     }, 1000);
   }
 
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.addEventListener(
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.addEventListener(
       'controllerchange',
       function () {
         if (bootStatus) {
@@ -79,7 +79,7 @@
         }
       }
     );
-  }
+    }
 
   function reportFailure() {
     if (bootReported) return;
@@ -95,14 +95,15 @@
   );
     sendBootStatus('TIRECALC_BOOT_START');
 
-  window.__tireAppBootOk = function () {
-    if (bootReported) return;
+    window.__tireAppBootOk = function () {
+if (bootReported) return;
 
-    bootReported = true;
-    clearTimeout(bootTimeoutId);
-    sendBootStatus('TIRECALC_BOOT_OK');
-  };
+bootReported = true;
+clearTimeout(bootTimeoutId);
+sendBootStatus('TIRECALC_BOOT_OK');
 
+};
+  
   // Не запускаем откат из-за отдельной ранней JavaScript-ошибки.
 // Если приложение не сообщит об успешном запуске,
 // сработает контрольный таймер выше.
@@ -183,19 +184,196 @@ details summary{font-weight:700;cursor:pointer;padding:3px 0 10px}.save-note{fon
     padding-top: 4px;
   }
 }
-  /* Единый тёмный дизайн вкладок «Прайс» и «Настройки» */
+/* Новый дизайн калькулятора: графит и красные акценты */
+:root {
+  --bg: #17191d;
+  --card: #23262c;
+  --ink: #f3f4f6;
+  --muted: #a5abb5;
+  --accent: #e53935;
+  --line: #3a3e46;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+header {
+  background: #101113;
+  border-bottom: 2px solid #e53935;
+}
+
+header p {
+  color: #b8bdc6;
+}
+
+#calc .card {
+  background: var(--card);
+  color: var(--ink);
+  border-color: var(--line);
+  box-shadow: 0 5px 18px #0003;
+}
+
+#calc h2,
+#calc details summary {
+  color: #fff;
+}
+
+#calc .field label,
+#calc .muted {
+  color: var(--muted);
+}
+
+#calc select,
+#calc input[type="number"],
+#calc input[type="text"] {
+  background: #181a1f;
+  color: #f5f5f5;
+  border-color: #484d57;
+  color-scheme: dark;
+  min-height: 48px;
+}
+
+#calc select:focus,
+#calc input:focus {
+  outline: 2px solid #e53935;
+  outline-offset: 1px;
+}
+
+#calc .chips button,
+#calc .secondary {
+  background: #2b2e35;
+  color: #f4f4f5;
+  border-color: #484d57;
+  min-height: 48px;
+}
+
+#calc .chips button.active {
+  background: #4a2021;
+  border-color: #f04444;
+  color: #fff;
+}
+
+.tabs button.active {
+  background: #e53935;
+  border-color: #e53935;
+  color: #fff;
+}
+
+#calc button.primary {
+  background: #e53935;
+  color: #fff;
+  border-color: #e53935;
+  min-height: 50px;
+  box-shadow: 0 3px 0 #9f2522;
+}
+
+#calc .check {
+  min-height: 42px;
+  gap: 11px;
+}
+
+#calc .check input {
+  width: 22px;
+  height: 22px;
+  accent-color: #ef4444;
+}
+
+#calc .total {
+  background: linear-gradient(145deg, #292d34, #17191d);
+  border: 1px solid #e53935;
+  border-radius: 18px;
+  padding: 20px 17px;
+  box-shadow: 0 8px 24px #0004;
+}
+
+#calc .total small {
+  color: #ffb4b1;
+  font-weight: 800;
+  letter-spacing: 1.1px;
+}
+
+#calc .amount {
+  color: #fff;
+  font-size: clamp(38px, 9vw, 48px);
+  line-height: 1.12;
+  font-variant-numeric: tabular-nums;
+  margin: 9px 0 12px;
+}
+
+#calc .summary {
+  color: #e0e3e8;
+  line-height: 1.55;
+}
+
+#calc #share {
+  margin-top: 16px;
+}
+
+#calc #saveCalculation,
+#calc #copy,
+#calc #reset {
+  background: #292d34;
+  color: #f4f4f5;
+  border-color: #555b66;
+  min-height: 48px;
+}
+
+#calc .item input {
+  background: #181a1f;
+  color: #fff;
+  border-color: #484d57;
+}
+
+#calc .remove {
+  background: #552625;
+  color: #ffd7d5;
+}
+
+#calc hr {
+  border-color: var(--line);
+}
+
+@media (max-width: 420px) {
+  #calc .card {
+    padding: 14px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+  }
+
+  #calc .grid {
+    gap: 9px;
+  }
+
+  #calc .chips button {
+    min-height: 50px;
+    padding: 10px 7px;
+  }
+
+  #calc .total {
+    padding: 19px 15px;
+  }
+
+  #calc .amount {
+    font-size: clamp(38px, 10vw, 46px);
+  }
+}
+
+/* Единый тёмный дизайн вкладок «Прайс» и «Настройки» */
 #prices,
 #settings {
-background: #17191d;
-color: #f3f4f6;
+  background: #17191d;
+  color: #f3f4f6;
+}
 }
 
 #prices .card,
 #settings .card {
-background: #23262c;
-color: #f3f4f6;
-border: 1px solid #3a3e46;
-box-shadow: 0 5px 18px #0003;
+  background: #23262c;
+  color: #f3f4f6;
+  border: 1px solid #3a3e46;
+  box-shadow: 0 5px 18px #0003;
 }
 
 #prices h2,
@@ -212,14 +390,14 @@ box-shadow: 0 5px 18px #0003;
 #settings span,
 #settings strong,
 #settings summary {
-color: #f3f4f6;
+  color: #f3f4f6;
 }
 
 #prices .muted,
 #prices small,
 #settings .muted,
 #settings small {
-color: #a5abb5;
+  color: #a5abb5;
 }
 
 #prices input,
@@ -228,45 +406,46 @@ color: #a5abb5;
 #settings input,
 #settings select,
 #settings textarea {
-background: #181a1f;
-color: #f5f5f5;
-border: 1px solid #484d57;
-color-scheme: dark;
-min-height: 46px;
+  background: #181a1f;
+  color: #f5f5f5;
+  border: 1px solid #484d57;
+  color-scheme: dark;
+  min-height: 46px;
 }
 
 #prices button,
 #prices .secondary,
 #settings button,
 #settings .secondary {
-background: #2b2e35;
-color: #f4f4f5;
-border-color: #484d57;
+  background: #2b2e35;
+  color: #f4f4f5;
+  border-color: #484d57;
 }
 
 #prices button.primary,
 #settings button.primary {
-background: #e53935;
-color: #fff;
-border-color: #e53935;
+  background: #e53935;
+  color: #fff;
+  border-color: #e53935;
 }
 
 #prices hr,
 #settings hr {
-border-color: #3a3e46 !important;
+  border-color: #3a3e46 !important;
 }
 </style>
 </head>
 <body>
 <header>
   <div class="header-title-row">
-    <h1>🛞 Калькулятор шиномонтажа</h1>
+    <h1 id="businessNameTitle">🛞 Вулкашка 61</h1>
     <span class="app-version">Версия 2.0.0</span>
   </div>
-  <p>Расчёт для клиента · цены сохраняются на этом устройстве</p>
+  <p>Шиномонтажный калькулятор</p>
+  <p>Расчёт для клиента</p>
 </header>
 <main>
-<div class="tabs"><button class="active" data-tab="calc">Калькулятор</button><button data-tab="prices">Прайс и настройки</button></div>
+<div class="tabs"><button class="active" data-tab="calc">Калькулятор</button><button data-tab="prices">Прайс</button><button data-tab="settings">Настройки</button></div>
 <section id="calc">
 <div class="card">
 <h2>1. Автомобиль и колёса</h2>
@@ -311,18 +490,40 @@ border-color: #3a3e46 !important;
 <div class="field"><label>Категория для редактирования</label><select id="priceVehicle"></select></div>
 <div id="priceEditor"></div>
 </div>
-<div class="card"><h2>Доплаты и дополнительные услуги</h2><p class="muted">Можно задать единую доплату для категории RunFlat / низкий профиль (&lt;45) и настроить часто используемые услуги. Значения по умолчанию — 0 ₽.</p><div id="surchargeEditor"></div><button class="secondary" id="addCatalogExtra">＋ Добавить услугу в список</button><div id="catalogExtras"></div></div>
-<div class="card" id="cloudPanel"><h2>Общий прайс — синхронизация</h2><p class="muted">После подключения облака все пользователи будут загружать общий прайс. Только владелец, вошедший под своим аккаунтом, сможет публиковать изменения.</p>
+<div class="card"><h2>Доплаты и дополнительные услуги</h2><p class="muted">Можно задать единую доплату для категории RunFlat / низкий профиль (&lt;45) и настроить часто используемые услуги. Значения по умолчанию — 0 ₽.</p><div id="surchargeEditor"></div><button class="secondary" id="addCatalogExtra">＋ Добавить услугу в список</button><div id="catalogExtras"></div></div><div class="card" id="publishPriceCard">
+<h2>Публикация общего прайса</h2>
+<p class="muted">После изменения цен владелец может опубликовать их для всех сотрудников.</p>
+<button class="primary" id="cloudPublish" style="width:100%">Опубликовать прайс</button>
+<p id="publishStatus" class="muted" aria-live="polite"></p>
+</div>
+</section><section id="settings" class="hidden">
+<div class="card">
+<h2>Название организации</h2>
+<p class="muted">Название отображается в верхней части приложения.</p>
+<div class="field"><label for="businessNameInput">Название организации</label><input type="text" id="businessNameInput" maxlength="60" value="Вулкашка 61" placeholder="Введите название"></div>
+<button class="primary" id="saveBusinessName">Сохранить название</button>
+</div><div class="card" id="cloudPanel">
+<h2>Общий прайс — синхронизация</h2>
+<p class="muted">Здесь находятся вход владельца и инструменты управления общим прайсом.</p>
 <p id="cloudStatus" class="muted" aria-live="polite">Подключаем общий прайс…</p>
-<div id="ownerTools" style="display:none"><hr style="border:0;border-top:1px solid var(--line);margin:14px 0"><h3 style="font-size:15px">Настройки владельца</h3>
+<div id="ownerTools">
+<hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+<h3 style="font-size:15px">Настройки владельца</h3>
 <div class="field"><label>Адрес Supabase проекта</label><input type="text" id="cloudUrl" value="https://lqqfgzioboqeeiuhijyi.supabase.co" placeholder="https://xxxxxxxx.supabase.co" autocomplete="url"></div>
 <div class="field" style="margin-top:8px"><label>Публичный anon key проекта</label><input type="text" id="cloudKey" value="sb_publishable_QcMaau9Phz4pQYjhF39N1w_bW6XlC3v" placeholder="sb_publishable_…" autocomplete="off"></div>
 <div class="row" style="margin-top:8px"><button class="secondary" id="cloudConnect" style="flex:1">Подключить общий прайс</button><button class="secondary" id="cloudRefresh" style="flex:1">Загрузить общий прайс</button></div>
-<div class="field" style="margin-top:8px"><label>Email владельца</label><input type="text" id="ownerEmail" autocomplete="username"></div><div class="field" style="margin-top:8px"><label>Пароль владельца Supabase Auth</label><input type="password" id="ownerPassword" autocomplete="current-password"></div>
+<div class="field" style="margin-top:8px"><label>Email владельца</label><input type="text" id="ownerEmail" autocomplete="username"></div>
+<div class="field" style="margin-top:8px"><label>Пароль владельца Supabase Auth</label><input type="password" id="ownerPassword" autocomplete="current-password"></div>
 <div class="row" style="margin-top:8px"><button class="secondary" id="ownerLogin" style="flex:1">Войти владельцем</button><button class="secondary" id="ownerLogout" style="flex:1">Выйти</button></div>
-<button class="primary" id="cloudPublish">Опубликовать текущий прайс для всех</button></div>
-<p class="muted" style="font-size:12px;margin-top:10px">Для владельца: нажми 5 раз подряд на строку статуса общего прайса, чтобы открыть настройки.</p></div>
-<div class="card"><button class="secondary" id="export" style="width:100%">Экспортировать настройки (JSON)</button><label class="muted" style="display:block;margin-top:12px">Импорт настроек из JSON-файла</label><input type="file" id="importFile" accept=".json,application/json"><button class="secondary" id="defaults" style="width:100%;margin-top:12px">Восстановить исходный прайс</button><p class="save-note">Важно: данные хранятся в браузере на этом телефоне. Для переноса на другое устройство используйте экспорт/импорт.</p></div>
+</div>
+</div><div class="card">
+<h2>Резервное копирование</h2>
+<button class="secondary" id="export" style="width:100%">Экспортировать настройки (JSON)</button>
+<label class="muted" style="display:block;margin-top:12px">Импорт настроек из JSON-файла</label>
+<input type="file" id="importFile" accept=".json,application/json">
+<button class="secondary" id="defaults" style="width:100%;margin-top:12px">Восстановить исходный прайс</button>
+<p class="save-note">Важно: данные хранятся в браузере на этом телефоне. Для переноса на другое устройство используйте экспорт/импорт.</p>
+</div>
 </section>
 </main>
 <script>
@@ -370,19 +571,27 @@ function calculate(){
  $('total').textContent=money(n);
  $('summary').textContent=`${v} · ${labels[r]} · ${qty} колёс${special?' · RunFlat / низкий профиль (<45)':''}\n`+(lines.length?lines.join('\n'):'Выберите работы или заполните цены в настройках.');
 }
-function renderPriceEditor(){let v=$('priceVehicle').value, box=$('priceEditor');box.innerHTML='';let names=[['remove','Снятие / установка'],['mount','Шиномонтаж'],['balance','Балансировка'],['one','Полный комплекс за 1 колесо'],['four','Полный комплекс за 4 колеса'],['rfOne','RunFlat за 1 колесо / от'],['rfFour','Комплекс RunFlat за 4 колеса'],['valve','Установка одного вентиля']];rims.forEach(r=>{let h=document.createElement('h3');h.style.fontSize='15px';h.textContent=labels[r];box.appendChild(h);names.forEach(([key,name])=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<span>${name}</span><input type="number" min="0" step="10" data-price="${r}|${key}" value="${data.prices[v][r][key]||0}" aria-label="${name}"><span class="muted">₽</span>`;box.appendChild(row)})});box.querySelectorAll('[data-price]').forEach(inp=>inp.addEventListener('change',()=>{let [r,k]=inp.dataset.price.split('|');data.prices[v][r][k]=Math.max(0,+inp.value||0);save();calculate()}))}
+function updatePriceAccess(){
+  const isOwner=window.__tireCalcIsOwner===true;
+  document.querySelectorAll('#priceEditor input, #surchargeEditor input, #catalogExtras input, #catalogExtras button, #addCatalogExtra').forEach(el=>{
+    el.disabled=!isOwner;
+  });
+  const publishCard=$('publishPriceCard');
+  if(publishCard) publishCard.classList.toggle('hidden',!isOwner);
+}
+function renderPriceEditor(){let v=$('priceVehicle').value, box=$('priceEditor');box.innerHTML='';let names=[['remove','Снятие / установка'],['mount','Шиномонтаж'],['balance','Балансировка'],['one','Полный комплекс за 1 колесо'],['four','Полный комплекс за 4 колеса'],['rfOne','RunFlat за 1 колесо / от'],['rfFour','Комплекс RunFlat за 4 колеса'],['valve','Установка одного вентиля']];rims.forEach(r=>{let h=document.createElement('h3');h.style.fontSize='15px';h.textContent=labels[r];box.appendChild(h);names.forEach(([key,name])=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<span>${name}</span><input type="number" min="0" step="10" data-price="${r}|${key}" value="${data.prices[v][r][key]||0}" aria-label="${name}"><span class="muted">₽</span>`;box.appendChild(row)})});box.querySelectorAll('[data-price]').forEach(inp=>inp.addEventListener('change',()=>{let [r,k]=inp.dataset.price.split('|');data.prices[v][r][k]=Math.max(0,+inp.value||0);save();calculate()}));updatePriceAccess()}
 function renderSurcharges(){let box=$('surchargeEditor');box.innerHTML='';
  let title=document.createElement('h3');title.textContent='Правка дисков — цены по диаметру';title.style.fontSize='15px';box.appendChild(title);
  for(let d=13;d<=23;d++){let size='R'+d;let h=document.createElement('h4');h.textContent=size;h.style.margin='12px 0 4px';box.appendChild(h);for(let [key,label] of [['rim','Правка диска'],['eight','Правка восьмёрки']]){let row=document.createElement('div');row.className='price-row';row.innerHTML=`<span>${label}</span><input type="number" min="0" step="10" data-repair-size="${size}" data-repair-type="${key}" value="${data.rimRepair[size][key]||0}"><span class="muted">₽/шт.</span>`;box.appendChild(row)}}
- box.querySelectorAll('[data-repair-size]').forEach(i=>i.addEventListener('change',()=>{data.rimRepair[i.dataset.repairSize][i.dataset.repairType]=Math.max(0,+i.value||0);save();calculate()}));[['special','Доплата за RunFlat / низкий профиль (<45)']].forEach(([k,n])=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<span>${n}</span><input type="number" min="0" step="10" data-surcharge="${k}" value="${data.surcharges[k]||0}"><span class="muted">₽/колесо</span>`;box.appendChild(row)});box.querySelectorAll('[data-surcharge]').forEach(i=>i.addEventListener('change',()=>{data.surcharges[i.dataset.surcharge]=+i.value||0;save();calculate()}))}
-function renderCatalog(){let box=$('catalogExtras');box.innerHTML='';data.extras.forEach((e,i)=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<input type="text" data-name="${i}" value="${e.name}"><input type="number" min="0" data-extra-price="${i}" value="${e.price}"><button class="secondary" data-del="${i}" aria-label="Удалить">×</button>`;box.appendChild(row)});box.querySelectorAll('[data-name]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.name].name=i.value||'Услуга';save();renderExtras()}));box.querySelectorAll('[data-extra-price]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.extraPrice].price=+i.value||0;save();renderExtras()}));box.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{data.extras.splice(+b.dataset.del,1);save();renderCatalog();renderExtras()}))}
+ box.querySelectorAll('[data-repair-size]').forEach(i=>i.addEventListener('change',()=>{data.rimRepair[i.dataset.repairSize][i.dataset.repairType]=Math.max(0,+i.value||0);save();calculate()}));[['special','Доплата за RunFlat / низкий профиль (<45)']].forEach(([k,n])=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<span>${n}</span><input type="number" min="0" step="10" data-surcharge="${k}" value="${data.surcharges[k]||0}"><span class="muted">₽/колесо</span>`;box.appendChild(row)});box.querySelectorAll('[data-surcharge]').forEach(i=>i.addEventListener('change',()=>{data.surcharges[i.dataset.surcharge]=+i.value||0;save();calculate()}));updatePriceAccess()}
+function renderCatalog(){let box=$('catalogExtras');box.innerHTML='';data.extras.forEach((e,i)=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<input type="text" data-name="${i}" value="${e.name}"><input type="number" min="0" data-extra-price="${i}" value="${e.price}"><button class="secondary" data-del="${i}" aria-label="Удалить">×</button>`;box.appendChild(row)});box.querySelectorAll('[data-name]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.name].name=i.value||'Услуга';save();renderExtras()}));box.querySelectorAll('[data-extra-price]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.extraPrice].price=+i.value||0;save();renderExtras()}));box.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{data.extras.splice(+b.dataset.del,1);save();renderCatalog();renderExtras()}));updatePriceAccess()}
 $('priceVehicle').innerHTML=vehicles.map(v=>`<option>${v}</option>`).join('');
 $('priceVehicle').addEventListener('change',renderPriceEditor);
 $('vehicle').addEventListener('change',calculate);['rim','tireCategory','qty','basic','removeInstall','mount','balance','repairQty','rimRepair','eightRepair','rimRepairPrice','eightRepairPrice'].forEach(id=>$(id).addEventListener('input',calculate));
 function syncRepairPrices(){const rp=data.rimRepair[$('repairRim').value]||{rim:0,eight:0};$('rimRepairPrice').value=rp.rim||0;$('eightRepairPrice').value=rp.eight||0;calculate()}
 $('repairRim').addEventListener('change',syncRepairPrices);
 $('unitButtons').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{unit=+b.dataset.unit;$('unitButtons').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));if(unit===4)$('qty').value=4;else if(+$('qty').value===4)$('qty').value=1;calculate()}));
-document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));$('calc').classList.toggle('hidden',b.dataset.tab!=='calc');$('prices').classList.toggle('hidden',b.dataset.tab!=='prices')}));
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));['calc','prices','settings'].forEach(id=>$(id).classList.toggle('hidden',b.dataset.tab!==id))}));
 $('addExtra').onclick=()=>{data.extras.push({name:'Новая работа',price:0});save();renderExtras();renderCatalog()};
 $('addCatalogExtra').onclick=()=>{data.extras.push({name:'Новая услуга',price:0});save();renderCatalog();renderExtras()};
 function getCalculationText(){return `РАСЧЁТ ШИНОМОНТАЖА\n${$('summary').textContent}\n\nИТОГО: ${$('total').textContent}\n\nСтоимость предварительная.`; }
@@ -401,8 +610,12 @@ renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();syncRepair
 if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')) addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 (()=>{
  const $c=id=>document.getElementById(id); let sb=null, owner=false, busy=false;
+  function syncOwnerAccess(){
+  window.__tireCalcIsOwner=owner;
+  if(typeof updatePriceAccess==='function') updatePriceAccess();
+  }
  const status=(s)=>{const el=$c('cloudStatus');if(el)el.textContent=s};
- let statusTaps=0,statusTapTimer=null; const statusEl=$c('cloudStatus'); statusEl.style.cursor='default'; statusEl.addEventListener('click',()=>{statusTaps++;clearTimeout(statusTapTimer);statusTapTimer=setTimeout(()=>statusTaps=0,1800);if(statusTaps>=5){statusTaps=0;$c('ownerTools').style.display=$c('ownerTools').style.display==='none'?'block':'none';}});
+ const statusEl=$c('cloudStatus'); statusEl.style.cursor='default';
  const cfg=()=>({url:($c('cloudUrl').value||'').trim().replace(/\/$/,''),key:($c('cloudKey').value||'').trim()});
  function makeClient(){const c=cfg();if(!c.url||!c.key)throw Error('Введи адрес проекта и публичный anon key.');if(!window.supabase?.createClient)throw Error('Не загрузилась библиотека облака. Проверь интернет.');sb=window.supabase.createClient(c.url,c.key,{auth:{persistSession:true,autoRefreshToken:true}});localStorage.setItem('tireCloudUrl',c.url);localStorage.setItem('tireCloudKey',c.key);return sb;}
  async function fetchPrice(){if(busy)return;busy=true;try{if(!sb)makeClient();const {data:row,error}=await sb.from('shared_price').select('payload,updated_at').eq('id',1).maybeSingle();if(error)throw error;if(!row){status('В облаке пока нет прайса. Войди как владелец и нажми «Опубликовать».');return;}data=row.payload;localStorage.setItem('tireCalcData',JSON.stringify(data));renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();syncRepairPrices();calculate();status('Общий прайс загружен'+(row.updated_at?' · обновлён '+new Date(row.updated_at).toLocaleString('ru-RU'):''));}catch(e){status('Не удалось загрузить общий прайс: '+(e.message||e));}finally{busy=false;}}
@@ -410,8 +623,8 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
  $c('cloudUrl').value=localStorage.getItem('tireCloudUrl')||'https://lqqfgzioboqeeiuhijyi.supabase.co';$c('cloudKey').value=localStorage.getItem('tireCloudKey')||'sb_publishable_QcMaau9Phz4pQYjhF39N1w_bW6XlC3v';
  $c('cloudConnect').addEventListener('click',async()=>{try{makeClient();const {error}=await sb.from('shared_price').select('id').limit(1);if(error)throw error;status('Подключение успешно. Загружаю общий прайс…');await fetchPrice();}catch(e){status('Ошибка подключения: '+(e.message||e)+' · Выполни SQL из архива в Supabase.');}});
  $c('cloudRefresh').addEventListener('click',fetchPrice);
- $c('ownerLogin').addEventListener('click',async()=>{try{if(!sb)makeClient();const {data:res,error}=await sb.auth.signInWithPassword({email:$c('ownerEmail').value.trim(),password:$c('ownerPassword').value});if(error)throw error;owner=true;$c('ownerPassword').value='';status('Вход выполнен. Теперь можно менять цены и публиковать их для всех.');}catch(e){status('Вход не выполнен: '+(e.message||e));}});
- $c('ownerLogout').addEventListener('click',async()=>{try{if(sb)await sb.auth.signOut();owner=false;status('Вы вышли из режима владельца.');}catch(e){status(e.message||String(e));}});
+ $c('ownerLogin').addEventListener('click',async()=>{try{if(!sb)makeClient();const {data:res,error}=await sb.auth.signInWithPassword({email:$c('ownerEmail').value.trim(),password:$c('ownerPassword').value});if(error)throw error;owner=true;syncOwnerAccess();$c('ownerPassword').value='';status('Вход выполнен. Теперь можно менять цены и публиковать их для всех.');}catch(e){status('Вход не выполнен: '+(e.message||e));}});
+ $c('ownerLogout').addEventListener('click',async()=>{try{if(sb)await sb.auth.signOut();owner=false;syncOwnerAccess();status('Вы вышли из режима владельца.');}catch(e){status(e.message||String(e));}});
  $c('cloudPublish').addEventListener('click',publish);
  // If a project was configured previously, load the shared price on start. Local price remains available offline.
   // При запуске загружаем общий прайс и восстанавливаем сессию владельца.
@@ -427,7 +640,7 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
 
      if (error) throw error;
 
-     owner = !!sessionData.session;
+     owner = !!sessionData.session;syncOwnerAccess();
 
      if (owner) {
       status('Вход владельца восстановлен. Можно менять цены и публиковать их для всех.');
