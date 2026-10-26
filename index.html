@@ -470,18 +470,40 @@ font-size: clamp(38px, 10vw, 46px);
 <div class="field"><label>Категория для редактирования</label><select id="priceVehicle"></select></div>
 <div id="priceEditor"></div>
 </div>
-<div class="card"><h2>Доплаты и дополнительные услуги</h2><p class="muted">Можно задать единую доплату для категории RunFlat / низкий профиль (&lt;45) и настроить часто используемые услуги. Значения по умолчанию — 0 ₽.</p><div id="surchargeEditor"></div><button class="secondary" id="addCatalogExtra">＋ Добавить услугу в список</button><div id="catalogExtras"></div></div>
-<div class="card" id="cloudPanel"><h2>Общий прайс — синхронизация</h2><p class="muted">После подключения облака все пользователи будут загружать общий прайс. Только владелец, вошедший под своим аккаунтом, сможет публиковать изменения.</p>
+<div class="card"><h2>Доплаты и дополнительные услуги</h2><p class="muted">Можно задать единую доплату для категории RunFlat / низкий профиль (&lt;45) и настроить часто используемые услуги. Значения по умолчанию — 0 ₽.</p><div id="surchargeEditor"></div><button class="secondary" id="addCatalogExtra">＋ Добавить услугу в список</button><div id="catalogExtras"></div></div><div class="card" id="publishPriceCard">
+<h2>Публикация общего прайса</h2>
+<p class="muted">После изменения цен владелец может опубликовать их для всех сотрудников.</p>
+<button class="primary" id="cloudPublish" style="width:100%">Опубликовать прайс</button>
+<p id="publishStatus" class="muted" aria-live="polite"></p>
+</div>
+</section><section id="settings" class="hidden">
+<div class="card">
+<h2>Название организации</h2>
+<p class="muted">Название отображается в верхней части приложения.</p>
+<div class="field"><label for="businessNameInput">Название организации</label><input type="text" id="businessNameInput" maxlength="60" value="Вулкашка 61" placeholder="Введите название"></div>
+<button class="primary" id="saveBusinessName">Сохранить название</button>
+</div><div class="card" id="cloudPanel">
+<h2>Общий прайс — синхронизация</h2>
+<p class="muted">Здесь находятся вход владельца и инструменты управления общим прайсом.</p>
 <p id="cloudStatus" class="muted" aria-live="polite">Подключаем общий прайс…</p>
-<div id="ownerTools" style="display:none"><hr style="border:0;border-top:1px solid var(--line);margin:14px 0"><h3 style="font-size:15px">Настройки владельца</h3>
+<div id="ownerTools">
+<hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+<h3 style="font-size:15px">Настройки владельца</h3>
 <div class="field"><label>Адрес Supabase проекта</label><input type="text" id="cloudUrl" value="https://lqqfgzioboqeeiuhijyi.supabase.co" placeholder="https://xxxxxxxx.supabase.co" autocomplete="url"></div>
 <div class="field" style="margin-top:8px"><label>Публичный anon key проекта</label><input type="text" id="cloudKey" value="sb_publishable_QcMaau9Phz4pQYjhF39N1w_bW6XlC3v" placeholder="sb_publishable_…" autocomplete="off"></div>
 <div class="row" style="margin-top:8px"><button class="secondary" id="cloudConnect" style="flex:1">Подключить общий прайс</button><button class="secondary" id="cloudRefresh" style="flex:1">Загрузить общий прайс</button></div>
-<div class="field" style="margin-top:8px"><label>Email владельца</label><input type="text" id="ownerEmail" autocomplete="username"></div><div class="field" style="margin-top:8px"><label>Пароль владельца Supabase Auth</label><input type="password" id="ownerPassword" autocomplete="current-password"></div>
+<div class="field" style="margin-top:8px"><label>Email владельца</label><input type="text" id="ownerEmail" autocomplete="username"></div>
+<div class="field" style="margin-top:8px"><label>Пароль владельца Supabase Auth</label><input type="password" id="ownerPassword" autocomplete="current-password"></div>
 <div class="row" style="margin-top:8px"><button class="secondary" id="ownerLogin" style="flex:1">Войти владельцем</button><button class="secondary" id="ownerLogout" style="flex:1">Выйти</button></div>
-<button class="primary" id="cloudPublish">Опубликовать текущий прайс для всех</button></div>
-<p class="muted" style="font-size:12px;margin-top:10px">Для владельца: нажми 5 раз подряд на строку статуса общего прайса, чтобы открыть настройки.</p></div>
-<div class="card"><button class="secondary" id="export" style="width:100%">Экспортировать настройки (JSON)</button><label class="muted" style="display:block;margin-top:12px">Импорт настроек из JSON-файла</label><input type="file" id="importFile" accept=".json,application/json"><button class="secondary" id="defaults" style="width:100%;margin-top:12px">Восстановить исходный прайс</button><p class="save-note">Важно: данные хранятся в браузере на этом телефоне. Для переноса на другое устройство используйте экспорт/импорт.</p></div>
+</div>
+</div><div class="card">
+<h2>Резервное копирование</h2>
+<button class="secondary" id="export" style="width:100%">Экспортировать настройки (JSON)</button>
+<label class="muted" style="display:block;margin-top:12px">Импорт настроек из JSON-файла</label>
+<input type="file" id="importFile" accept=".json,application/json">
+<button class="secondary" id="defaults" style="width:100%;margin-top:12px">Восстановить исходный прайс</button>
+<p class="save-note">Важно: данные хранятся в браузере на этом телефоне. Для переноса на другое устройство используйте экспорт/импорт.</p>
+</div>
 </section>
 </main>
 <script>
