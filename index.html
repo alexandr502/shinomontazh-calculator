@@ -590,6 +590,10 @@ renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();syncRepair
 if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')) addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 (()=>{
  const $c=id=>document.getElementById(id); let sb=null, owner=false, busy=false;
+  function syncOwnerAccess(){
+  window.__tireCalcIsOwner=owner;
+  if(typeof updatePriceAccess==='function') updatePriceAccess();
+  }
  const status=(s)=>{const el=$c('cloudStatus');if(el)el.textContent=s};
  const statusEl=$c('cloudStatus'); statusEl.style.cursor='default';
  const cfg=()=>({url:($c('cloudUrl').value||'').trim().replace(/\/$/,''),key:($c('cloudKey').value||'').trim()});
@@ -599,8 +603,8 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
  $c('cloudUrl').value=localStorage.getItem('tireCloudUrl')||'https://lqqfgzioboqeeiuhijyi.supabase.co';$c('cloudKey').value=localStorage.getItem('tireCloudKey')||'sb_publishable_QcMaau9Phz4pQYjhF39N1w_bW6XlC3v';
  $c('cloudConnect').addEventListener('click',async()=>{try{makeClient();const {error}=await sb.from('shared_price').select('id').limit(1);if(error)throw error;status('Подключение успешно. Загружаю общий прайс…');await fetchPrice();}catch(e){status('Ошибка подключения: '+(e.message||e)+' · Выполни SQL из архива в Supabase.');}});
  $c('cloudRefresh').addEventListener('click',fetchPrice);
- $c('ownerLogin').addEventListener('click',async()=>{try{if(!sb)makeClient();const {data:res,error}=await sb.auth.signInWithPassword({email:$c('ownerEmail').value.trim(),password:$c('ownerPassword').value});if(error)throw error;owner=true;$c('ownerPassword').value='';status('Вход выполнен. Теперь можно менять цены и публиковать их для всех.');}catch(e){status('Вход не выполнен: '+(e.message||e));}});
- $c('ownerLogout').addEventListener('click',async()=>{try{if(sb)await sb.auth.signOut();owner=false;status('Вы вышли из режима владельца.');}catch(e){status(e.message||String(e));}});
+ $c('ownerLogin').addEventListener('click',async()=>{try{if(!sb)makeClient();const {data:res,error}=await sb.auth.signInWithPassword({email:$c('ownerEmail').value.trim(),password:$c('ownerPassword').value});if(error)throw error;owner=true;syncOwnerAccess();$c('ownerPassword').value='';status('Вход выполнен. Теперь можно менять цены и публиковать их для всех.');}catch(e){status('Вход не выполнен: '+(e.message||e));}});
+ $c('ownerLogout').addEventListener('click',async()=>{try{if(sb)await sb.auth.signOut();owner=false;syncOwnerAccess();status('Вы вышли из режима владельца.');}catch(e){status(e.message||String(e));}});
  $c('cloudPublish').addEventListener('click',publish);
  // If a project was configured previously, load the shared price on start. Local price remains available offline.
   // При запуске загружаем общий прайс и восстанавливаем сессию владельца.
@@ -616,7 +620,7 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
 
      if (error) throw error;
 
-     owner = !!sessionData.session;
+     owner = !!sessionData.session;syncOwnerAccess();
 
      if (owner) {
       status('Вход владельца восстановлен. Можно менять цены и публиковать их для всех.');
