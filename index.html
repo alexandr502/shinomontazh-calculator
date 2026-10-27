@@ -502,6 +502,7 @@ header p {
 <p class="muted">Название отображается в верхней части приложения.</p>
 <div class="field"><label for="businessNameInput">Название организации</label><input type="text" id="businessNameInput" maxlength="60" value="Вулкашка 61" placeholder="Введите название"></div>
 <button class="primary" id="saveBusinessName">Сохранить название</button>
+<p id="businessNameStatus" class="muted" aria-live="polite"></p>
 </div><div class="card" id="cloudPanel">
 <h2>Общий прайс — синхронизация</h2>
 <p class="muted">Здесь находятся вход владельца и инструменты управления общим прайсом.</p>
@@ -545,6 +546,34 @@ let unit=4;
 const $=id=>document.getElementById(id);
 const money=n=>Math.round(n).toLocaleString('ru-RU')+' ₽';
 function save(){localStorage.setItem('tireCalcData',JSON.stringify(data))}
+  // Название организации хранится отдельно на каждом устройстве.
+const DEFAULT_BUSINESS_NAME = 'Вулкашка 61';
+
+function applyBusinessName(name) {
+  const cleanName = String(name || '').trim().slice(0, 60) || DEFAULT_BUSINESS_NAME;
+
+  $('businessNameTitle').textContent = '🛞 ' + cleanName;
+  $('businessNameInput').value = cleanName;
+
+  localStorage.setItem('tireCalcBusinessName', cleanName);
+}
+
+$('saveBusinessName').addEventListener('click', function () {
+  const name = $('businessNameInput').value.trim();
+
+  if (!name) {
+    $('businessNameStatus').textContent = 'Введите название организации.';
+    $('businessNameInput').focus();
+    return;
+  }
+
+  applyBusinessName(name);
+  $('businessNameStatus').textContent = 'Название сохранено на этом устройстве.';
+});
+
+applyBusinessName(
+  localStorage.getItem('tireCalcBusinessName') || DEFAULT_BUSINESS_NAME
+);
 function activePrice(){return data.prices[$('vehicle').value][$('rim').value]||{}}
 function renderExtras(){let box=$('extras');box.innerHTML='';data.extras.forEach((e,i)=>{let d=document.createElement('div');d.className='check';d.innerHTML=`<input type="checkbox" data-extra="${i}" id="ex${i}"><label for="ex${i}" style="flex:1">${e.name} <span class="muted">(${money(e.price)}/шт.)</span></label><input type="number" min="0" value="1" aria-label="Количество" data-extraqty="${i}" style="width:70px;min-height:38px">`;box.appendChild(d)});box.querySelectorAll('input').forEach(x=>x.addEventListener('change',calculate))}
 function calculate(){
