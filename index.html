@@ -433,6 +433,32 @@ header p {
 #settings hr {
   border-color: #3a3e46 !important;
 }
+  /* Этап 1: шапка и навигация */
+header {
+  position: static;
+  top: auto;
+}
+
+.header-title-row h1 {
+  font-size: clamp(25px, 6vw, 32px);
+  line-height: 1.2;
+}
+
+.tabs {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  overflow: visible;
+}
+
+.tabs button {
+  flex: 1 1 0;
+  min-width: 0;
+  white-space: normal;
+  border-radius: 12px;
+  padding: 11px 6px;
+  text-align: center;
+}
 </style>
 </head>
 <body>
