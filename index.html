@@ -459,12 +459,32 @@ header {
   padding: 11px 6px;
   text-align: center;
 }
+  .header-title-row h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-logo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  flex: 0 0 auto;
+  border-radius: 10px;
+}
+
+@media (max-width: 380px) {
+  .header-logo {
+    width: 42px;
+    height: 42px;
+  }
+}
 </style>
 </head>
 <body>
 <header>
   <div class="header-title-row">
-    <h1 id="businessNameTitle">🛞 Вулкашка 61</h1>
+    <h1 id="businessNameTitle"><img class="header-logo" src="./header-wheel.jpg" alt="" /> Вулкашка 61</h1>
     <span class="app-version">Версия 2.0.0</span>
   </div>
   <p>Шиномонтажный калькулятор</p>
