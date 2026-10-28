@@ -1041,32 +1041,30 @@ function calculate() {
     );
   }
   const argonQty = serviceQty.argon;
-
   $('argonQty').textContent = argonQty;
+  $('argonUnitPrice').textContent =
+    money(Number($('argonPrice').value) || 0) + '/шт.';
 
-  if ($('argonWelding').checked) {
-    add('Аргоновая сварка', $('argonPrice').value, argonQty);
-  }
+  add('Аргоновая сварка', $('argonPrice').value, argonQty);
+
   const repairSize = $('repairRim').value;
   const repairQty = Math.max(
-    1,
-    Math.min(24, parseInt($('repairQty').value) || 1)
+    0,
+    Math.min(24, parseInt($('repairQty').value, 10) || 0)
   );
 
+  $('repairQtyOutput').textContent = repairQty;
+  $('rimRepairPriceLabel').textContent =
+    money(Number($('rimRepairPrice').value) || 0) + '/шт.';
+  $('eightRepairPriceLabel').textContent =
+    money(Number($('eightRepairPrice').value) || 0) + '/шт.';
+
   if ($('rimRepair').checked) {
-    add(
-      `Правка диска ${repairSize}`,
-      Number($('rimRepairPrice').value),
-      repairQty
-    );
+    add(`Правка диска ${repairSize}`, $('rimRepairPrice').value, repairQty);
   }
 
   if ($('eightRepair').checked) {
-    add(
-      `Правка восьмёрки ${repairSize}`,
-      Number($('eightRepairPrice').value),
-      repairQty
-    );
+    add(`Правка восьмёрки ${repairSize}`, $('eightRepairPrice').value, repairQty);
   }
 
   data.extras.forEach((extra, i) => {
@@ -1134,18 +1132,58 @@ $('argonPlus').addEventListener('click', () => {
   calculate();
 });
 
-$('argonWelding').addEventListener('change', calculate);
 $('argonPrice').addEventListener('input', calculate);
   
 function syncRepairPrices() {
-  const prices = data.rimRepair[$('repairRim').value] || { rim: 0, eight: 0 };
+  const range = $('rim').value;
+  $('repairRim').value = range;
+
+  const representative = {
+    '12-14': 'R14',
+    '15-16': 'R15',
+    '17-18': 'R17',
+    '19-20': 'R19',
+    '21-22': 'R21',
+    '23+': 'R23'
+  };
+
+  const size = representative[range] || 'R17';
+  const prices = data.rimRepair[size] || { rim: 0, eight: 0 };
+
   $('rimRepairPrice').value = prices.rim || 0;
   $('eightRepairPrice').value = prices.eight || 0;
+
   calculate();
 }
 
 $('repairRim').addEventListener('change', syncRepairPrices);
+$('rim').addEventListener('change', syncRepairPrices);
 
+$('repairMinus').addEventListener('click', () => {
+  $('repairQty').value = Math.max(
+    0,
+    (Number($('repairQty').value) || 0) - 1
+  );
+  calculate();
+});
+
+$('repairPlus').addEventListener('click', () => {
+  $('repairQty').value = Math.min(
+    24,
+    (Number($('repairQty').value) || 0) + 1
+  );
+  calculate();
+});
+
+$('resetRepairs').addEventListener('click', () => {
+  $('repairQty').value = 0;
+  $('rimRepair').checked = false;
+  $('eightRepair').checked = false;
+  syncRepairPrices();
+});
+
+$('rimRepairPrice').addEventListener('input', calculate);
+$('eightRepairPrice').addEventListener('input', calculate);
 $('basic').addEventListener('change', calculate);
 
 document.querySelectorAll('.tabs button').forEach(button => {
@@ -1179,11 +1217,10 @@ $(id).checked = false;
 });
 
 Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
-$('argonWelding').checked = false;
 $('argonPrice').value = 1500;
 data.extras.forEach(extra => extra.quantity = 0);
 
-$('repairQty').value = 1;
+$('repairQty').value = 0;
 renderExtras();
 calculate();
 };
