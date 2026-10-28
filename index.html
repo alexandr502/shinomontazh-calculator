@@ -927,7 +927,12 @@ function renderExtras() {
   const box = $('extras');
   box.innerHTML = '';
 
-  data.extras.forEach((e, i) => {
+  const allExtras = [
+    ...data.extras.map((e, index) => ({ ...e, source: 'catalog', index })),
+    ...data.calculatorExtras.map((e, index) => ({ ...e, source: 'manual', index }))
+  ];
+
+  allExtras.forEach((e, i) => {
     const quantity = Math.max(0, Number(e.quantity) || 0);
     const row = document.createElement('div');
 
@@ -937,6 +942,11 @@ function renderExtras() {
     row.innerHTML = `
       <label></label>
       <span class="service-price">${money(e.price)}/шт.</span>
+      ${e.source === 'manual'
+        ? `<button type="button" class="extra-edit-button"
+             data-extra-edit="${e.index}"
+             aria-label="Редактировать услугу">✎</button>`
+        : ''}
       <div class="quantity-control">
         <button type="button" data-extra-minus="${i}"
           aria-label="Уменьшить количество">−</button>
@@ -950,13 +960,17 @@ function renderExtras() {
     box.appendChild(row);
   });
 
+  function getExtra(i) {
+    const catalogCount = data.extras.length;
+    return i < catalogCount
+      ? data.extras[i]
+      : data.calculatorExtras[i - catalogCount];
+  }
+
   box.querySelectorAll('[data-extra-minus]').forEach(button => {
     button.addEventListener('click', () => {
-      const i = +button.dataset.extraMinus;
-      data.extras[i].quantity = Math.max(
-        0,
-        (data.extras[i].quantity || 0) - 1
-      );
+      const extra = getExtra(Number(button.dataset.extraMinus));
+      extra.quantity = Math.max(0, (Number(extra.quantity) || 0) - 1);
       save();
       renderExtras();
       calculate();
@@ -965,11 +979,39 @@ function renderExtras() {
 
   box.querySelectorAll('[data-extra-plus]').forEach(button => {
     button.addEventListener('click', () => {
-      const i = +button.dataset.extraPlus;
-      data.extras[i].quantity = Math.min(
-        99,
-        (data.extras[i].quantity || 0) + 1
-      );
+      const extra = getExtra(Number(button.dataset.extraPlus));
+      extra.quantity = Math.min(99, (Number(extra.quantity) || 0) + 1);
+      save();
+      renderExtras();
+      calculate();
+    });
+  });
+
+  box.querySelectorAll('[data-extra-edit]').forEach(button => {
+    button.addEventListener('click', () => {
+      const extra = data.calculatorExtras[Number(button.dataset.extraEdit)];
+
+      const name = prompt('Название услуги:', extra.name);
+      if (name === null) return;
+
+      const cleanName = name.trim();
+      if (!cleanName) {
+        alert('Название не может быть пустым.');
+        return;
+      }
+
+      const priceText = prompt('Цена за 1 шт. (₽):', String(extra.price ?? 0));
+      if (priceText === null) return;
+
+      const price = Number(priceText);
+      if (!Number.isFinite(price) || price < 0) {
+        alert('Введите цену числом, не меньше 0.');
+        return;
+      }
+
+      extra.name = cleanName;
+      extra.price = price;
+
       save();
       renderExtras();
       calculate();
