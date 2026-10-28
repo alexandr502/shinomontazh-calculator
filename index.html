@@ -714,6 +714,27 @@ header {
 <div class="check"><input type="checkbox" id="eightRepair"><label for="eightRepair" style="flex:1">Правка восьмёрки</label></div>
 <div class="field"><label>Цена правки восьмёрки за 1 шт. (из прайса, можно изменить)</label><input type="number" id="eightRepairPrice" min="0" step="10" value="0"></div>
 <div class="muted">При выборе диаметра цены автоматически подставляются из прайса. Перед расчётом можно изменить любую цену — изменение действует только для текущего расчёта и не меняет основной прайс.</div>
+<div class="card">
+  <h2>Аргоновая сварка</h2>
+  <div class="check">
+    <input type="checkbox" id="argonWelding">
+    <label for="argonWelding" style="flex:1">Аргоновая сварка</label>
+  </div>
+  <div class="field">
+    <label>Количество трещин</label>
+    <div class="quantity-control">
+      <button type="button" id="argonMinus">−</button>
+      <output id="argonQty">0</output>
+      <button type="button" id="argonPlus">+</button>
+    </div>
+  </div>
+  <div class="field">
+    <label>Цена за одну трещину (₽)</label>
+    <input type="number" id="argonPrice" min="0" step="50" value="1500">
+  </div>
+  <div class="muted">Цена действует только для текущего расчёта.</div>
+</div>
+
 </div>
 <div class="card">
 <h2>4. Дополнительные работы</h2>
