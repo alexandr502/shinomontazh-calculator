@@ -184,6 +184,12 @@ details summary{font-weight:700;cursor:pointer;padding:3px 0 10px}.save-note{fon
     padding-top: 4px;
   }
 }
+  #repairRim {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: none !important;
+  padding-right: 12px;
+}
 /* Новый дизайн калькулятора: графит и красные акценты */
 :root {
   --bg: #17191d;
@@ -707,6 +713,8 @@ header {
 </div>
 <div class="card">
   <div class="section-heading">
+    <div class="card">
+  <div class="section-heading">
     <h2><span aria-hidden="true">🛞</span> Правка дисков</h2>
     <button type="button" class="secondary section-reset" id="resetRepairs"
       title="Очистить правку дисков" aria-label="Очистить правку дисков">↻</button>
@@ -722,13 +730,16 @@ header {
       <option value="21-22">R21–R22</option>
       <option value="23+">R23+</option>
     </select>
-    <div class="muted">Диапазон соответствует размеру колёс в верхнем блоке.</div>
   </div>
 
   <div class="service-row">
-    <label for="rimRepair">Правка диска</label>
+    <label>Правка диска</label>
     <span class="service-price" id="rimRepairPriceLabel">—</span>
-    <input type="checkbox" id="rimRepair">
+    <div class="quantity-control">
+      <button type="button" id="rimRepairMinus" aria-label="Уменьшить количество">−</button>
+      <output id="rimRepairQty">0</output>
+      <button type="button" id="rimRepairPlus" aria-label="Увеличить количество">+</button>
+    </div>
   </div>
   <div class="field">
     <label>Цена правки диска за 1 шт. (₽)</label>
@@ -736,27 +747,17 @@ header {
   </div>
 
   <div class="service-row">
-    <label for="eightRepair">Правка восьмёрки</label>
+    <label>Правка восьмёрки</label>
     <span class="service-price" id="eightRepairPriceLabel">—</span>
-    <input type="checkbox" id="eightRepair">
+    <div class="quantity-control">
+      <button type="button" id="eightRepairMinus" aria-label="Уменьшить количество">−</button>
+      <output id="eightRepairQty">0</output>
+      <button type="button" id="eightRepairPlus" aria-label="Увеличить количество">+</button>
+    </div>
   </div>
   <div class="field">
     <label>Цена правки восьмёрки за 1 шт. (₽)</label>
     <input type="number" id="eightRepairPrice" min="0" step="10" value="0">
-  </div>
-
-  <div class="field">
-    <label>Количество дисков</label>
-    <div class="quantity-control">
-      <button type="button" id="repairMinus">−</button>
-      <output id="repairQtyOutput">0</output>
-      <button type="button" id="repairPlus">+</button>
-    </div>
-    <input type="hidden" id="repairQty" value="0">
-  </div>
-
-  <div class="muted">
-    Цены подставляются из прайса по диапазону. Изменение действует только для текущего расчёта.
   </div>
 </div>
 
@@ -1047,25 +1048,12 @@ function calculate() {
 
   add('Аргоновая сварка', $('argonPrice').value, argonQty);
 
-  const repairSize = $('repairRim').value;
-  const repairQty = Math.max(
-    0,
-    Math.min(24, parseInt($('repairQty').value, 10) || 0)
-  );
-
-  $('repairQtyOutput').textContent = repairQty;
-  $('rimRepairPriceLabel').textContent =
-    money(Number($('rimRepairPrice').value) || 0) + '/шт.';
-  $('eightRepairPriceLabel').textContent =
-    money(Number($('eightRepairPrice').value) || 0) + '/шт.';
-
-  if ($('rimRepair').checked) {
-    add(`Правка диска ${repairSize}`, $('rimRepairPrice').value, repairQty);
-  }
-
-  if ($('eightRepair').checked) {
-    add(`Правка восьмёрки ${repairSize}`, $('eightRepairPrice').value, repairQty);
-  }
+  #repairRim {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: none !important;
+  padding-right: 12px;
+}
 
   data.extras.forEach((extra, i) => {
     const quantity = Math.max(0, Number(extra.quantity) || 0);
