@@ -244,6 +244,98 @@ header p {
   font-size: 24px;
   line-height: 1;
 }
+  /* Строки услуг */
+.service-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.service-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 24px;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #1c1e23;
+}
+
+.service-row label {
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.service-price {
+  color: #e8e9ec;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.service-row input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
+}
+
+.service-hint {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.quantity-control {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.quantity-control button {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #30333a;
+  color: #fff;
+  font-size: 23px;
+}
+
+.quantity-control output {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.service-row.is-active {
+  border-color: var(--accent);
+  background: #302124;
+}
+
+.service-row.is-disabled {
+  opacity: 0.45;
+}
+
+@media (min-width: 520px) {
+  .service-row {
+    grid-template-columns: minmax(0, 1fr) auto 24px auto;
+  }
+
+  .service-hint {
+    grid-column: 1 / -1;
+  }
+
+  .quantity-control {
+    grid-column: 4;
+    grid-row: 1;
+  }
+}
   /* Параметры автомобиля и колеса */
 #calc .card:first-child .field label {
   color: #d5d8de;
