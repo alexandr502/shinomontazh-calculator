@@ -999,6 +999,15 @@ function updateServiceRows() {
 
   const packageRow = $('basic').closest('.service-row');
   packageRow.classList.toggle('is-active', packageSelected);
+  const toggle = $('basicToggle');
+toggle.classList.toggle('is-active', packageSelected);
+toggle.setAttribute('aria-pressed', String(packageSelected));
+toggle.setAttribute(
+  'aria-label',
+  packageSelected
+    ? 'Отключить полный шиномонтаж'
+    : 'Включить полный шиномонтаж'
+);
 }
 
 function calculate() {
@@ -1319,6 +1328,22 @@ $('resetRepairs').addEventListener('click', () => {
 $('rimRepairPrice').addEventListener('input', calculate);
 $('eightRepairPrice').addEventListener('input', calculate);
 $('basic').addEventListener('change', calculate);
+  $('basicToggle').addEventListener('click', () => {
+  const basic = $('basic');
+  basic.checked = !basic.checked;
+
+  const button = $('basicToggle');
+  button.classList.toggle('is-active', basic.checked);
+  button.setAttribute('aria-pressed', String(basic.checked));
+  button.setAttribute(
+    'aria-label',
+    basic.checked
+      ? 'Отключить полный шиномонтаж'
+      : 'Включить полный шиномонтаж'
+  );
+
+  calculate();
+});
 
 document.querySelectorAll('.tabs button').forEach(button => {
   button.addEventListener('click', () => {
