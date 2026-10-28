@@ -706,33 +706,83 @@ header {
 </div>
 </div>
 <div class="card">
-<h2>3. Правка дисков</h2>
-<div class="field"><label>Диаметр диска для правки</label><select id="repairRim"><option value="R13">R13</option><option value="R14">R14</option><option value="R15">R15</option><option value="R16">R16</option><option value="R17">R17</option><option value="R18">R18</option><option value="R19">R19</option><option value="R20">R20</option><option value="R21">R21</option><option value="R22">R22</option><option value="R23">R23</option></select></div>
-<div class="field"><label>Количество дисков для правки</label><input type="number" id="repairQty" min="1" max="24" value="1"></div>
-<div class="check"><input type="checkbox" id="rimRepair"><label for="rimRepair" style="flex:1">Правка диска</label></div>
-<div class="field"><label>Цена правки диска за 1 шт. (из прайса, можно изменить)</label><input type="number" id="rimRepairPrice" min="0" step="10" value="0"></div>
-<div class="check"><input type="checkbox" id="eightRepair"><label for="eightRepair" style="flex:1">Правка восьмёрки</label></div>
-<div class="field"><label>Цена правки восьмёрки за 1 шт. (из прайса, можно изменить)</label><input type="number" id="eightRepairPrice" min="0" step="10" value="0"></div>
-<div class="muted">При выборе диаметра цены автоматически подставляются из прайса. Перед расчётом можно изменить любую цену — изменение действует только для текущего расчёта и не меняет основной прайс.</div>
-<div class="card">
-  <h2>Аргоновая сварка</h2>
-  <div class="check">
-    <input type="checkbox" id="argonWelding">
-    <label for="argonWelding" style="flex:1">Аргоновая сварка</label>
+  <div class="section-heading">
+    <h2><span aria-hidden="true">🛞</span> Правка дисков</h2>
+    <button type="button" class="secondary section-reset" id="resetRepairs"
+      title="Очистить правку дисков" aria-label="Очистить правку дисков">↻</button>
+  </div>
+
+  <div class="field">
+    <label>Диаметр диска для правки</label>
+    <select id="repairRim" disabled>
+      <option value="12-14">R12–R14</option>
+      <option value="15-16">R15–R16</option>
+      <option value="17-18">R17–R18</option>
+      <option value="19-20">R19–R20</option>
+      <option value="21-22">R21–R22</option>
+      <option value="23+">R23+</option>
+    </select>
+    <div class="muted">Диапазон соответствует размеру колёс в верхнем блоке.</div>
+  </div>
+
+  <div class="service-row">
+    <label for="rimRepair">Правка диска</label>
+    <span class="service-price" id="rimRepairPriceLabel">—</span>
+    <input type="checkbox" id="rimRepair">
   </div>
   <div class="field">
+    <label>Цена правки диска за 1 шт. (₽)</label>
+    <input type="number" id="rimRepairPrice" min="0" step="10" value="0">
+  </div>
+
+  <div class="service-row">
+    <label for="eightRepair">Правка восьмёрки</label>
+    <span class="service-price" id="eightRepairPriceLabel">—</span>
+    <input type="checkbox" id="eightRepair">
+  </div>
+  <div class="field">
+    <label>Цена правки восьмёрки за 1 шт. (₽)</label>
+    <input type="number" id="eightRepairPrice" min="0" step="10" value="0">
+  </div>
+
+  <div class="field">
+    <label>Количество дисков</label>
+    <div class="quantity-control">
+      <button type="button" id="repairMinus">−</button>
+      <output id="repairQtyOutput">0</output>
+      <button type="button" id="repairPlus">+</button>
+    </div>
+    <input type="hidden" id="repairQty" value="0">
+  </div>
+
+  <div class="muted">
+    Цены подставляются из прайса по диапазону. Изменение действует только для текущего расчёта.
+  </div>
+</div>
+
+<div class="card">
+  <div class="section-heading">
+    <h2><span aria-hidden="true">🔥</span> Аргоновая сварка</h2>
+  </div>
+
+  <div class="service-row">
     <label>Количество трещин</label>
+    <span class="service-price" id="argonUnitPrice">1 500 ₽/шт.</span>
     <div class="quantity-control">
       <button type="button" id="argonMinus">−</button>
       <output id="argonQty">0</output>
       <button type="button" id="argonPlus">+</button>
     </div>
   </div>
+
   <div class="field">
     <label>Цена за одну трещину (₽)</label>
     <input type="number" id="argonPrice" min="0" step="50" value="1500">
   </div>
-  <div class="muted">Цена действует только для текущего расчёта.</div>
+
+  <div class="muted">
+    При количестве 0 сварка не включается в расчёт. Цена действует только для текущего расчёта.
+  </div>
 </div>
 
 </div>
