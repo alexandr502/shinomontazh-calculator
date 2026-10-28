@@ -927,7 +927,7 @@ function renderExtras() {
   const box = $('extras');
   box.innerHTML = '';
 
-  data.extras.forEach((e, i) => {
+  data.calculatorExtras.forEach((e, i) => {
     const quantity = Math.max(0, Number(e.quantity) || 0);
     const row = document.createElement('div');
 
@@ -954,7 +954,7 @@ function renderExtras() {
 
   box.querySelectorAll('[data-extra-minus]').forEach(button => {
     button.addEventListener('click', () => {
-      const extra = data.extras[Number(button.dataset.extraMinus)];
+      const extra = data.calculatorExtras[Number(button.dataset.extraMinus)];
       extra.quantity = Math.max(0, (Number(extra.quantity) || 0) - 1);
       save();
       renderExtras();
@@ -964,7 +964,7 @@ function renderExtras() {
 
   box.querySelectorAll('[data-extra-plus]').forEach(button => {
     button.addEventListener('click', () => {
-      const extra = data.extras[Number(button.dataset.extraPlus)];
+      const extra = data.calculatorExtras[Number(button.dataset.extraPlus)];
       extra.quantity = Math.min(99, (Number(extra.quantity) || 0) + 1);
       save();
       renderExtras();
@@ -1148,8 +1148,7 @@ $('eightRepairPriceLabel').textContent =
 
 add(`Правка диска ${repairSize}`, $('rimRepairPrice').value, rimRepairQty);
 add(`Правка восьмёрки ${repairSize}`, $('eightRepairPrice').value, eightRepairQty);
-    const allExtras = data.extras;
-
+    const allExtras = data.calculatorExtras;
   allExtras.forEach((extra, i) => {
     const quantity = Math.max(0, Number(extra.quantity) || 0);
 
@@ -1419,13 +1418,24 @@ $('addCatalogExtra').onclick = () => {
   renderCatalog();
   renderExtras();
 };
+  $('addExtra').onclick = () => {
+  data.calculatorExtras.push({
+    name: 'Новая работа',
+    price: 0,
+    quantity: 0
+  });
+
+  save();
+  renderExtras();
+  calculate();
+};
 
 $('reset').onclick = () => {
 $('basic').checked = false;
 
 Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
 $('argonPrice').value = 1500;
-data.extras.forEach(extra => extra.quantity = 0);
+data.calculatorExtras.forEach(extra => extra.quantity = 0);
 
 $('rimRepairQty').textContent = 0;
 $('eightRepairQty').textContent = 0;
