@@ -657,7 +657,6 @@ header {
   <div class="service-row" data-service="removeInstall">
     <label for="removeInstall">Снятие / установка</label>
     <span class="service-price" id="removeInstallPrice">—</span>
-    <id="removeInstall">
     <div class="quantity-control">
       <button type="button" data-qty-minus="removeInstall" aria-label="Уменьшить количество снятий и установок">−</button>
       <output id="removeInstallQty">0</output>
@@ -668,7 +667,6 @@ header {
   <div class="service-row" data-service="mount">
     <label for="mount">Шиномонтаж</label>
     <span class="service-price" id="mountPrice">—</span>
-    <id="mount">
     <div class="quantity-control">
       <button type="button" data-qty-minus="mount" aria-label="Уменьшить количество шиномонтажных работ">−</button>
       <output id="mountQty">0</output>
@@ -679,7 +677,6 @@ header {
   <div class="service-row" data-service="balance">
     <label for="balance">Балансировка</label>
     <span class="service-price" id="balancePrice">—</span>
-    <id="balance">
     <div class="quantity-control">
       <button type="button" data-qty-minus="balance" aria-label="Уменьшить количество балансировок">−</button>
       <output id="balanceQty">0</output>
@@ -978,8 +975,10 @@ $('priceVehicle').innerHTML=vehicles.map(v=>`<option>${v}</option>`).join('');
 $('priceVehicle').addEventListener('change',renderPriceEditor);
 $('vehicle').addEventListener('change', calculate);
 
-['rim', 'tireCategory', 'basic', 'removeInstall', 'mount', 'balance',
- 'repairQty', 'rimRepair', 'eightRepair', 'rimRepairPrice', 'eightRepairPrice'
+[
+  'rim', 'tireCategory', 'basic',
+  'repairQty', 'rimRepair', 'eightRepair',
+  'rimRepairPrice', 'eightRepairPrice'
 ].forEach(id => {
   $(id).addEventListener('input', calculate);
   $(id).addEventListener('change', calculate);
@@ -991,8 +990,6 @@ document.querySelectorAll('[data-qty-minus], [data-qty-plus]').forEach(button =>
     const delta = button.dataset.qtyPlus ? 1 : -1;
 
     serviceQty[id] = Math.max(0, Math.min(24, serviceQty[id] + delta));
-    if (serviceQty[id] > 0) $(id).checked = true;
-    if (serviceQty[id] === 0) $(id).checked = false;
 
     calculate();
   });
