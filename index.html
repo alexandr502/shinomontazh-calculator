@@ -643,6 +643,30 @@ header {
     height: 42px;
   }
 }
+  /* Дополнительные услуги — в едином стиле с основными услугами */
+#extras .extra-service-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+  background: #1c1e23;
+}
+
+#extras .extra-service-row label {
+  display: block;
+  min-width: 0;
+  color: #f3f4f6;
+}
+
+#extras .extra-service-row .service-price {
+  display: inline;
+  color: #e8e9ec;
+  font-size: 13px;
+  white-space: normal;
+}
+
+#extras .extra-service-row .quantity-control {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+}
 </style>
 </head>
 <body>
@@ -818,10 +842,9 @@ header {
 
 </div>
 <div class="card">
-<h2>4. Дополнительные работы</h2>
+<h2><span aria-hidden="true">🔧➕</span> Дополнительные услуги</h2>
 <div id="extras"></div>
-<button class="secondary" id="addExtra">＋ Добавить работу вручную</button>
-<div class="muted" style="margin-top:7px">Укажите название и цену за единицу; количество регулируется отдельно.</div>
+<button class="secondary" id="addExtra">＋ Добавить услугу вручную</button>
 </div>
 <div class="total"><small>ИТОГО К ОЗВУЧИВАНИЮ</small><div class="amount" id="total">0 ₽</div><div class="summary" id="summary">Выберите работы и параметры автомобиля.</div><button class="primary" id="share">Отправить расчёт</button><button class="secondary" id="saveCalculation" style="width:100%;margin-top:8px">Сохранить расчёт в файл (.txt)</button><button class="secondary" id="copy" style="width:100%;margin-top:8px">Скопировать расчёт</button></div>
 <button class="secondary" id="reset" style="width:100%">Очистить расчёт</button>
@@ -929,26 +952,36 @@ function renderExtras() {
   box.innerHTML = '';
 
   data.extras.forEach((e, i) => {
+    const quantity = Math.max(0, Number(e.quantity) || 0);
     const row = document.createElement('div');
-    row.className = 'check';
+
+    row.className = 'service-row extra-service-row';
+    row.classList.toggle('is-active', quantity > 0);
+
     row.innerHTML = `
-      <label for="ex${i}" style="flex:1">
+      <label>
         ${e.name}
-        <span class="muted">(${money(e.price)}/шт.)</span>
+        <span class="service-price">(${money(e.price)}/шт.)</span>
       </label>
       <div class="quantity-control">
-        <button type="button" data-extra-minus="${i}" aria-label="Уменьшить количество">−</button>
-        <output id="extraQty${i}">0</output>
-        <button type="button" data-extra-plus="${i}" aria-label="Увеличить количество">+</button>
+        <button type="button" data-extra-minus="${i}"
+          aria-label="Уменьшить количество">−</button>
+        <output id="extraQty${i}">${quantity}</output>
+        <button type="button" data-extra-plus="${i}"
+          aria-label="Увеличить количество">+</button>
       </div>
     `;
+
     box.appendChild(row);
   });
 
   box.querySelectorAll('[data-extra-minus]').forEach(button => {
     button.addEventListener('click', () => {
       const i = +button.dataset.extraMinus;
-      data.extras[i].quantity = Math.max(0, (data.extras[i].quantity || 0) - 1);
+      data.extras[i].quantity = Math.max(
+        0,
+        (data.extras[i].quantity || 0) - 1
+      );
       renderExtras();
       calculate();
     });
@@ -957,13 +990,16 @@ function renderExtras() {
   box.querySelectorAll('[data-extra-plus]').forEach(button => {
     button.addEventListener('click', () => {
       const i = +button.dataset.extraPlus;
-      data.extras[i].quantity = Math.min(99, (data.extras[i].quantity || 0) + 1);
+      data.extras[i].quantity = Math.min(
+        99,
+        (data.extras[i].quantity || 0) + 1
+      );
       renderExtras();
       calculate();
     });
   });
 }
-
+  
 function updateServiceRows() {
   const packageSelected = $('basic').checked;
 
