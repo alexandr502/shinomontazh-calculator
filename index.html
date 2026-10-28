@@ -927,11 +927,7 @@ function renderExtras() {
   const box = $('extras');
   box.innerHTML = '';
 
-  const allExtras = [
-    ...data.extras.map((e, index) => ({ ...e, source: 'catalog', index })),
-    ...data.calculatorExtras.map((e, index) => ({ ...e, source: 'manual', index }))
-  ];
-
+  const allExtras = data.extras;
   allExtras.forEach((e, i) => {
     const quantity = Math.max(0, Number(e.quantity) || 0);
     const row = document.createElement('div');
@@ -942,10 +938,6 @@ function renderExtras() {
     row.innerHTML = `
       <label></label>
       <span class="service-price">${money(e.price)}/шт.</span>
-      ${e.source === 'manual'
-        ? `<button type="button" class="extra-edit-button"
-             data-extra-edit="${e.index}"
-             aria-label="Редактировать услугу">✎</button>`
         : ''}
       <div class="quantity-control">
         <button type="button" data-extra-minus="${i}"
@@ -960,16 +952,9 @@ function renderExtras() {
     box.appendChild(row);
   });
 
-  function getExtra(i) {
-    const catalogCount = data.extras.length;
-    return i < catalogCount
-      ? data.extras[i]
-      : data.calculatorExtras[i - catalogCount];
-  }
-
   box.querySelectorAll('[data-extra-minus]').forEach(button => {
     button.addEventListener('click', () => {
-      const extra = getExtra(Number(button.dataset.extraMinus));
+      const extra = data.extras[Number(button.dataset.extraMinus)];
       extra.quantity = Math.max(0, (Number(extra.quantity) || 0) - 1);
       save();
       renderExtras();
@@ -979,7 +964,7 @@ function renderExtras() {
 
   box.querySelectorAll('[data-extra-plus]').forEach(button => {
     button.addEventListener('click', () => {
-      const extra = getExtra(Number(button.dataset.extraPlus));
+      const extra = data.extras[Number(button.dataset.extraPlus)];
       extra.quantity = Math.min(99, (Number(extra.quantity) || 0) + 1);
       save();
       renderExtras();
@@ -1163,10 +1148,7 @@ $('eightRepairPriceLabel').textContent =
 
 add(`Правка диска ${repairSize}`, $('rimRepairPrice').value, rimRepairQty);
 add(`Правка восьмёрки ${repairSize}`, $('eightRepairPrice').value, eightRepairQty);
-    const allExtras = [
-    ...data.extras,
-    ...data.calculatorExtras
-  ];
+    const allExtras = data.extras;
 
   allExtras.forEach((extra, i) => {
     const quantity = Math.max(0, Number(extra.quantity) || 0);
@@ -1430,17 +1412,6 @@ document.querySelectorAll('.tabs button').forEach(button => {
     });
   });
 });
-$('addExtra').onclick = () => {
-  data.calculatorExtras.push({
-    name: 'Новая работа',
-    price: 0,
-    quantity: 0
-  });
-
-  save();
-  renderExtras();
-  calculate();
-};
   
 $('addCatalogExtra').onclick = () => {
   data.extras.push({ name: 'Новая услуга', price: 0, quantity: 0 });
