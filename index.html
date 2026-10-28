@@ -1291,7 +1291,6 @@ document.querySelectorAll('[data-qty-minus], [data-qty-plus]').forEach(button =>
     calculate();
   });
 });
-```js
 $('argonMinus').addEventListener('click', () => {
   serviceQty.argon = Math.max(0, serviceQty.argon - 1);
   calculate();
@@ -1303,7 +1302,6 @@ $('argonPlus').addEventListener('click', () => {
   calculate();
   updateQuantityHighlight('argonQty');
 });
-```
 
 
 $('argonPrice').addEventListener('input', calculate);
