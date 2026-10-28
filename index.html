@@ -713,7 +713,6 @@ header {
 </div>
 <div class="card">
   <div class="section-heading">
-    <div class="card">
   <div class="section-heading">
     <h2><span aria-hidden="true">🛞</span> Правка дисков</h2>
     <button type="button" class="secondary section-reset" id="resetRepairs"
@@ -781,9 +780,6 @@ header {
     <input type="number" id="argonPrice" min="0" step="50" value="1500">
   </div>
 
-  <div class="muted">
-    При количестве 0 сварка не включается в расчёт. Цена действует только для текущего расчёта.
-  </div>
 </div>
 
 </div>
@@ -1048,13 +1044,28 @@ function calculate() {
 
   add('Аргоновая сварка', $('argonPrice').value, argonQty);
 
-  #repairRim {
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: none !important;
-  padding-right: 12px;
-}
+  const repairSize = $('repairRim').value;
 
+const rimRepairQty = Math.max(
+  0,
+  Math.min(24, parseInt($('rimRepairQty').textContent, 10) || 0)
+);
+
+const eightRepairQty = Math.max(
+  0,
+  Math.min(24, parseInt($('eightRepairQty').textContent, 10) || 0)
+);
+
+$('rimRepairQty').textContent = rimRepairQty;
+$('eightRepairQty').textContent = eightRepairQty;
+
+$('rimRepairPriceLabel').textContent =
+  money(Number($('rimRepairPrice').value) || 0) + '/шт.';
+$('eightRepairPriceLabel').textContent =
+  money(Number($('eightRepairPrice').value) || 0) + '/шт.';
+
+add(`Правка диска ${repairSize}`, $('rimRepairPrice').value, rimRepairQty);
+add(`Правка восьмёрки ${repairSize}`, $('eightRepairPrice').value, eightRepairQty);
   data.extras.forEach((extra, i) => {
     const quantity = Math.max(0, Number(extra.quantity) || 0);
 
@@ -1188,7 +1199,6 @@ $('vehicle').addEventListener('change', calculate);
 
 [
   'rim', 'tireCategory', 'basic',
-  'repairQty', 'rimRepair', 'eightRepair',
   'rimRepairPrice', 'eightRepairPrice'
 ].forEach(id => {
   $(id).addEventListener('input', calculate);
@@ -1242,26 +1252,33 @@ function syncRepairPrices() {
 $('repairRim').addEventListener('change', syncRepairPrices);
 $('rim').addEventListener('change', syncRepairPrices);
 
-$('repairMinus').addEventListener('click', () => {
-  $('repairQty').value = Math.max(
-    0,
-    (Number($('repairQty').value) || 0) - 1
-  );
+function changeRepairQty(id, delta) {
+  const output = $(id);
+  const current = Number(output.textContent) || 0;
+
+  output.textContent = Math.max(0, Math.min(24, current + delta));
   calculate();
+}
+
+$('rimRepairMinus').addEventListener('click', () => {
+  changeRepairQty('rimRepairQty', -1);
 });
 
-$('repairPlus').addEventListener('click', () => {
-  $('repairQty').value = Math.min(
-    24,
-    (Number($('repairQty').value) || 0) + 1
-  );
-  calculate();
+$('rimRepairPlus').addEventListener('click', () => {
+  changeRepairQty('rimRepairQty', 1);
+});
+
+$('eightRepairMinus').addEventListener('click', () => {
+  changeRepairQty('eightRepairQty', -1);
+});
+
+$('eightRepairPlus').addEventListener('click', () => {
+  changeRepairQty('eightRepairQty', 1);
 });
 
 $('resetRepairs').addEventListener('click', () => {
-  $('repairQty').value = 0;
-  $('rimRepair').checked = false;
-  $('eightRepair').checked = false;
+  $('rimRepairQty').textContent = 0;
+  $('eightRepairQty').textContent = 0;
   syncRepairPrices();
 });
 
@@ -1295,15 +1312,14 @@ $('addCatalogExtra').onclick = () => {
 };
 
 $('reset').onclick = () => {
-['basic', 'rimRepair', 'eightRepair'].forEach(id => {
-$(id).checked = false;
-});
+$('basic').checked = false;
 
 Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
 $('argonPrice').value = 1500;
 data.extras.forEach(extra => extra.quantity = 0);
 
-$('repairQty').value = 0;
+$('rimRepairQty').textContent = 0;
+$('eightRepairQty').textContent = 0;
 renderExtras();
 calculate();
 };
