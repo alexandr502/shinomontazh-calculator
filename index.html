@@ -657,7 +657,7 @@ header {
   <div class="service-row" data-service="removeInstall">
     <label for="removeInstall">Снятие / установка</label>
     <span class="service-price" id="removeInstallPrice">—</span>
-    <input type="checkbox" id="removeInstall">
+    <id="removeInstall">
     <div class="quantity-control">
       <button type="button" data-qty-minus="removeInstall" aria-label="Уменьшить количество снятий и установок">−</button>
       <output id="removeInstallQty">0</output>
@@ -668,7 +668,7 @@ header {
   <div class="service-row" data-service="mount">
     <label for="mount">Шиномонтаж</label>
     <span class="service-price" id="mountPrice">—</span>
-    <input type="checkbox" id="mount">
+    <id="mount">
     <div class="quantity-control">
       <button type="button" data-qty-minus="mount" aria-label="Уменьшить количество шиномонтажных работ">−</button>
       <output id="mountQty">0</output>
@@ -679,7 +679,7 @@ header {
   <div class="service-row" data-service="balance">
     <label for="balance">Балансировка</label>
     <span class="service-price" id="balancePrice">—</span>
-    <input type="checkbox" id="balance">
+    <id="balance">
     <div class="quantity-control">
       <button type="button" data-qty-minus="balance" aria-label="Уменьшить количество балансировок">−</button>
       <output id="balanceQty">0</output>
@@ -847,20 +847,22 @@ function updateServiceRows() {
   const packageSelected = $('basic').checked;
 
   ['removeInstall', 'mount', 'balance'].forEach(id => {
-    const checkbox = $(id);
     const row = document.querySelector(`[data-service="${id}"]`);
 
-    checkbox.disabled = packageSelected;
-    if (packageSelected) checkbox.checked = false;
+    row.classList.toggle(
+      'is-active',
+      !packageSelected && serviceQty[id] > 0
+    );
 
-    row.classList.toggle('is-active', !packageSelected && checkbox.checked);
     row.classList.toggle('is-disabled', packageSelected);
 
-    row.querySelectorAll('[data-qty-minus], [data-qty-plus]').forEach(button => {
-      button.disabled = packageSelected;
-    });
+    row.querySelectorAll('[data-qty-minus], [data-qty-plus]')
+      .forEach(button => {
+        button.disabled = packageSelected;
+      });
 
     if (packageSelected) serviceQty[id] = 0;
+
     $(`${id}Qty`).textContent = serviceQty[id];
   });
 
