@@ -821,7 +821,6 @@ header {
 <div class="card">
 <h2><span aria-hidden="true">🔧➕</span> Дополнительные услуги</h2>
 <div id="extras"></div>
-<button class="secondary" id="addExtra">＋ Добавить услугу вручную</button>
 </div>
 <div class="total"><small>ИТОГО К ОЗВУЧИВАНИЮ</small><div class="amount" id="total">0 ₽</div><div class="summary" id="summary">Выберите работы и параметры автомобиля.</div><button class="primary" id="share">Отправить расчёт</button><button class="secondary" id="saveCalculation" style="width:100%;margin-top:8px">Сохранить расчёт в файл (.txt)</button><button class="secondary" id="copy" style="width:100%;margin-top:8px">Скопировать расчёт</button></div>
 <button class="secondary" id="reset" style="width:100%">Очистить расчёт</button>
@@ -928,16 +927,7 @@ function renderExtras() {
   const box = $('extras');
   box.innerHTML = '';
 
-  const allExtras = [
-    ...data.extras.map((e, i) => ({
-      item: e, source: 'catalog', index: i
-    })),
-    ...data.calculatorExtras.map((e, i) => ({
-      item: e, source: 'manual', index: i
-    }))
-  ];
-
-  allExtras.forEach(({ item: e, source, index }, i) => {
+  data.extras.forEach((e, i) => {
     const quantity = Math.max(0, Number(e.quantity) || 0);
     const row = document.createElement('div');
 
@@ -947,11 +937,6 @@ function renderExtras() {
     row.innerHTML = `
       <label></label>
       <span class="service-price">${money(e.price)}/шт.</span>
-      ${source === 'manual'
-        ? `<button type="button" class="extra-edit-button"
-             data-extra-edit="${index}"
-             aria-label="Редактировать услугу">✎</button>`
-        : ''}
       <div class="quantity-control">
         <button type="button" data-extra-minus="${i}"
           aria-label="Уменьшить количество">−</button>
@@ -967,8 +952,11 @@ function renderExtras() {
 
   box.querySelectorAll('[data-extra-minus]').forEach(button => {
     button.addEventListener('click', () => {
-      const entry = allExtras[+button.dataset.extraMinus];
-      entry.item.quantity = Math.max(0, (entry.item.quantity || 0) - 1);
+      const i = +button.dataset.extraMinus;
+      data.extras[i].quantity = Math.max(
+        0,
+        (data.extras[i].quantity || 0) - 1
+      );
       save();
       renderExtras();
       calculate();
@@ -977,42 +965,11 @@ function renderExtras() {
 
   box.querySelectorAll('[data-extra-plus]').forEach(button => {
     button.addEventListener('click', () => {
-      const entry = allExtras[+button.dataset.extraPlus];
-      entry.item.quantity = Math.min(99, (entry.item.quantity || 0) + 1);
-      save();
-      renderExtras();
-      calculate();
-    });
-  });
-
-  box.querySelectorAll('[data-extra-edit]').forEach(button => {
-    button.addEventListener('click', () => {
-      const extra = data.calculatorExtras[+button.dataset.extraEdit];
-
-      const name = prompt('Название услуги:', extra.name);
-      if (name === null) return;
-
-      const cleanName = name.trim();
-      if (!cleanName) {
-        alert('Название услуги не может быть пустым.');
-        return;
-      }
-
-      const priceText = prompt(
-        'Цена за одну услугу (₽):',
-        String(extra.price ?? 0)
+      const i = +button.dataset.extraPlus;
+      data.extras[i].quantity = Math.min(
+        99,
+        (data.extras[i].quantity || 0) + 1
       );
-      if (priceText === null) return;
-
-      const price = Number(priceText);
-      if (!Number.isFinite(price) || price < 0) {
-        alert('Введите корректную цену — число не меньше 0.');
-        return;
-      }
-
-      extra.name = cleanName;
-      extra.price = price;
-
       save();
       renderExtras();
       calculate();
@@ -1432,17 +1389,6 @@ document.querySelectorAll('.tabs button').forEach(button => {
   });
 });
 
-$('addExtra').onclick = () => {
-  data.calculatorExtras.push({
-    name: 'Новая работа',
-    price: 0,
-    quantity: 0
-  });
-  save();
-  renderExtras();
-  calculate();
-};
-
 $('addCatalogExtra').onclick = () => {
   data.extras.push({ name: 'Новая услуга', price: 0, quantity: 0 });
   save();
@@ -1456,7 +1402,6 @@ $('basic').checked = false;
 Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
 $('argonPrice').value = 1500;
 data.extras.forEach(extra => extra.quantity = 0);
-data.calculatorExtras.forEach(extra => extra.quantity = 0);
 
 $('rimRepairQty').textContent = 0;
 $('eightRepairQty').textContent = 0;
