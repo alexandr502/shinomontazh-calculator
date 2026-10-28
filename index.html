@@ -1293,11 +1293,13 @@ document.querySelectorAll('[data-qty-minus], [data-qty-plus]').forEach(button =>
 });
 $('argonMinus').addEventListener('click', () => {
   serviceQty.argon = Math.max(0, serviceQty.argon - 1);
+  updateQuantityHighlight('argonQty');
   calculate();
 });
 
 $('argonPlus').addEventListener('click', () => {
   serviceQty.argon = Math.min(24, serviceQty.argon + 1);
+  updateQuantityHighlight('argonQty');
   calculate();
 });
 
@@ -1328,11 +1330,20 @@ function syncRepairPrices() {
 $('repairRim').addEventListener('change', syncRepairPrices);
 $('rim').addEventListener('change', syncRepairPrices);
 
+function updateQuantityHighlight(id) {
+  const output = $(id);
+  const row = output.closest('.service-row');
+  const quantity = Number(output.textContent) || 0;
+
+  row.classList.toggle('is-active', quantity > 0);
+}
+
 function changeRepairQty(id, delta) {
   const output = $(id);
   const current = Number(output.textContent) || 0;
 
   output.textContent = Math.max(0, Math.min(24, current + delta));
+  updateQuantityHighlight(id);
   calculate();
 }
 
@@ -1355,6 +1366,8 @@ $('eightRepairPlus').addEventListener('click', () => {
 $('resetRepairs').addEventListener('click', () => {
   $('rimRepairQty').textContent = 0;
   $('eightRepairQty').textContent = 0;
+  updateQuantityHighlight('rimRepairQty');
+updateQuantityHighlight('eightRepairQty');
   syncRepairPrices();
 });
 
