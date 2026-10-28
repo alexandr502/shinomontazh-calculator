@@ -1320,14 +1320,16 @@ document.querySelectorAll('[data-qty-minus], [data-qty-plus]').forEach(button =>
 });
 $('argonMinus').addEventListener('click', () => {
   serviceQty.argon = Math.max(0, serviceQty.argon - 1);
-  calculate();
+  $('argonQty').textContent = serviceQty.argon;
   updateQuantityHighlight('argonQty');
+  calculate();
 });
 
 $('argonPlus').addEventListener('click', () => {
   serviceQty.argon = Math.min(24, serviceQty.argon + 1);
-  calculate();
+  $('argonQty').textContent = serviceQty.argon;
   updateQuantityHighlight('argonQty');
+  calculate();
 });
 
 
@@ -1454,6 +1456,7 @@ $('basic').checked = false;
 Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
 $('argonPrice').value = 1500;
 data.extras.forEach(extra => extra.quantity = 0);
+data.calculatorExtras.forEach(extra => extra.quantity = 0);
 
 $('rimRepairQty').textContent = 0;
 $('eightRepairQty').textContent = 0;
