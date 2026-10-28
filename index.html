@@ -927,8 +927,7 @@ function renderExtras() {
   const box = $('extras');
   box.innerHTML = '';
 
-  const allExtras = data.extras;
-  allExtras.forEach((e, i) => {
+  data.extras.forEach((e, i) => {
     const quantity = Math.max(0, Number(e.quantity) || 0);
     const row = document.createElement('div');
 
@@ -938,7 +937,8 @@ function renderExtras() {
     row.innerHTML = `
       <label></label>
       <span class="service-price">${money(e.price)}/шт.</span>
-        : ''}
+      <button type="button" class="extra-edit-button"
+        data-extra-edit="${i}" aria-label="Редактировать услугу">✎</button>
       <div class="quantity-control">
         <button type="button" data-extra-minus="${i}"
           aria-label="Уменьшить количество">−</button>
