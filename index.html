@@ -912,16 +912,26 @@ function calculate() {
       add(special ? 'Шиномонтаж RunFlat / низкий профиль' : 'Шиномонтаж', mountPrice, 4);
       add('Балансировка', Number(p.balance) || 0, 4);
     }
-  } else {
-    if ($('removeInstall').checked) {
-      add('Снятие / установка', Number(p.mount || 0) * 0.5, serviceQty.removeInstall);
-    }
-    if ($('mount').checked) {
-      add(special ? 'Шиномонтаж RunFlat / низкий профиль' : 'Шиномонтаж', mountPrice, serviceQty.mount);
-    }
-    if ($('balance').checked) {
-      add('Балансировка', Number(p.balance) || 0, serviceQty.balance);
-    }
+    } else {
+    add(
+      'Снятие / установка',
+      Number(p.mount || 0) * 0.5,
+      serviceQty.removeInstall
+    );
+
+    add(
+      special
+        ? 'Шиномонтаж RunFlat / низкий профиль'
+        : 'Шиномонтаж',
+      mountPrice,
+      serviceQty.mount
+    );
+
+    add(
+      'Балансировка',
+      Number(p.balance) || 0,
+      serviceQty.balance
+    );
   }
 
   if (special && Number(data.surcharges.special) > 0) {
