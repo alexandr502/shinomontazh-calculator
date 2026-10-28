@@ -909,76 +909,95 @@ function calculate() {
   const add = (name, price, count = 1) => {
     price = Math.max(0, Number(price) || 0);
     count = Math.max(0, Number(count) || 0);
+
     if (price > 0 && count > 0) {
       total += price * count;
       lines.push(`${name} — ${money(price)} × ${count}`);
     }
   };
 
+  const removePrice = Number(p.remove) || 0;
   const mountPrice = special
     ? (Number(p.rfOne) || 0)
     : (Number(p.mount) || 0);
+  const tireMountPrice = mountPrice * 0.5;
+  const tireDemountPrice = mountPrice * 0.5;
+  const balancePrice = Number(p.balance) || 0;
+  const packagePrice = special
+    ? (Number(p.rfFour) || 0)
+    : (Number(p.four) || 0);
 
-  $('basicPrice').textContent = money(
-    special ? (Number(p.rfFour) || 0) : (Number(p.four) || 0)
-  );
-  $('removeInstallPrice').textContent = money(Number(p.mount || 0) * 0.5);
+  $('basicPrice').textContent = money(packagePrice);
+  $('removeInstallPrice').textContent = money(removePrice);
   $('mountPrice').textContent = money(mountPrice);
-  $('balancePrice').textContent = money(Number(p.balance) || 0);
+  $('tireMountPrice').textContent = money(tireMountPrice);
+  $('tireDemountPrice').textContent = money(tireDemountPrice);
+  $('balancePrice').textContent = money(balancePrice);
 
   updateServiceRows();
 
   if ($('basic').checked) {
-    const packagePrice = special
-      ? (Number(p.rfFour) || 0)
-      : (Number(p.four) || 0);
-
     if (packagePrice > 0) {
-      add(special ? 'Полный шиномонтаж RunFlat / низкий профиль' : 'Полный шиномонтаж', packagePrice);
+      add(
+        special
+          ? 'Полный шиномонтаж RunFlat / низкий профиль'
+          : 'Полный шиномонтаж',
+        packagePrice
+      );
     } else {
-      add('Снятие / установка', Number(p.mount || 0) * 0.5, 4);
-      add(special ? 'Шиномонтаж RunFlat / низкий профиль' : 'Шиномонтаж', mountPrice, 4);
-      add('Балансировка', Number(p.balance) || 0, 4);
+      add('Снятие / установка колеса', removePrice, 4);
+      add('Шиномонтаж', mountPrice, 4);
+      add('Балансировка', balancePrice, 4);
     }
-    } else {
+  } else {
+    add('Снятие / установка колеса', removePrice, serviceQty.removeInstall);
     add(
-      'Снятие / установка',
-      Number(p.mount || 0) * 0.5,
-      serviceQty.removeInstall
-    );
-
-    add(
-      special
-        ? 'Шиномонтаж RunFlat / низкий профиль'
-        : 'Шиномонтаж',
+      special ? 'Шиномонтаж RunFlat / низкий профиль' : 'Шиномонтаж',
       mountPrice,
       serviceQty.mount
     );
-
-    add(
-      'Балансировка',
-      Number(p.balance) || 0,
-      serviceQty.balance
-    );
+    add('Монтаж покрышки', tireMountPrice, serviceQty.tireMount);
+    add('Демонтаж покрышки', tireDemountPrice, serviceQty.tireDemount);
+    add('Балансировка', balancePrice, serviceQty.balance);
   }
 
   if (special && Number(data.surcharges.special) > 0) {
-    add('Доплата за RunFlat / низкий профиль', Number(data.surcharges.special), 4);
+    add(
+      'Доплата за RunFlat / низкий профиль',
+      Number(data.surcharges.special),
+      4
+    );
   }
 
   const repairSize = $('repairRim').value;
-  const repairQty = Math.max(1, Math.min(24, parseInt($('repairQty').value) || 1));
+  const repairQty = Math.max(
+    1,
+    Math.min(24, parseInt($('repairQty').value) || 1)
+  );
 
   if ($('rimRepair').checked) {
-    add(`Правка диска ${repairSize}`, Number($('rimRepairPrice').value), repairQty);
+    add(
+      `Правка диска ${repairSize}`,
+      Number($('rimRepairPrice').value),
+      repairQty
+    );
   }
+
   if ($('eightRepair').checked) {
-    add(`Правка восьмёрки ${repairSize}`, Number($('eightRepairPrice').value), repairQty);
+    add(
+      `Правка восьмёрки ${repairSize}`,
+      Number($('eightRepairPrice').value),
+      repairQty
+    );
   }
 
   data.extras.forEach((extra, i) => {
     const quantity = Math.max(0, Number(extra.quantity) || 0);
-    if (quantity > 0) add(extra.name, extra.price, quantity);
+
+    if (quantity > 0) {
+      add(extra.name, extra.price, quantity);
+    }
+
     const output = $(`extraQty${i}`);
     if (output) output.textContent = quantity;
   });
@@ -986,7 +1005,9 @@ function calculate() {
   $('total').textContent = money(total);
   $('summary').textContent =
     `${vehicle} · ${labels[rim]}${special ? ' · RunFlat / низкий профиль (<45)' : ''}\n` +
-    (lines.length ? lines.join('\n') : 'Выберите работы или заполните цены в настройках.');
+    (lines.length
+      ? lines.join('\n')
+      : 'Выберите работы или заполните цены в настройках.');
 }
 function updatePriceAccess(){
   const isOwner=window.__tireCalcIsOwner===true;
