@@ -318,6 +318,35 @@ header p {
   text-align: center;
   font-weight: 700;
 }
+  .basic-toggle {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #30333a;
+  cursor: pointer;
+}
+
+.basic-toggle.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.service-row:has(.basic-toggle) {
+  grid-template-columns: minmax(0, 1fr) 44px;
+}
+
+.service-row:has(.basic-toggle) .basic-toggle {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.service-row:has(.basic-toggle) .service-hint {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
 
 .service-row.is-active {
   border-color: var(--accent);
@@ -653,12 +682,18 @@ header {
   <button type="button" class="secondary section-reset" id="resetServices" title="Очистить выбор услуг" aria-label="Очистить выбор услуг">↻</button>
 </div>
 <div class="service-list">
-  <div class="service-row">
-    <label for="basic">Полный шиномонтаж</label>
-    <span class="service-price" id="basicPrice">—</span>
-    <input type="checkbox" id="basic" checked>
-    <span class="service-hint">Комплект из 4 колёс</span>
-  </div>
+ <div class="service-row">
+  <label for="basic">Полный шиномонтаж</label>
+  <button
+    type="button"
+    id="basicToggle"
+    class="basic-toggle is-active"
+    aria-label="Отключить полный шиномонтаж"
+    aria-pressed="true"
+  ></button>
+  <span class="service-hint">Комплект из 4 колёс</span>
+  <input type="checkbox" id="basic" checked hidden>
+</div>
 
   <div class="service-row" data-service="removeInstall">
     <label>Снятие / установка колеса</label>
