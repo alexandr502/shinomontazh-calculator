@@ -1032,23 +1032,23 @@ $('addCatalogExtra').onclick = () => {
 };
 
 $('reset').onclick = () => {
-  ['basic', 'removeInstall', 'mount', 'balance', 'rimRepair', 'eightRepair']
-    .forEach(id => $(id).checked = false);
+  $('reset').onclick = () => {
+['basic', 'rimRepair', 'eightRepair'].forEach(id => {
+$(id).checked = false;
+});
 
-  Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
-  data.extras.forEach(extra => extra.quantity = 0);
+Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
+data.extras.forEach(extra => extra.quantity = 0);
 
-  $('repairQty').value = 1;
-  renderExtras();
-  calculate();
+$('repairQty').value = 1;
+renderExtras();
+calculate();
 };
 
 $('resetServices').onclick = () => {
-  ['basic', 'removeInstall', 'mount', 'balance'].forEach(id => {
-    $(id).checked = false;
-  });
-  Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
-  calculate();
+$('basic').checked = false;
+Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
+calculate();
 };
   
 $('export').onclick=()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='прайс-шиномонтаж.json';a.click();URL.revokeObjectURL(a.href)};
