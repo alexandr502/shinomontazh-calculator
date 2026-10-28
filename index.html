@@ -865,8 +865,16 @@ function renderExtras() {
 function updateServiceRows() {
   const packageSelected = $('basic').checked;
 
-  ['removeInstall', 'mount', 'balance'].forEach(id => {
+  [
+    'removeInstall',
+    'mount',
+    'tireMount',
+    'tireDemount',
+    'balance'
+  ].forEach(id => {
     const row = document.querySelector(`[data-service="${id}"]`);
+
+    if (!row) return;
 
     row.classList.toggle(
       'is-active',
@@ -880,7 +888,9 @@ function updateServiceRows() {
         button.disabled = packageSelected;
       });
 
-    if (packageSelected) serviceQty[id] = 0;
+    if (packageSelected) {
+      serviceQty[id] = 0;
+    }
 
     $(`${id}Qty`).textContent = serviceQty[id];
   });
