@@ -1094,10 +1094,105 @@ function updatePriceAccess(){
   if(publishCard) publishCard.classList.toggle('hidden',!isOwner);
 }
 function renderPriceEditor(){let v=$('priceVehicle').value, box=$('priceEditor');box.innerHTML='';let names=[['remove','Снятие / установка'],['mount','Шиномонтаж'],['balance','Балансировка'],['one','Полный комплекс за 1 колесо'],['four','Полный комплекс за 4 колеса'],['rfOne','RunFlat за 1 колесо / от'],['rfFour','Комплекс RunFlat за 4 колеса'],['valve','Установка одного вентиля']];rims.forEach(r=>{let h=document.createElement('h3');h.style.fontSize='15px';h.textContent=labels[r];box.appendChild(h);names.forEach(([key,name])=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<span>${name}</span><input type="number" min="0" step="10" data-price="${r}|${key}" value="${data.prices[v][r][key]||0}" aria-label="${name}"><span class="muted">₽</span>`;box.appendChild(row)})});box.querySelectorAll('[data-price]').forEach(inp=>inp.addEventListener('change',()=>{let [r,k]=inp.dataset.price.split('|');data.prices[v][r][k]=Math.max(0,+inp.value||0);save();calculate()}));updatePriceAccess()}
-function renderSurcharges(){let box=$('surchargeEditor');box.innerHTML='';
- let title=document.createElement('h3');title.textContent='Правка дисков — цены по диаметру';title.style.fontSize='15px';box.appendChild(title);
- for(let d=13;d<=23;d++){let size='R'+d;let h=document.createElement('h4');h.textContent=size;h.style.margin='12px 0 4px';box.appendChild(h);for(let [key,label] of [['rim','Правка диска'],['eight','Правка восьмёрки']]){let row=document.createElement('div');row.className='price-row';row.innerHTML=`<span>${label}</span><input type="number" min="0" step="10" data-repair-size="${size}" data-repair-type="${key}" value="${data.rimRepair[size][key]||0}"><span class="muted">₽/шт.</span>`;box.appendChild(row)}}
- box.querySelectorAll('[data-repair-size]').forEach(i=>i.addEventListener('change',()=>{data.rimRepair[i.dataset.repairSize][i.dataset.repairType]=Math.max(0,+i.value||0);save();calculate()}));[['special','Доплата за RunFlat / низкий профиль (<45)']].forEach(([k,n])=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<span>${n}</span><input type="number" min="0" step="10" data-surcharge="${k}" value="${data.surcharges[k]||0}"><span class="muted">₽/колесо</span>`;box.appendChild(row)});box.querySelectorAll('[data-surcharge]').forEach(i=>i.addEventListener('change',()=>{data.surcharges[i.dataset.surcharge]=+i.value||0;save();calculate()}));updatePriceAccess()}
+function renderSurcharges() {
+  const box = $('surchargeEditor');
+  box.innerHTML = '';
+
+  const title = document.createElement('h3');
+  title.textContent = 'Правка дисков — цены по диапазонам';
+  title.style.fontSize = '15px';
+  box.appendChild(title);
+
+  const ranges = [
+    { value: '12-14', label: 'R12–R14', sizes: ['R13', 'R14'], representative: 'R14' },
+    { value: '15-16', label: 'R15–R16', sizes: ['R15', 'R16'], representative: 'R15' },
+    { value: '17-18', label: 'R17–R18', sizes: ['R17', 'R18'], representative: 'R17' },
+    { value: '19-20', label: 'R19–R20', sizes: ['R19', 'R20'], representative: 'R19' },
+    { value: '21-22', label: 'R21–R22', sizes: ['R21', 'R22'], representative: 'R21' },
+    { value: '23+', label: 'R23+', sizes: ['R23'], representative: 'R23' }
+  ];
+
+  ranges.forEach(range => {
+    const heading = document.createElement('h4');
+    heading.textContent = range.label;
+    heading.style.margin = '12px 0 4px';
+    box.appendChild(heading);
+
+    [
+      ['rim', 'Правка диска'],
+      ['eight', 'Правка восьмёрки']
+    ].forEach(([type, label]) => {
+      const row = document.createElement('div');
+      row.className = 'price-row';
+
+      const price = data.rimRepair[range.representative]?.[type] || 0;
+
+      row.innerHTML = `
+        <span>${label}</span>
+        <input
+          type="number"
+          min="0"
+          step="10"
+          data-repair-range="${range.value}"
+          data-repair-type="${type}"
+          value="${price}"
+          aria-label="${label}, ${range.label}"
+        >
+        <span class="muted">₽/шт.</span>
+      `;
+
+      box.appendChild(row);
+    });
+  });
+
+  box.querySelectorAll('[data-repair-range]').forEach(input => {
+    input.addEventListener('change', () => {
+      const range = ranges.find(
+        item => item.value === input.dataset.repairRange
+      );
+      const type = input.dataset.repairType;
+      const price = Math.max(0, Number(input.value) || 0);
+
+      range.sizes.forEach(size => {
+        if (!data.rimRepair[size]) {
+          data.rimRepair[size] = { rim: 0, eight: 0 };
+        }
+
+        data.rimRepair[size][type] = price;
+      });
+
+      save();
+      syncRepairPrices();
+    });
+  });
+
+  const surchargeRow = document.createElement('div');
+  surchargeRow.className = 'price-row';
+  surchargeRow.innerHTML = `
+    <span>Доплата за RunFlat / низкий профиль (&lt;45)</span>
+    <input
+      type="number"
+      min="0"
+      step="10"
+      data-surcharge="special"
+      value="${data.surcharges.special || 0}"
+    >
+    <span class="muted">₽/колесо</span>
+  `;
+  box.appendChild(surchargeRow);
+
+  box.querySelectorAll('[data-surcharge]').forEach(input => {
+    input.addEventListener('change', () => {
+      data.surcharges[input.dataset.surcharge] =
+        Math.max(0, Number(input.value) || 0);
+
+      save();
+      calculate();
+    });
+  });
+
+  updatePriceAccess();
+}
 function renderCatalog(){let box=$('catalogExtras');box.innerHTML='';data.extras.forEach((e,i)=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<input type="text" data-name="${i}" value="${e.name}"><input type="number" min="0" data-extra-price="${i}" value="${e.price}"><button class="secondary" data-del="${i}" aria-label="Удалить">×</button>`;box.appendChild(row)});box.querySelectorAll('[data-name]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.name].name=i.value||'Услуга';save();renderExtras()}));box.querySelectorAll('[data-extra-price]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.extraPrice].price=+i.value||0;save();renderExtras()}));box.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{data.extras.splice(+b.dataset.del,1);save();renderCatalog();renderExtras()}));updatePriceAccess()}
 $('priceVehicle').innerHTML=vehicles.map(v=>`<option>${v}</option>`).join('');
 $('priceVehicle').addEventListener('change',renderPriceEditor);
