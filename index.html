@@ -645,7 +645,7 @@ header {
 }
   /* Дополнительные услуги — в едином стиле с основными услугами */
 #extras .extra-service-row {
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto 24px;
   background: #1c1e23;
 }
 
@@ -656,16 +656,16 @@ header {
 }
 
 #extras .extra-service-row .service-price {
-  display: inline;
   color: #e8e9ec;
   font-size: 13px;
-  white-space: normal;
+  white-space: nowrap;
 }
 
 #extras .extra-service-row .quantity-control {
-  grid-column: 2;
+  grid-column: 3;
   grid-row: 1;
   margin: 0;
+  justify-content: flex-end;
 }
 </style>
 </head>
@@ -958,11 +958,9 @@ function renderExtras() {
     row.className = 'service-row extra-service-row';
     row.classList.toggle('is-active', quantity > 0);
 
-    row.innerHTML = `
-      <label>
-        ${e.name}
-        <span class="service-price">(${money(e.price)}/шт.)</span>
-      </label>
+        row.innerHTML = `
+      <label>${e.name}</label>
+      <span class="service-price">${money(e.price)}/шт.</span>
       <div class="quantity-control">
         <button type="button" data-extra-minus="${i}"
           aria-label="Уменьшить количество">−</button>
