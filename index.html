@@ -797,30 +797,156 @@ applyBusinessName(
   localStorage.getItem('tireCalcBusinessName') || DEFAULT_BUSINESS_NAME
 );
 function activePrice(){return data.prices[$('vehicle').value][$('rim').value]||{}}
-function renderExtras(){let box=$('extras');box.innerHTML='';data.extras.forEach((e,i)=>{let d=document.createElement('div');d.className='check';d.innerHTML=`<input type="checkbox" data-extra="${i}" id="ex${i}"><label for="ex${i}" style="flex:1">${e.name} <span class="muted">(${money(e.price)}/шт.)</span></label><input type="number" min="0" value="1" aria-label="Количество" data-extraqty="${i}" style="width:70px;min-height:38px">`;box.appendChild(d)});box.querySelectorAll('input').forEach(x=>x.addEventListener('change',calculate))}
-function calculate(){
- const p=activePrice(), qty=Math.max(1,parseInt($('qty').value)||1), v=$('vehicle').value, r=$('rim').value;
- let n=0, lines=[];
- const add=(name,price,count=qty)=>{if(price>0){n+=price*count;lines.push(`${name}: ${money(price*count)}`)}};
- const special=$('tireCategory').value==='special';
- // Для RunFlat / низкого профиля берём цену шиномонтажа из отдельной строки RunFlat.
- // Снятие/установка и балансировка всегда считаются по своим обычным расценкам.
- const mountPrice=special?(+p.rfOne||0):(+p.mount||0);
- if($('basic').checked){
-   add('Снятие / установка',+p.remove||0);
-   add(special?'Шиномонтаж RunFlat / низкий профиль':'Шиномонтаж',mountPrice);
-   add('Балансировка',+p.balance||0);
- }
- if($('removeInstall').checked)add('Снятие / установка',+p.remove||0);
- if($('mount').checked)add(special?'Шиномонтаж RunFlat / низкий профиль':'Шиномонтаж',mountPrice);
- if($('balance').checked)add('Балансировка',+p.balance||0);
- if(special){let surcharge=+data.surcharges.special||0;if(surcharge>0)add('Доплата за RunFlat / низкий профиль (<45)',surcharge)}
- const repairSize=$('repairRim').value, repairPrices=data.rimRepair[repairSize]||{}, repairQty=Math.max(1,Math.min(24,parseInt($('repairQty').value)||1));
- if($('rimRepair').checked)add(`Правка диска ${repairSize} (${repairQty} шт.)`,Math.max(0,+$('rimRepairPrice').value||0),repairQty);
- if($('eightRepair').checked)add(`Правка восьмёрки ${repairSize} (${repairQty} шт.)`,Math.max(0,+$('eightRepairPrice').value||0),repairQty);
- document.querySelectorAll('[data-extra]').forEach(ch=>{if(ch.checked){let i=+ch.dataset.extra, q=Math.max(1,parseInt(document.querySelector(`[data-extraqty="${i}"]`).value)||1);add(data.extras[i].name,+data.extras[i].price||0,q)}});
- $('total').textContent=money(n);
- $('summary').textContent=`${v} · ${labels[r]} · ${qty} колёс${special?' · RunFlat / низкий профиль (<45)':''}\n`+(lines.length?lines.join('\n'):'Выберите работы или заполните цены в настройках.');
+const serviceQty = {
+  removeInstall: 0,
+  mount: 0,
+  balance: 0
+};
+
+function renderExtras() {
+  const box = $('extras');
+  box.innerHTML = '';
+
+  data.extras.forEach((e, i) => {
+    const row = document.createElement('div');
+    row.className = 'check';
+    row.innerHTML = `
+      <label for="ex${i}" style="flex:1">
+        ${e.name}
+        <span class="muted">(${money(e.price)}/шт.)</span>
+      </label>
+      <div class="quantity-control">
+        <button type="button" data-extra-minus="${i}" aria-label="Уменьшить количество">−</button>
+        <output id="extraQty${i}">0</output>
+        <button type="button" data-extra-plus="${i}" aria-label="Увеличить количество">+</button>
+      </div>
+    `;
+    box.appendChild(row);
+  });
+
+  box.querySelectorAll('[data-extra-minus]').forEach(button => {
+    button.addEventListener('click', () => {
+      const i = +button.dataset.extraMinus;
+      data.extras[i].quantity = Math.max(0, (data.extras[i].quantity || 0) - 1);
+      renderExtras();
+      calculate();
+    });
+  });
+
+  box.querySelectorAll('[data-extra-plus]').forEach(button => {
+    button.addEventListener('click', () => {
+      const i = +button.dataset.extraPlus;
+      data.extras[i].quantity = Math.min(99, (data.extras[i].quantity || 0) + 1);
+      renderExtras();
+      calculate();
+    });
+  });
+}
+
+function updateServiceRows() {
+  const packageSelected = $('basic').checked;
+
+  ['removeInstall', 'mount', 'balance'].forEach(id => {
+    const checkbox = $(id);
+    const row = document.querySelector(`[data-service="${id}"]`);
+
+    checkbox.disabled = packageSelected;
+    if (packageSelected) checkbox.checked = false;
+
+    row.classList.toggle('is-active', !packageSelected && checkbox.checked);
+    row.classList.toggle('is-disabled', packageSelected);
+
+    row.querySelectorAll('[data-qty-minus], [data-qty-plus]').forEach(button => {
+      button.disabled = packageSelected;
+    });
+
+    if (packageSelected) serviceQty[id] = 0;
+    $(`${id}Qty`).textContent = serviceQty[id];
+  });
+
+  const packageRow = $('basic').closest('.service-row');
+  packageRow.classList.toggle('is-active', packageSelected);
+}
+
+function calculate() {
+  const p = activePrice();
+  const vehicle = $('vehicle').value;
+  const rim = $('rim').value;
+  const special = $('tireCategory').value === 'special';
+  const lines = [];
+  let total = 0;
+
+  const add = (name, price, count = 1) => {
+    price = Math.max(0, Number(price) || 0);
+    count = Math.max(0, Number(count) || 0);
+    if (price > 0 && count > 0) {
+      total += price * count;
+      lines.push(`${name} — ${money(price)} × ${count}`);
+    }
+  };
+
+  const mountPrice = special
+    ? (Number(p.rfOne) || 0)
+    : (Number(p.mount) || 0);
+
+  $('basicPrice').textContent = money(
+    special ? (Number(p.rfFour) || 0) : (Number(p.four) || 0)
+  );
+  $('removeInstallPrice').textContent = money(Number(p.mount || 0) * 0.5);
+  $('mountPrice').textContent = money(mountPrice);
+  $('balancePrice').textContent = money(Number(p.balance) || 0);
+
+  updateServiceRows();
+
+  if ($('basic').checked) {
+    const packagePrice = special
+      ? (Number(p.rfFour) || 0)
+      : (Number(p.four) || 0);
+
+    if (packagePrice > 0) {
+      add(special ? 'Полный шиномонтаж RunFlat / низкий профиль' : 'Полный шиномонтаж', packagePrice);
+    } else {
+      add('Снятие / установка', Number(p.mount || 0) * 0.5, 4);
+      add(special ? 'Шиномонтаж RunFlat / низкий профиль' : 'Шиномонтаж', mountPrice, 4);
+      add('Балансировка', Number(p.balance) || 0, 4);
+    }
+  } else {
+    if ($('removeInstall').checked) {
+      add('Снятие / установка', Number(p.mount || 0) * 0.5, serviceQty.removeInstall);
+    }
+    if ($('mount').checked) {
+      add(special ? 'Шиномонтаж RunFlat / низкий профиль' : 'Шиномонтаж', mountPrice, serviceQty.mount);
+    }
+    if ($('balance').checked) {
+      add('Балансировка', Number(p.balance) || 0, serviceQty.balance);
+    }
+  }
+
+  if (special && Number(data.surcharges.special) > 0) {
+    add('Доплата за RunFlat / низкий профиль', Number(data.surcharges.special), 4);
+  }
+
+  const repairSize = $('repairRim').value;
+  const repairQty = Math.max(1, Math.min(24, parseInt($('repairQty').value) || 1));
+
+  if ($('rimRepair').checked) {
+    add(`Правка диска ${repairSize}`, Number($('rimRepairPrice').value), repairQty);
+  }
+  if ($('eightRepair').checked) {
+    add(`Правка восьмёрки ${repairSize}`, Number($('eightRepairPrice').value), repairQty);
+  }
+
+  data.extras.forEach((extra, i) => {
+    const quantity = Math.max(0, Number(extra.quantity) || 0);
+    if (quantity > 0) add(extra.name, extra.price, quantity);
+    const output = $(`extraQty${i}`);
+    if (output) output.textContent = quantity;
+  });
+
+  $('total').textContent = money(total);
+  $('summary').textContent =
+    `${vehicle} · ${labels[rim]}${special ? ' · RunFlat / низкий профиль (<45)' : ''}\n` +
+    (lines.length ? lines.join('\n') : 'Выберите работы или заполните цены в настройках.');
 }
 function updatePriceAccess(){
   const isOwner=window.__tireCalcIsOwner===true;
@@ -838,19 +964,83 @@ function renderSurcharges(){let box=$('surchargeEditor');box.innerHTML='';
 function renderCatalog(){let box=$('catalogExtras');box.innerHTML='';data.extras.forEach((e,i)=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<input type="text" data-name="${i}" value="${e.name}"><input type="number" min="0" data-extra-price="${i}" value="${e.price}"><button class="secondary" data-del="${i}" aria-label="Удалить">×</button>`;box.appendChild(row)});box.querySelectorAll('[data-name]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.name].name=i.value||'Услуга';save();renderExtras()}));box.querySelectorAll('[data-extra-price]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.extraPrice].price=+i.value||0;save();renderExtras()}));box.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{data.extras.splice(+b.dataset.del,1);save();renderCatalog();renderExtras()}));updatePriceAccess()}
 $('priceVehicle').innerHTML=vehicles.map(v=>`<option>${v}</option>`).join('');
 $('priceVehicle').addEventListener('change',renderPriceEditor);
-$('vehicle').addEventListener('change',calculate);['rim','tireCategory','qty','basic','removeInstall','mount','balance','repairQty','rimRepair','eightRepair','rimRepairPrice','eightRepairPrice'].forEach(id=>$(id).addEventListener('input',calculate));
-function syncRepairPrices(){const rp=data.rimRepair[$('repairRim').value]||{rim:0,eight:0};$('rimRepairPrice').value=rp.rim||0;$('eightRepairPrice').value=rp.eight||0;calculate()}
-$('repairRim').addEventListener('change',syncRepairPrices);
-$('unitButtons').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{unit=+b.dataset.unit;$('unitButtons').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));if(unit===4)$('qty').value=4;else if(+$('qty').value===4)$('qty').value=1;calculate()}));
-document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));['calc','prices','settings'].forEach(id=>$(id).classList.toggle('hidden',b.dataset.tab!==id))}));
-$('addExtra').onclick=()=>{data.extras.push({name:'Новая работа',price:0});save();renderExtras();renderCatalog()};
-$('addCatalogExtra').onclick=()=>{data.extras.push({name:'Новая услуга',price:0});save();renderCatalog();renderExtras()};
-function getCalculationText(){return `РАСЧЁТ ШИНОМОНТАЖА\n${$('summary').textContent}\n\nИТОГО: ${$('total').textContent}\n\nСтоимость предварительная.`; }
-$('share').onclick=async()=>{const text=getCalculationText();try{if(navigator.share){await navigator.share({title:'Расчёт шиномонтажа',text});}else{await navigator.clipboard.writeText(text);alert('Расчёт скопирован. Теперь вставьте его в сообщение.')}}catch(e){if(e.name!=='AbortError'){prompt('Скопируйте расчёт для отправки:',text)}}};
-$('saveCalculation').onclick=()=>{const text=getCalculationText();const blob=new Blob([text],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);const stamp=new Date().toLocaleDateString('ru-RU').replaceAll('.','-');a.download=`расчёт-шиномонтажа-${stamp}.txt`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);};
-$('copy').onclick=async()=>{let text=getCalculationText();try{await navigator.clipboard.writeText(text);$('copy').textContent='Скопировано!';setTimeout(()=>$('copy').textContent='Скопировать расчёт',1600)}catch(e){prompt('Скопируйте расчёт:',text)}};
-$('reset').onclick=()=>{['basic','removeInstall','mount','balance','rimRepair','eightRepair'].forEach(id=>$(id).checked=id==='basic');document.querySelectorAll('[data-extra]').forEach(x=>x.checked=false);$('qty').value=4;$('repairQty').value=1;unit=4;$('unitButtons').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x.dataset.unit==='4'));calculate()};
-$('resetServices').onclick=()=>{
+$('vehicle').addEventListener('change', calculate);
+
+['rim', 'tireCategory', 'basic', 'removeInstall', 'mount', 'balance',
+ 'repairQty', 'rimRepair', 'eightRepair', 'rimRepairPrice', 'eightRepairPrice'
+].forEach(id => {
+  $(id).addEventListener('input', calculate);
+  $(id).addEventListener('change', calculate);
+});
+
+document.querySelectorAll('[data-qty-minus], [data-qty-plus]').forEach(button => {
+  button.addEventListener('click', () => {
+    const id = button.dataset.qtyMinus || button.dataset.qtyPlus;
+    const delta = button.dataset.qtyPlus ? 1 : -1;
+
+    serviceQty[id] = Math.max(0, Math.min(24, serviceQty[id] + delta));
+    if (serviceQty[id] > 0) $(id).checked = true;
+    if (serviceQty[id] === 0) $(id).checked = false;
+
+    calculate();
+  });
+});
+
+function syncRepairPrices() {
+  const prices = data.rimRepair[$('repairRim').value] || { rim: 0, eight: 0 };
+  $('rimRepairPrice').value = prices.rim || 0;
+  $('eightRepairPrice').value = prices.eight || 0;
+  calculate();
+}
+
+$('repairRim').addEventListener('change', syncRepairPrices);
+
+$('basic').addEventListener('change', calculate);
+
+document.querySelectorAll('.tabs button').forEach(button => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('.tabs button').forEach(tab => {
+      tab.classList.toggle('active', tab === button);
+    });
+    ['calc', 'prices', 'settings'].forEach(id => {
+      $(id).classList.toggle('hidden', button.dataset.tab !== id);
+    });
+  });
+});
+
+$('addExtra').onclick = () => {
+  data.extras.push({ name: 'Новая работа', price: 0, quantity: 0 });
+  save();
+  renderExtras();
+  renderCatalog();
+};
+
+$('addCatalogExtra').onclick = () => {
+  data.extras.push({ name: 'Новая услуга', price: 0, quantity: 0 });
+  save();
+  renderCatalog();
+  renderExtras();
+};
+
+$('reset').onclick = () => {
+  ['basic', 'removeInstall', 'mount', 'balance', 'rimRepair', 'eightRepair']
+    .forEach(id => $(id).checked = false);
+
+  Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
+  data.extras.forEach(extra => extra.quantity = 0);
+
+  $('repairQty').value = 1;
+  renderExtras();
+  calculate();
+};
+
+$('resetServices').onclick = () => {
+  ['basic', 'removeInstall', 'mount', 'balance'].forEach(id => {
+    $(id).checked = false;
+  });
+  Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
+  calculate();
+};
   ['basic','removeInstall','mount','balance'].forEach(id=>$(id).checked=false);
   $('qty').value=4;
   unit=4;
