@@ -1430,7 +1430,18 @@ document.querySelectorAll('.tabs button').forEach(button => {
     });
   });
 });
+$('addExtra').onclick = () => {
+  data.calculatorExtras.push({
+    name: 'Новая работа',
+    price: 0,
+    quantity: 0
+  });
 
+  save();
+  renderExtras();
+  calculate();
+};
+  
 $('addCatalogExtra').onclick = () => {
   data.extras.push({ name: 'Новая услуга', price: 0, quantity: 0 });
   save();
