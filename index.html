@@ -840,7 +840,8 @@ const serviceQty = {
   mount: 0,
   tireMount: 0,
   tireDemount: 0,
-  balance: 0
+  balance: 0,
+  argon: 0
 };
 function renderExtras() {
   const box = $('extras');
@@ -989,7 +990,13 @@ function calculate() {
       4
     );
   }
+  const argonQty = serviceQty.argon;
 
+  $('argonQty').textContent = argonQty;
+
+  if ($('argonWelding').checked) {
+    add('Аргоновая сварка', $('argonPrice').value, argonQty);
+  }
   const repairSize = $('repairRim').value;
   const repairQty = Math.max(
     1,
@@ -1067,7 +1074,19 @@ document.querySelectorAll('[data-qty-minus], [data-qty-plus]').forEach(button =>
     calculate();
   });
 });
+$('argonMinus').addEventListener('click', () => {
+  serviceQty.argon = Math.max(0, serviceQty.argon - 1);
+  calculate();
+});
 
+$('argonPlus').addEventListener('click', () => {
+  serviceQty.argon = Math.min(24, serviceQty.argon + 1);
+  calculate();
+});
+
+$('argonWelding').addEventListener('change', calculate);
+$('argonPrice').addEventListener('input', calculate);
+  
 function syncRepairPrices() {
   const prices = data.rimRepair[$('repairRim').value] || { rim: 0, eight: 0 };
   $('rimRepairPrice').value = prices.rim || 0;
@@ -1110,6 +1129,8 @@ $(id).checked = false;
 });
 
 Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
+$('argonWelding').checked = false;
+$('argonPrice').value = 1500;
 data.extras.forEach(extra => extra.quantity = 0);
 
 $('repairQty').value = 1;
