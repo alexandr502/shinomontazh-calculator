@@ -818,9 +818,10 @@ function activePrice(){return data.prices[$('vehicle').value][$('rim').value]||{
 const serviceQty = {
   removeInstall: 0,
   mount: 0,
+  tireMount: 0,
+  tireDemount: 0,
   balance: 0
 };
-
 function renderExtras() {
   const box = $('extras');
   box.innerHTML = '';
