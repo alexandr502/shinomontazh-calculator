@@ -530,7 +530,10 @@ header {
 <div class="muted" style="margin-top:10px">RunFlat и низкий профиль (&lt;45) объединены в одну категорию специальных шин и используют общие расценки.</div>
 </div>
 <div class="card">
-<h2>2. Основные работы</h2>
+<div class="section-heading">
+  <h2><span aria-hidden="true">🔧</span> Услуги</h2>
+  <button type="button" class="secondary section-reset" id="resetServices" title="Очистить выбор услуг" aria-label="Очистить выбор услуг">↻</button>
+</div>
 <div class="row chips" id="unitButtons"><button class="active" data-unit="4">Комплект · 4 колеса</button><button data-unit="1">За 1 колесо</button></div>
 <div class="check"><input type="checkbox" id="basic" checked><label for="basic">Полный шиномонтаж (снятие/установка + шиномонтаж + балансировка)</label></div>
 <div class="check"><input type="checkbox" id="removeInstall"><label for="removeInstall">Только снятие / установка</label></div>
@@ -701,6 +704,13 @@ $('share').onclick=async()=>{const text=getCalculationText();try{if(navigator.sh
 $('saveCalculation').onclick=()=>{const text=getCalculationText();const blob=new Blob([text],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);const stamp=new Date().toLocaleDateString('ru-RU').replaceAll('.','-');a.download=`расчёт-шиномонтажа-${stamp}.txt`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);};
 $('copy').onclick=async()=>{let text=getCalculationText();try{await navigator.clipboard.writeText(text);$('copy').textContent='Скопировано!';setTimeout(()=>$('copy').textContent='Скопировать расчёт',1600)}catch(e){prompt('Скопируйте расчёт:',text)}};
 $('reset').onclick=()=>{['basic','removeInstall','mount','balance','rimRepair','eightRepair'].forEach(id=>$(id).checked=id==='basic');document.querySelectorAll('[data-extra]').forEach(x=>x.checked=false);$('qty').value=4;$('repairQty').value=1;unit=4;$('unitButtons').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x.dataset.unit==='4'));calculate()};
+$('resetServices').onclick=()=>{
+  ['basic','removeInstall','mount','balance'].forEach(id=>$(id).checked=false);
+  $('qty').value=4;
+  unit=4;
+  $('unitButtons').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x.dataset.unit==='4'));
+  calculate();
+};
 $('export').onclick=()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='прайс-шиномонтаж.json';a.click();URL.revokeObjectURL(a.href)};
 $('importFile').onchange=async e=>{try{let obj=JSON.parse(await e.target.files[0].text());if(!obj.prices||!obj.extras)throw Error();data=obj;save();if(!data.rimRepair)data.rimRepair=fresh().rimRepair;renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();syncRepairPrices();calculate();alert('Настройки импортированы')}catch(err){alert('Не удалось прочитать файл настроек')}};
 $('defaults').onclick=()=>{if(confirm('Восстановить исходные цены? Текущие настройки будут заменены.')){data=fresh();save();renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();calculate()}};
