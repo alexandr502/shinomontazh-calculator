@@ -554,13 +554,47 @@ header {
   <h2><span aria-hidden="true">🔧</span> Услуги</h2>
   <button type="button" class="secondary section-reset" id="resetServices" title="Очистить выбор услуг" aria-label="Очистить выбор услуг">↻</button>
 </div>
-<div class="row chips" id="unitButtons"><button class="active" data-unit="4">Комплект · 4 колеса</button><button data-unit="1">За 1 колесо</button></div>
-<div class="check"><input type="checkbox" id="basic" checked><label for="basic">Полный шиномонтаж (снятие/установка + шиномонтаж + балансировка)</label></div>
-<div class="check"><input type="checkbox" id="removeInstall"><label for="removeInstall">Только снятие / установка</label></div>
-<div class="check"><input type="checkbox" id="mount"><label for="mount">Только шиномонтаж</label></div>
-<div class="check"><input type="checkbox" id="balance"><label for="balance">Только балансировка</label></div>
+<div class="service-list">
+  <div class="service-row">
+    <label for="basic">Полный шиномонтаж</label>
+    <span class="service-price" id="basicPrice">—</span>
+    <input type="checkbox" id="basic" checked>
+    <span class="service-hint">Комплект из 4 колёс</span>
+  </div>
 
-<div class="field"><label>Количество колёс</label><input type="number" id="qty" min="1" max="24" value="4"></div>
+  <div class="service-row" data-service="removeInstall">
+    <label for="removeInstall">Снятие / установка</label>
+    <span class="service-price" id="removeInstallPrice">—</span>
+    <input type="checkbox" id="removeInstall">
+    <div class="quantity-control">
+      <button type="button" data-qty-minus="removeInstall" aria-label="Уменьшить количество снятий и установок">−</button>
+      <output id="removeInstallQty">0</output>
+      <button type="button" data-qty-plus="removeInstall" aria-label="Увеличить количество снятий и установок">+</button>
+    </div>
+  </div>
+
+  <div class="service-row" data-service="mount">
+    <label for="mount">Шиномонтаж</label>
+    <span class="service-price" id="mountPrice">—</span>
+    <input type="checkbox" id="mount">
+    <div class="quantity-control">
+      <button type="button" data-qty-minus="mount" aria-label="Уменьшить количество шиномонтажных работ">−</button>
+      <output id="mountQty">0</output>
+      <button type="button" data-qty-plus="mount" aria-label="Увеличить количество шиномонтажных работ">+</button>
+    </div>
+  </div>
+
+  <div class="service-row" data-service="balance">
+    <label for="balance">Балансировка</label>
+    <span class="service-price" id="balancePrice">—</span>
+    <input type="checkbox" id="balance">
+    <div class="quantity-control">
+      <button type="button" data-qty-minus="balance" aria-label="Уменьшить количество балансировок">−</button>
+      <output id="balanceQty">0</output>
+      <button type="button" data-qty-plus="balance" aria-label="Увеличить количество балансировок">+</button>
+    </div>
+  </div>
+</div>
 </div>
 <div class="card">
 <h2>3. Правка дисков</h2>
