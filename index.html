@@ -928,16 +928,22 @@ function renderExtras() {
   const box = $('extras');
   box.innerHTML = '';
 
-  data.extras.forEach((e, i) => {
-    const quantity = Math.max(0, Number(e.quantity) || 0);
+ const allExtras = [
+  ...data.extras.map((e, i) => ({ ...e, source: 'catalog', index: i })),
+  ...data.calculatorExtras.map((e, i) => ({ ...e, source: 'manual', index: i }))
+];
+
+allExtras.forEach((e, i) => {
+  const quantity = Math.max(0, Number(e.quantity) || 0);
     const row = document.createElement('div');
 
     row.className = 'service-row';
     row.classList.toggle('is-active', quantity > 0);
 
         row.innerHTML = `
-      <label>${e.name}</label>
-      <span class="service-price">${money(e.price)}/шт.</span>
+     <label>${e.name}</label>
+<span class="service-price">${money(e.price)}/шт.</span>
+${e.source === 'manual' ? `<button type="button" class="extra-edit-button" data-extra-edit="${e.index}" aria-label="Редактировать услугу">✎</button>` : ''}
       <div class="quantity-control">
         <button type="button" data-extra-minus="${i}"
           aria-label="Уменьшить количество">−</button>
@@ -953,9 +959,9 @@ function renderExtras() {
   box.querySelectorAll('[data-extra-minus]').forEach(button => {
     button.addEventListener('click', () => {
       const i = +button.dataset.extraMinus;
-      data.extras[i].quantity = Math.max(
+      allExtras[i].quantity = Math.max(
         0,
-        (data.extras[i].quantity || 0) - 1
+        (allExtras[i].quantity || 0) - 1
       );
       renderExtras();
       calculate();
@@ -965,9 +971,9 @@ function renderExtras() {
   box.querySelectorAll('[data-extra-plus]').forEach(button => {
     button.addEventListener('click', () => {
       const i = +button.dataset.extraPlus;
-      data.extras[i].quantity = Math.min(
+      allExtras[i].quantity = Math.min(
         99,
-        (data.extras[i].quantity || 0) + 1
+        (allExtras[i].quantity || 0) + 1
       );
       renderExtras();
       calculate();
@@ -1381,10 +1387,14 @@ document.querySelectorAll('.tabs button').forEach(button => {
 });
 
 $('addExtra').onclick = () => {
-  data.extras.push({ name: 'Новая работа', price: 0, quantity: 0 });
+  data.calculatorExtras.push({
+    name: 'Новая работа',
+    price: 0,
+    quantity: 0
+  });
   save();
   renderExtras();
-  renderCatalog();
+  calculate();
 };
 
 $('addCatalogExtra').onclick = () => {
