@@ -1291,17 +1291,20 @@ document.querySelectorAll('[data-qty-minus], [data-qty-plus]').forEach(button =>
     calculate();
   });
 });
+```js
 $('argonMinus').addEventListener('click', () => {
   serviceQty.argon = Math.max(0, serviceQty.argon - 1);
-  updateQuantityHighlight('argonQty');
   calculate();
+  updateQuantityHighlight('argonQty');
 });
 
 $('argonPlus').addEventListener('click', () => {
   serviceQty.argon = Math.min(24, serviceQty.argon + 1);
-  updateQuantityHighlight('argonQty');
   calculate();
+  updateQuantityHighlight('argonQty');
 });
+```
+
 
 $('argonPrice').addEventListener('input', calculate);
   
