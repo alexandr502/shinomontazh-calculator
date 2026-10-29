@@ -1056,6 +1056,18 @@ function calculate() {
       lines.push(`${name} — ${money(price)} × ${count}`);
     }
   };
+  const addTotal = (name, amount, count) => {
+amount = Math.max(0, Number(amount) || 0);
+count = Math.max(0, Number(count) || 0);
+
+```
+if (amount > 0 && count > 0) {
+  total += amount;
+  lines.push(`${name} — ${money(amount)}`);
+}
+```
+
+};
 
   const removePrice = Number(p.remove) || 0;
   const mountPrice = special
@@ -1113,7 +1125,7 @@ function calculate() {
   $('argonUnitPrice').textContent =
     money(Number($('argonPrice').value) || 0) + '/шт.';
 
-  add('Аргоновая сварка', $('argonPrice').value, argonQty);
+ addTotal('Аргоновая сварка', $('argonTotal').value, argonQty);
 
   const repairSize = $('repairRim').value;
 
@@ -1135,8 +1147,8 @@ $('rimRepairPriceLabel').textContent =
 $('eightRepairPriceLabel').textContent =
   money(Number($('eightRepairPrice').value) || 0) + '/шт.';
 
-add(`Правка диска ${repairSize}`, $('rimRepairPrice').value, rimRepairQty);
-add(`Правка восьмёрки ${repairSize}`, $('eightRepairPrice').value, eightRepairQty);
+addTotal(`Правка диска ${repairSize}`, $('rimRepairTotal').value, rimRepairQty);
+addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').value, eightRepairQty);
     data.extras.forEach((extra, i) => {
   const quantity = Math.max(0, Number(extra.quantity) || 0);
 
