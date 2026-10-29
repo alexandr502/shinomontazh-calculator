@@ -650,6 +650,44 @@ header {
     height: 42px;
   }
 }
+  /* Обратная связь при публикации общего прайса */
+#prices #cloudPublish {
+  transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
+  transform-origin: center;
+}
+
+#prices #cloudPublish:active {
+  transform: scale(.98);
+  box-shadow: 0 1px 0 #9f2522;
+}
+
+#prices #cloudPublish.is-publishing {
+  opacity: .72;
+  cursor: wait;
+}
+
+#prices #cloudPublish:disabled {
+  cursor: wait;
+}
+
+#prices #publishStatus {
+  min-height: 20px;
+  margin: 10px 0 0;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+#prices #publishStatus.is-pending {
+  color: #fbbf24;
+}
+
+#prices #publishStatus.is-success {
+  color: #4ade80;
+}
+
+#prices #publishStatus.is-error {
+  color: #f87171;
+}
   
 </style>
 </head>
@@ -1516,7 +1554,79 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
  const cfg=()=>({url:($c('cloudUrl').value||'').trim().replace(/\/$/,''),key:($c('cloudKey').value||'').trim()});
  function makeClient(){const c=cfg();if(!c.url||!c.key)throw Error('Введи адрес проекта и публичный anon key.');if(!window.supabase?.createClient)throw Error('Не загрузилась библиотека облака. Проверь интернет.');sb=window.supabase.createClient(c.url,c.key,{auth:{persistSession:true,autoRefreshToken:true}});localStorage.setItem('tireCloudUrl',c.url);localStorage.setItem('tireCloudKey',c.key);return sb;}
  async function fetchPrice(){if(busy)return;busy=true;try{if(!sb)makeClient();const {data:row,error}=await sb.from('shared_price').select('payload,updated_at').eq('id',1).maybeSingle();if(error)throw error;if(!row){status('В облаке пока нет прайса. Войди как владелец и нажми «Опубликовать».');return;}data=row.payload;localStorage.setItem('tireCalcData',JSON.stringify(data));renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();syncRepairPrices();calculate();status('Общий прайс загружен'+(row.updated_at?' · обновлён '+new Date(row.updated_at).toLocaleString('ru-RU'):''));}catch(e){status('Не удалось загрузить общий прайс: '+(e.message||e));}finally{busy=false;}}
- async function publish(){try{if(!sb)makeClient();const {data:sessionData}=await sb.auth.getSession();if(!sessionData.session){status('Сначала войди под аккаунтом владельца.');return;}const {error}=await sb.from('shared_price').upsert({id:1,payload:data,updated_at:new Date().toISOString()},{onConflict:'id'});if(error)throw error;localStorage.setItem('tireCalcData',JSON.stringify(data));status('Готово: общий прайс опубликован для всех пользователей.');}catch(e){status('Не удалось опубликовать: '+(e.message||e)+' · Проверь SQL-политики и аккаунт владельца.');}}
+  async function publish(){
+  const button=$c('cloudPublish');
+  const result=$c('publishStatus');
+
+  if(button.dataset.busy==='true')return;
+
+  const originalLabel=button.textContent;
+
+  button.dataset.busy='true';
+  button.disabled=true;
+  button.setAttribute('aria-busy','true');
+  button.classList.add('is-publishing');
+  button.textContent='Публикуем…';
+
+  if(result){
+    result.className='publish-status is-pending';
+    result.textContent='⏳ Публикуем прайс…';
+  }
+
+  try{
+    if(!sb)makeClient();
+
+    const {data:sessionData}=await sb.auth.getSession();
+
+    if(!sessionData.session){
+      const message='Сначала войди под аккаунтом владельца.';
+      status(message);
+
+      if(result){
+        result.className='publish-status is-error';
+        result.textContent='❌ '+message;
+      }
+
+      return;
+    }
+
+    const {error}=await sb.from('shared_price').upsert({
+      id:1,
+      payload:data,
+      updated_at:new Date().toISOString()
+    },{onConflict:'id'});
+
+    if(error)throw error;
+
+    localStorage.setItem('tireCalcData',JSON.stringify(data));
+
+    status('Готово: общий прайс опубликован для всех пользователей.');
+
+    if(result){
+      result.className='publish-status is-success';
+      result.textContent='✅ Прайс успешно опубликован!';
+    }
+
+  }catch(e){
+    const reason=e&&e.message?e.message:String(e);
+
+    status('Не удалось опубликовать: '+reason+' · Проверь SQL-политики и аккаунт владельца.');
+
+    if(result){
+      result.className='publish-status is-error';
+      result.textContent='❌ Не удалось опубликовать прайс. '+reason;
+    }
+
+  }finally{
+    window.setTimeout(()=>{
+      button.disabled=false;
+      button.removeAttribute('aria-busy');
+      button.classList.remove('is-publishing');
+      button.textContent=originalLabel;
+      button.dataset.busy='false';
+    },350);
+  }
+ }
  $c('cloudUrl').value=localStorage.getItem('tireCloudUrl')||'https://lqqfgzioboqeeiuhijyi.supabase.co';$c('cloudKey').value=localStorage.getItem('tireCloudKey')||'sb_publishable_QcMaau9Phz4pQYjhF39N1w_bW6XlC3v';
  $c('cloudConnect').addEventListener('click',async()=>{try{makeClient();const {error}=await sb.from('shared_price').select('id').limit(1);if(error)throw error;status('Подключение успешно. Загружаю общий прайс…');await fetchPrice();}catch(e){status('Ошибка подключения: '+(e.message||e)+' · Выполни SQL из архива в Supabase.');}});
  $c('cloudRefresh').addEventListener('click',fetchPrice);
