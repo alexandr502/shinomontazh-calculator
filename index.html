@@ -820,11 +820,14 @@ header {
 
 </div>
 <div class="card">
-<h2><span aria-hidden="true">🔧➕</span> Дополнительные услуги</h2>
+<div class="section-heading">
+  <h2><span aria-hidden="true">🔧➕</span> Дополнительные услуги</h2>
+  <button type="button" class="secondary section-reset" id="resetExtras"
+    title="Очистить дополнительные услуги" aria-label="Очистить дополнительные услуги">↻</button>
+</div>
 <div id="extras"></div>
 </div>
 <div class="total"><small>ИТОГО К ОЗВУЧИВАНИЮ</small><div class="amount" id="total">0 ₽</div><div class="summary" id="summary">Выберите работы и параметры автомобиля.</div><button class="primary" id="share">Отправить расчёт</button><button class="secondary" id="saveCalculation" style="width:100%;margin-top:8px">Сохранить расчёт в файл (.txt)</button><button class="secondary" id="copy" style="width:100%;margin-top:8px">Скопировать расчёт</button></div>
-<button class="secondary" id="reset" style="width:100%">Очистить расчёт</button>
 </section>
 <section id="prices" class="hidden">
 <div class="card"><h2>Прайс по категориям</h2><p class="muted">Для легковых автомобилей внесены значения с вашей фотографии. Остальные категории оставлены пустыми для ручного заполнения. В каждой строке: цена за 1 колесо и за 4 колеса. Изменения сохраняются локально; после входа владельца их можно опубликовать в общий прайс.</p>
@@ -1458,30 +1461,6 @@ $('addCatalogExtra').onclick = () => {
   renderExtras();
 };
 
-$('reset').onclick = () => {
-$('basic').checked = false;
-
-Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
-$('argonPrice').value = 1500;
-data.extras.forEach(extra => extra.quantity = 0);
-
-$('rimRepairQty').textContent = 0;
-$('eightRepairQty').textContent = 0;
-
-// Сбрасываем итоги ручных услуг.
-updateServiceTotal('rimRepairTotal');
-updateServiceTotal('eightRepairTotal');
-updateServiceTotal('argonTotal');
-
-$('argonQty').textContent = 0;
-updateQuantityHighlight('argonQty');
-updateQuantityHighlight('rimRepairQty');
-updateQuantityHighlight('eightRepairQty');
-
-renderExtras();
-calculate();
-};
-
 $('resetServices').onclick = () => {
 $('basic').checked = false;
 Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
@@ -1491,6 +1470,11 @@ updateServiceTotal('argonTotal');
 updateQuantityHighlight('argonQty');
 
 calculate();
+};
+  $('resetExtras').onclick = () => {
+  data.extras.forEach(extra => extra.quantity = 0);
+  renderExtras();
+  calculate();
 };
   
 $('export').onclick=()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='прайс-шиномонтаж.json';a.click();URL.revokeObjectURL(a.href)};
