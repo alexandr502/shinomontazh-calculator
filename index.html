@@ -257,6 +257,13 @@ header p {
   gap: 8px;
   margin-top: 14px;
 }
+  #extras {
+display: flex;
+flex-direction: column;
+gap: 8px;
+margin-top: 14px;
+}
+
 
 .service-row {
   display: grid;
@@ -766,7 +773,8 @@ header {
     </select>
   </div>
 
-  <div class="service-row">
+  <div class="service-row" style="margin-top:14px">
+
     <label>Правка диска</label>
     <span class="service-price" id="rimRepairPriceLabel">—</span>
     <div class="quantity-control">
@@ -776,12 +784,13 @@ header {
     </div>
   </div>
    <input type="number" id="rimRepairPrice" min="0" step="10" value="0" hidden>
-  <div class="field">
+  <div class="field" style="margin-top:14px">
+
     <label>Итоговая сумма за правку дисков (₽)</label>
     <input type="number" id="rimRepairTotal" min="0" step="10" value="0">
   </div>
 
-    <div class="service-row">
+    <div class="service-row" style="margin-top:14px">
     <label>Правка восьмёрки</label>
     <span class="service-price" id="eightRepairPriceLabel">—</span>
     <div class="quantity-control">
