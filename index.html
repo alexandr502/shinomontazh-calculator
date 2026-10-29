@@ -1427,10 +1427,20 @@ $('eightRepairPlus').addEventListener('click', () => {
 });
 
 $('resetRepairs').addEventListener('click', () => {
+  // Очищаем правку дисков
   $('rimRepairQty').textContent = 0;
   $('eightRepairQty').textContent = 0;
+
   updateQuantityHighlight('rimRepairQty');
-updateQuantityHighlight('eightRepairQty');
+  updateQuantityHighlight('eightRepairQty');
+
+  // Очищаем аргоновую сварку
+  serviceQty.argon = 0;
+  $('argonQty').textContent = 0;
+  $('argonTotal').value = 0;
+  updateQuantityHighlight('argonQty');
+
+  // Пересчитываем итог
   syncRepairPrices();
 });
 
