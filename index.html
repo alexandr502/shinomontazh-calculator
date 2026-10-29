@@ -1038,6 +1038,32 @@ toggle.setAttribute(
     : 'Включить полный шиномонтаж'
 );
 }
+  function updateServiceTotal(totalId) {
+  const config = {
+    rimRepairTotal: {
+      priceId: 'rimRepairPrice',
+      qtyId: 'rimRepairQty'
+    },
+    eightRepairTotal: {
+      priceId: 'eightRepairPrice',
+      qtyId: 'eightRepairQty'
+    },
+    argonTotal: {
+      priceId: 'argonPrice',
+      qtyId: null
+    }
+  };
+
+  const item = config[totalId];
+  if (!item) return;
+
+  const quantity = item.qtyId
+    ? Number($(item.qtyId).textContent) || 0
+    : Number(serviceQty.argon) || 0;
+
+  const price = Number($(item.priceId).value) || 0;
+  $(totalId).value = price * quantity;
+}
 
 function calculate() {
   const p = activePrice();
@@ -1066,34 +1092,6 @@ if (amount > 0 && count > 0) {
 }
 
 };
-
-  function updateServiceTotal(totalId) {
-const config = {
-rimRepairTotal: {
-priceId: 'rimRepairPrice',
-qtyId: 'rimRepairQty'
-},
-eightRepairTotal: {
-priceId: 'eightRepairPrice',
-qtyId: 'eightRepairQty'
-},
-argonTotal: {
-priceId: 'argonPrice',
-qtyId: null
-}
-};
-
-const item = config[totalId];
-if (!item) return;
-
-const quantity = item.qtyId
-  ? Number($(item.qtyId).textContent) || 0
-  : Number(serviceQty.argon) || 0;
-
-const price = Number($(item.priceId).value) || 0;
-$(totalId).value = price * quantity;
-
-}
 
   const removePrice = Number(p.remove) || 0;
   const mountPrice = special
