@@ -1476,6 +1476,17 @@ data.extras.forEach(extra => extra.quantity = 0);
 
 $('rimRepairQty').textContent = 0;
 $('eightRepairQty').textContent = 0;
+
+// Сбрасываем итоги ручных услуг.
+updateServiceTotal('rimRepairTotal');
+updateServiceTotal('eightRepairTotal');
+updateServiceTotal('argonTotal');
+
+$('argonQty').textContent = 0;
+updateQuantityHighlight('argonQty');
+updateQuantityHighlight('rimRepairQty');
+updateQuantityHighlight('eightRepairQty');
+
 renderExtras();
 calculate();
 };
@@ -1483,6 +1494,11 @@ calculate();
 $('resetServices').onclick = () => {
 $('basic').checked = false;
 Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
+
+$('argonQty').textContent = 0;
+updateServiceTotal('argonTotal');
+updateQuantityHighlight('argonQty');
+
 calculate();
 };
   
