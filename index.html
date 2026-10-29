@@ -1067,6 +1067,34 @@ if (amount > 0 && count > 0) {
 
 };
 
+  function updateServiceTotal(totalId) {
+const config = {
+rimRepairTotal: {
+priceId: 'rimRepairPrice',
+qtyId: 'rimRepairQty'
+},
+eightRepairTotal: {
+priceId: 'eightRepairPrice',
+qtyId: 'eightRepairQty'
+},
+argonTotal: {
+priceId: 'argonPrice',
+qtyId: null
+}
+};
+
+const item = config[totalId];
+if (!item) return;
+
+const quantity = item.qtyId
+  ? Number($(item.qtyId).textContent) || 0
+  : Number(serviceQty.argon) || 0;
+
+const price = Number($(item.priceId).value) || 0;
+$(totalId).value = price * quantity;
+
+}
+
   const removePrice = Number(p.remove) || 0;
   const mountPrice = special
     ? (Number(p.rfOne) || 0)
@@ -1279,11 +1307,10 @@ $('priceVehicle').addEventListener('change',renderPriceEditor);
 $('vehicle').addEventListener('change', calculate);
 
 [
-  'rim', 'tireCategory', 'basic',
-  'rimRepairPrice', 'eightRepairPrice'
+'rim', 'tireCategory', 'basic'
 ].forEach(id => {
-  $(id).addEventListener('input', calculate);
-  $(id).addEventListener('change', calculate);
+$(id).addEventListener('input', calculate);
+$(id).addEventListener('change', calculate);
 });
 
 document.querySelectorAll('[data-qty-minus], [data-qty-plus]').forEach(button => {
@@ -1300,6 +1327,7 @@ $('argonMinus').addEventListener('click', () => {
   serviceQty.argon = Math.max(0, serviceQty.argon - 1);
   $('argonQty').textContent = serviceQty.argon;
   updateQuantityHighlight('argonQty');
+  updateServiceTotal('argonTotal');
   calculate();
 });
 
@@ -1307,11 +1335,27 @@ $('argonPlus').addEventListener('click', () => {
   serviceQty.argon = Math.min(24, serviceQty.argon + 1);
   $('argonQty').textContent = serviceQty.argon;
   updateQuantityHighlight('argonQty');
+  updateServiceTotal('argonTotal');
   calculate();
 });
 
+$('argonPrice').addEventListener('input', () => {
+  updateServiceTotal('argonTotal');
+  calculate();
+  $('rimRepairPrice').addEventListener('input', () => {
+  updateServiceTotal('rimRepairTotal');
+  calculate();
+});
 
-$('argonPrice').addEventListener('input', calculate);
+$('eightRepairPrice').addEventListener('input', () => {
+  updateServiceTotal('eightRepairTotal');
+  calculate();
+});
+
+$('rimRepairTotal').addEventListener('input', calculate);
+$('eightRepairTotal').addEventListener('input', calculate);
+$('argonTotal').addEventListener('input', calculate);
+});
   
 function syncRepairPrices() {
   const range = $('rim').value;
@@ -1330,9 +1374,12 @@ function syncRepairPrices() {
   const prices = data.rimRepair[size] || { rim: 0, eight: 0 };
 
   $('rimRepairPrice').value = prices.rim || 0;
-  $('eightRepairPrice').value = prices.eight || 0;
+$('eightRepairPrice').value = prices.eight || 0;
 
-  calculate();
+updateServiceTotal('rimRepairTotal');
+updateServiceTotal('eightRepairTotal');
+
+calculate();
 }
 
 $('repairRim').addEventListener('change', syncRepairPrices);
@@ -1350,9 +1397,14 @@ function changeRepairQty(id, delta) {
   const output = $(id);
   const current = Number(output.textContent) || 0;
 
-  output.textContent = Math.max(0, Math.min(24, current + delta));
-  updateQuantityHighlight(id);
-  calculate();
+ output.textContent = Math.max(0, Math.min(24, current + delta));
+updateQuantityHighlight(id);
+
+updateServiceTotal(
+  id === 'rimRepairQty' ? 'rimRepairTotal' : 'eightRepairTotal'
+);
+
+calculate();
 }
 
 $('rimRepairMinus').addEventListener('click', () => {
