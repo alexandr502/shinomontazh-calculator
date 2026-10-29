@@ -1340,22 +1340,24 @@ $('argonPlus').addEventListener('click', () => {
 });
 
 $('argonPrice').addEventListener('input', () => {
-  updateServiceTotal('argonTotal');
-  calculate();
-  $('rimRepairPrice').addEventListener('input', () => {
-  updateServiceTotal('rimRepairTotal');
-  calculate();
+updateServiceTotal('argonTotal');
+calculate();
+});
+
+$('rimRepairPrice').addEventListener('input', () => {
+updateServiceTotal('rimRepairTotal');
+calculate();
 });
 
 $('eightRepairPrice').addEventListener('input', () => {
-  updateServiceTotal('eightRepairTotal');
-  calculate();
+updateServiceTotal('eightRepairTotal');
+calculate();
 });
 
 $('rimRepairTotal').addEventListener('input', calculate);
 $('eightRepairTotal').addEventListener('input', calculate);
 $('argonTotal').addEventListener('input', calculate);
-});
+
   
 function syncRepairPrices() {
   const range = $('rim').value;
@@ -1431,8 +1433,6 @@ updateQuantityHighlight('eightRepairQty');
   syncRepairPrices();
 });
 
-$('rimRepairPrice').addEventListener('input', calculate);
-$('eightRepairPrice').addEventListener('input', calculate);
 $('basic').addEventListener('change', calculate);
   $('basicToggle').addEventListener('click', () => {
   const basic = $('basic');
