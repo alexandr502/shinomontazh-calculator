@@ -1060,12 +1060,10 @@ const addTotal = (name, amount, count) => {
 amount = Math.max(0, Number(amount) || 0);
 count = Math.max(0, Number(count) || 0);
 
-```
 if (amount > 0 && count > 0) {
   total += amount;
   lines.push(`${name} — ${money(amount)}`);
 }
-```
 
 };
 
