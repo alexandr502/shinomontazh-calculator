@@ -927,7 +927,15 @@ function renderExtras() {
   const box = $('extras');
   box.innerHTML = '';
 
-  data.calculatorExtras.forEach((e, i) => {
+  if (!Array.isArray(data.extras)) {
+    data.extras = [];
+  }
+
+  data.extras.forEach((e, i) => {
+    if (!Number.isFinite(Number(e.quantity))) {
+      e.quantity = 0;
+    }
+
     const quantity = Math.max(0, Number(e.quantity) || 0);
     const row = document.createElement('div');
 
@@ -937,8 +945,6 @@ function renderExtras() {
     row.innerHTML = `
       <label></label>
       <span class="service-price">${money(e.price)}/шт.</span>
-      <button type="button" class="extra-edit-button"
-        data-extra-edit="${i}" aria-label="Редактировать услугу">✎</button>
       <div class="quantity-control">
         <button type="button" data-extra-minus="${i}"
           aria-label="Уменьшить количество">−</button>
@@ -954,7 +960,9 @@ function renderExtras() {
 
   box.querySelectorAll('[data-extra-minus]').forEach(button => {
     button.addEventListener('click', () => {
-      const extra = data.calculatorExtras[Number(button.dataset.extraMinus)];
+      const extra = data.extras[Number(button.dataset.extraMinus)];
+      if (!extra) return;
+
       extra.quantity = Math.max(0, (Number(extra.quantity) || 0) - 1);
       save();
       renderExtras();
@@ -964,39 +972,10 @@ function renderExtras() {
 
   box.querySelectorAll('[data-extra-plus]').forEach(button => {
     button.addEventListener('click', () => {
-      const extra = data.calculatorExtras[Number(button.dataset.extraPlus)];
+      const extra = data.extras[Number(button.dataset.extraPlus)];
+      if (!extra) return;
+
       extra.quantity = Math.min(99, (Number(extra.quantity) || 0) + 1);
-      save();
-      renderExtras();
-      calculate();
-    });
-  });
-
-  box.querySelectorAll('[data-extra-edit]').forEach(button => {
-    button.addEventListener('click', () => {
-      const extra = data.calculatorExtras[Number(button.dataset.extraEdit)];
-
-      const name = prompt('Название услуги:', extra.name);
-      if (name === null) return;
-
-      const cleanName = name.trim();
-      if (!cleanName) {
-        alert('Название не может быть пустым.');
-        return;
-      }
-
-      const priceText = prompt('Цена за 1 шт. (₽):', String(extra.price ?? 0));
-      if (priceText === null) return;
-
-      const price = Number(priceText);
-      if (!Number.isFinite(price) || price < 0) {
-        alert('Введите цену числом, не меньше 0.');
-        return;
-      }
-
-      extra.name = cleanName;
-      extra.price = price;
-
       save();
       renderExtras();
       calculate();
@@ -1148,17 +1127,16 @@ $('eightRepairPriceLabel').textContent =
 
 add(`Правка диска ${repairSize}`, $('rimRepairPrice').value, rimRepairQty);
 add(`Правка восьмёрки ${repairSize}`, $('eightRepairPrice').value, eightRepairQty);
-    const allExtras = data.calculatorExtras;
-  allExtras.forEach((extra, i) => {
-    const quantity = Math.max(0, Number(extra.quantity) || 0);
+    data.extras.forEach((extra, i) => {
+  const quantity = Math.max(0, Number(extra.quantity) || 0);
 
-    if (quantity > 0) {
-      add(extra.name, extra.price, quantity);
-    }
+  if (quantity > 0) {
+    add(extra.name, extra.price, quantity);
+  }
 
-    const output = $(`extraQty${i}`);
-    if (output) output.textContent = quantity;
-  });
+  const output = $(`extraQty${i}`);
+  if (output) output.textContent = quantity;
+});
 
   $('total').textContent = money(total);
   $('summary').textContent =
@@ -1418,24 +1396,13 @@ $('addCatalogExtra').onclick = () => {
   renderCatalog();
   renderExtras();
 };
-  $('addExtra').onclick = () => {
-  data.calculatorExtras.push({
-    name: 'Новая работа',
-    price: 0,
-    quantity: 0
-  });
-
-  save();
-  renderExtras();
-  calculate();
-};
 
 $('reset').onclick = () => {
 $('basic').checked = false;
 
 Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
 $('argonPrice').value = 1500;
-data.calculatorExtras.forEach(extra => extra.quantity = 0);
+data.extras.forEach(extra => extra.quantity = 0);
 
 $('rimRepairQty').textContent = 0;
 $('eightRepairQty').textContent = 0;
