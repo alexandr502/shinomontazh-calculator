@@ -757,6 +757,46 @@ header {
   text-align: right;
 }
 
+  #prices .repair-price-row {
+  grid-template-columns: minmax(0, 1fr) 18px minmax(74px, 92px) 42px;
+}
+
+#prices .repair-price-row .repair-from {
+  color: #a5abb5;
+  font-size: 13px;
+  text-align: right;
+}
+
+#prices #catalogExtras {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+#prices #catalogExtras .price-row {
+  grid-template-columns: minmax(0, 1fr) minmax(74px, 110px) 42px;
+  gap: 8px;
+  margin: 0;
+}
+
+#prices #catalogExtras input {
+  min-width: 0;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+#prices #addCatalogExtra {
+  width: 100%;
+  margin-top: 12px;
+}
+
+@media (max-width: 420px) {
+  #prices .repair-price-row {
+    grid-template-columns: minmax(0, 1fr) 18px minmax(70px, 88px) 38px;
+    gap: 6px;
+  }
+}
 @media (max-width: 700px) {
   #prices .price-size-grid {
     grid-template-columns: minmax(0, 1fr);
