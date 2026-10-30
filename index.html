@@ -903,15 +903,17 @@ header {
 
   /* Мобильная компоновка раздела «Услуги» */
 @media (max-width: 420px) {
-  .service-list .service-row {
-  display: grid;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+ .service-list .service-row {
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 4px 8px;
   padding: 9px 10px;
+}
+
+.service-list .service-row label {
+  grid-column: 1;
+  grid-row: 1;
+  font-size: 14px;
+  line-height: 1.25;
 }
 
   .service-list .service-row label {
