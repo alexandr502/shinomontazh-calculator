@@ -1254,13 +1254,6 @@ const addTotal = (name, amount, count) => {
     add('Балансировка', balancePrice, serviceQty.balance);
   }
 
-  if (special && Number(data.surcharges.special) > 0) {
-    add(
-      'Доплата за RunFlat / низкий профиль',
-      Number(data.surcharges.special),
-      4
-    );
-  }
   const argonQty = serviceQty.argon;
   $('argonQty').textContent = argonQty;
   $('argonUnitPrice').textContent =
