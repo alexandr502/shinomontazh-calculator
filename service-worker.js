@@ -165,21 +165,13 @@ self.addEventListener('message', event => {
     ) {
       return;
     }
-         if (type === 'TIRECALC_BOOT_START') {
+      if (type === 'TIRECALC_BOOT_START') {
       if (!state.candidateStartedAt) {
         state.candidateStartedAt = Date.now();
         await writeState(state);
       }
       return;
-         }
-
-         if (type === 'TIRECALC_BOOT_START') {
-      if (!state.candidateStartedAt) {
-        state.candidateStartedAt = Date.now();
-        await writeState(state);
-      }
-      return;
-         }
+    }
     if (type === 'TIRECALC_BOOT_OK') {
       state.lastGood = CACHE;
       state.candidate = null;
