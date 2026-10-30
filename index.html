@@ -1381,11 +1381,6 @@ function renderSurcharges() {
   const box = $('surchargeEditor');
   box.innerHTML = '';
 
-  const title = document.createElement('h3');
-  title.textContent = 'Правка дисков — цены по диапазонам';
-  title.style.fontSize = '15px';
-  box.appendChild(title);
-
   const ranges = [
     { value: '12-14', label: 'R12–R14', sizes: ['R13', 'R14'], representative: 'R14' },
     { value: '15-16', label: 'R15–R16', sizes: ['R15', 'R16'], representative: 'R15' },
@@ -1395,23 +1390,33 @@ function renderSurcharges() {
     { value: '23+', label: 'R23+', sizes: ['R23'], representative: 'R23' }
   ];
 
+  const grid = document.createElement('div');
+  grid.className = 'price-size-grid';
+
   ranges.forEach(range => {
-    const heading = document.createElement('h4');
+    const card = document.createElement('div');
+    card.className = 'price-size-card';
+
+    const heading = document.createElement('h3');
+    heading.className = 'price-size-title';
     heading.textContent = range.label;
-    heading.style.margin = '12px 0 4px';
-    box.appendChild(heading);
+    card.appendChild(heading);
+
+    const services = document.createElement('div');
+    services.className = 'price-size-services';
 
     [
       ['rim', 'Правка диска'],
       ['eight', 'Правка восьмёрки']
     ].forEach(([type, label]) => {
       const row = document.createElement('div');
-      row.className = 'price-row';
+      row.className = 'price-row price-service-row repair-price-row';
 
       const price = data.rimRepair[range.representative]?.[type] || 0;
 
       row.innerHTML = `
         <span>${label}</span>
+        <span class="repair-from">от</span>
         <input
           type="number"
           min="0"
@@ -1424,9 +1429,14 @@ function renderSurcharges() {
         <span class="muted">₽/шт.</span>
       `;
 
-      box.appendChild(row);
+      services.appendChild(row);
     });
+
+    card.appendChild(services);
+    grid.appendChild(card);
   });
+
+  box.appendChild(grid);
 
   box.querySelectorAll('[data-repair-range]').forEach(input => {
     input.addEventListener('change', () => {
@@ -1449,31 +1459,8 @@ function renderSurcharges() {
     });
   });
 
-  const surchargeRow = document.createElement('div');
-  surchargeRow.className = 'price-row';
-  surchargeRow.innerHTML = `
-    <span>Доплата за RunFlat / низкий профиль (&lt;45)</span>
-    <input
-      type="number"
-      min="0"
-      step="10"
-      data-surcharge="special"
-      value="${data.surcharges.special || 0}"
-    >
-    <span class="muted">₽/колесо</span>
-  `;
-  box.appendChild(surchargeRow);
-
-  box.querySelectorAll('[data-surcharge]').forEach(input => {
-    input.addEventListener('change', () => {
-      data.surcharges[input.dataset.surcharge] =
-        Math.max(0, Number(input.value) || 0);
-
-      save();
-      calculate();
-    });
-  });
-
+  updatePriceAccess();
+}
   updatePriceAccess();
 }
 function renderCatalog(){let box=$('catalogExtras');box.innerHTML='';data.extras.forEach((e,i)=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<input type="text" data-name="${i}" value="${e.name}"><input type="number" min="0" data-extra-price="${i}" value="${e.price}"><button class="secondary" data-del="${i}" aria-label="Удалить">×</button>`;box.appendChild(row)});box.querySelectorAll('[data-name]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.name].name=i.value||'Услуга';save();renderExtras()}));box.querySelectorAll('[data-extra-price]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.extraPrice].price=+i.value||0;save();renderExtras()}));box.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{data.extras.splice(+b.dataset.del,1);save();renderCatalog();renderExtras()}));updatePriceAccess()}
