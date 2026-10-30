@@ -951,7 +951,7 @@ header {
 <div class="total"><small>ИТОГО К ОЗВУЧИВАНИЮ</small><div class="amount" id="total">0 ₽</div><div class="summary" id="summary">Выберите работы и параметры автомобиля.</div><button class="primary" id="share">Отправить расчёт</button><button class="secondary" id="saveCalculation" style="width:100%;margin-top:8px">Сохранить расчёт в файл (.txt)</button><button class="secondary" id="copy" style="width:100%;margin-top:8px">Скопировать расчёт</button></div>
 </section>
 <section id="prices" class="hidden">
-<div class="card"><h2>Прайс по категориям</h2><p class="muted">Для легковых автомобилей внесены значения с вашей фотографии. Остальные категории оставлены пустыми для ручного заполнения. В каждой строке: цена за 1 колесо и за 4 колеса. Изменения сохраняются локально; после входа владельца их можно опубликовать в общий прайс.</p>
+<div class="card"><h2>Прайс по категориям</h2>
 <div class="field"><label>Категория для редактирования</label><select id="priceVehicle"></select></div>
 <div id="priceEditor"></div>
 </div>
@@ -993,7 +993,7 @@ header {
 </section>
 </main>
 <script>
-const vehicles=['Легковой','Кроссовер / SUV','Внедорожник','Микроавтобус','Коммерческий транспорт','Грузовой','Другая категория'];
+const vehicles=['Легковой','Кроссовер','Внедорожник / SUV','Микроавтобус'];
 const rims=['12-14','15-16','17-18','19-20','21-22','23+'];
 const labels={'12-14':'R12–R14','15-16':'R15–R16','17-18':'R17–R18','19-20':'R19–R20','21-22':'R21–R22','23+':'R23+'};
 const base={
