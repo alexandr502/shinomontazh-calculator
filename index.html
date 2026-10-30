@@ -797,6 +797,15 @@ header {
   transform: scale(.98);
   box-shadow: none;
 }
+  #prices #catalogExtras [data-del] {
+  transition: transform .12s ease, opacity .12s ease;
+  transform-origin: center;
+}
+
+#prices #catalogExtras [data-del]:active {
+  transform: scale(.92);
+  box-shadow: none;
+}
 
 #prices #addCatalogExtra:disabled {
   opacity: .6;
