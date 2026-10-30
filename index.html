@@ -4,7 +4,7 @@
 <script>
 (function () {
   let bootReported = false;
- const bootVersion = 'tirecalc-prod-v20';
+ const bootVersion = 'tirecalc-prod-v21';
   let bootStatus = null;
   let bootRetryTimer = null;
 
@@ -999,7 +999,7 @@ header {
 <body>
 <header>
   <div class="header-title-row">
-    <h1 id="businessNameTitle"><img class="header-logo" src="./header-wheel.jpg" alt="" /> Вулкашка 61</h1>
+    <h1 id="businessNameTitle"><img class="header-logo" src="./header-wheel.jpg" alt="" /> Шиномонтаж</h1>
     <span class="app-version">Версия 3.0.0</span>
   </div>
   <p>Шиномонтажный калькулятор</p>
@@ -1215,7 +1215,7 @@ header {
   <p class="muted">Название отображается в верхней части приложения.</p>
   <div class="field">
     <label for="businessNameInput">Название организации</label>
-    <input type="text" id="businessNameInput" maxlength="60" value="Вулкашка 61" placeholder="Введите название">
+    <input type="text" id="businessNameInput" maxlength="60" value="Шиномонтаж" placeholder="Введите название">
   </div>
   <button class="primary" id="saveBusinessName">Сохранить название</button>
   <p id="businessNameStatus" class="muted" aria-live="polite"></p>
@@ -1268,7 +1268,7 @@ const $=id=>document.getElementById(id);
 const money=n=>Math.round(n).toLocaleString('ru-RU')+' ₽';
 function save(){localStorage.setItem('tireCalcData',JSON.stringify(data))}
   // Название организации хранится отдельно на каждом устройстве.
-const DEFAULT_BUSINESS_NAME = 'Вулкашка 61';
+const DEFAULT_BUSINESS_NAME = 'Шиномонтаж';
 
 function applyBusinessName(name) {
   const cleanName = String(name || '').trim().slice(0, 60) || DEFAULT_BUSINESS_NAME;
@@ -1288,12 +1288,12 @@ $('saveBusinessName').addEventListener('click', function () {
     return;
   }
 
-  applyBusinessName(name);
-  $('businessNameStatus').textContent = 'Название сохранено на этом устройстве.';
-});
+ const savedBusinessName = localStorage.getItem('tireCalcBusinessName');
 
 applyBusinessName(
-  localStorage.getItem('tireCalcBusinessName') || DEFAULT_BUSINESS_NAME
+  !savedBusinessName || savedBusinessName === 'Вулкашка 61'
+    ? DEFAULT_BUSINESS_NAME
+    : savedBusinessName
 );
 function categoryRimsFor(vehicle) {
   if (vehicle === 'Микроавтобус') return ['15-16'];
