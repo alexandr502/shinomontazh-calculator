@@ -1288,13 +1288,18 @@ $('saveBusinessName').addEventListener('click', function () {
     return;
   }
 
- const savedBusinessName = localStorage.getItem('tireCalcBusinessName');
+  applyBusinessName(name);
+  $('businessNameStatus').textContent = 'Название организации сохранено.';
+});
+
+const savedBusinessName = localStorage.getItem('tireCalcBusinessName');
 
 applyBusinessName(
   !savedBusinessName || savedBusinessName === 'Вулкашка 61'
     ? DEFAULT_BUSINESS_NAME
     : savedBusinessName
 );
+
 function categoryRimsFor(vehicle) {
   if (vehicle === 'Микроавтобус') return ['15-16'];
 
