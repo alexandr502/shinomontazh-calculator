@@ -479,7 +479,17 @@ margin-top: 14px;
   border-color: #f04444;
   color: #fff;
 }
+.tabs button {
+  background: #2b2e35;
+  border: 1px solid #484d57;
+  color: #f4f4f5;
+}
 
+.tabs button:hover {
+  background: #383c44;
+  border-color: #626875;
+}
+  
 .tabs button.active {
   background: #e53935;
   border-color: #e53935;
@@ -590,7 +600,6 @@ margin-top: 14px;
 #settings {
   background: #17191d;
   color: #f3f4f6;
-}
 }
 
 #prices .card,
@@ -969,16 +978,26 @@ header {
 
   /* Полный комплекс — отдельная компоновка */
   .service-list .service-row:has(.basic-toggle) {
-    grid-template-columns: minmax(0, 1fr) 40px;
+    grid-template-columns: minmax(0, 1fr) 36px;
   }
 
   .service-list .service-row .basic-toggle {
-    grid-column: 2;
-    grid-row: 1;
-    width: 40px;
-    min-width: 40px;
-    height: 40px;
-  }
+  grid-column: 2;
+  grid-row: 1;
+  width: 36px;
+  min-width: 36px;
+  height: 40px;
+}
+  #calc .section-heading .section-reset {
+  width: 36px;
+  min-width: 36px;
+  height: 40px;
+  min-height: 40px;
+  flex: 0 0 36px;
+  padding: 0;
+  font-size: 20px;
+  line-height: 1;
+}
 
   .service-list .service-row:has(.basic-toggle) .service-hint {
     grid-column: 1 / -1;
