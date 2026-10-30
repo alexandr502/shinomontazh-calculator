@@ -901,16 +901,23 @@ header {
   }
 }
 
-    /* Мобильная компоновка раздела «Услуги» */
+    /* Мобильная компоновка разделов калькулятора */
 @media (max-width: 420px) {
-  .service-list .service-row {
+  /* Услуги */
+  .service-list .service-row,
+  #calc > .card:nth-child(3) .service-row,
+  #calc > .card:nth-child(4) .service-row,
+  #extras .service-row {
     grid-template-columns: minmax(0, 1fr) auto auto;
     gap: 6px;
     padding: 9px 10px;
     align-items: center;
   }
 
-  .service-list .service-row label {
+  .service-list .service-row label,
+  #calc > .card:nth-child(3) .service-row label,
+  #calc > .card:nth-child(4) .service-row label,
+  #extras .service-row label {
     grid-column: 1;
     grid-row: 1;
     min-width: 0;
@@ -919,7 +926,10 @@ header {
     line-height: 1.2;
   }
 
-  .service-list .service-row .service-price {
+  .service-list .service-row .service-price,
+  #calc > .card:nth-child(3) .service-row .service-price,
+  #calc > .card:nth-child(4) .service-row .service-price,
+  #extras .service-row .service-price {
     grid-column: 2;
     grid-row: 1;
     justify-self: end;
@@ -927,7 +937,10 @@ header {
     white-space: nowrap;
   }
 
-  .service-list .service-row .quantity-control {
+  .service-list .service-row .quantity-control,
+  #calc > .card:nth-child(3) .service-row .quantity-control,
+  #calc > .card:nth-child(4) .service-row .quantity-control,
+  #extras .service-row .quantity-control {
     grid-column: 3;
     grid-row: 1;
     display: flex;
@@ -936,18 +949,25 @@ header {
     gap: 5px;
   }
 
-  .service-list .quantity-control button {
+  .service-list .quantity-control button,
+  #calc > .card:nth-child(3) .quantity-control button,
+  #calc > .card:nth-child(4) .quantity-control button,
+  #extras .quantity-control button {
     width: 36px;
     min-width: 36px;
     height: 40px;
     font-size: 20px;
   }
 
-  .service-list .quantity-control output {
+  .service-list .quantity-control output,
+  #calc > .card:nth-child(3) .quantity-control output,
+  #calc > .card:nth-child(4) .quantity-control output,
+  #extras .quantity-control output {
     min-width: 18px;
     font-size: 14px;
   }
 
+  /* Полный комплекс — отдельная компоновка */
   .service-list .service-row:has(.basic-toggle) {
     grid-template-columns: minmax(0, 1fr) 40px;
   }
@@ -963,6 +983,15 @@ header {
   .service-list .service-row:has(.basic-toggle) .service-hint {
     grid-column: 1 / -1;
     grid-row: 2;
+  }
+
+  /* Заголовок дополнительных услуг */
+  #calc > .card:nth-child(5) .section-heading h2 {
+    padding: 0 44px;
+    box-sizing: border-box;
+    font-size: 16px;
+    line-height: 1.2;
+    white-space: nowrap;
   }
 }
 </style>
