@@ -789,8 +789,19 @@ header {
 #prices #addCatalogExtra {
   width: 100%;
   margin-top: 12px;
+  transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
+  transform-origin: center;
 }
 
+#prices #addCatalogExtra:active {
+  transform: scale(.98);
+  box-shadow: 0 1px 0 #9f2522;
+}
+
+#prices #addCatalogExtra:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
 @media (max-width: 420px) {
   #prices .repair-price-row {
     grid-template-columns: minmax(0, 1fr) 18px minmax(70px, 88px) 38px;
