@@ -399,6 +399,16 @@ margin-top: 14px;
   position: absolute;
   right: 0;
 }
+  /* Эффект нажатия кнопок калькулятора */
+#calc button {
+  transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
+  transform-origin: center;
+}
+
+#calc button:active {
+  transform: scale(.96);
+  box-shadow: none;
+}
   /* Параметры автомобиля и колеса */
 #calc .card:first-child .field label {
   color: #d5d8de;
