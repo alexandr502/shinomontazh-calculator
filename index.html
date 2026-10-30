@@ -134,7 +134,7 @@ sendBootStatus('TIRECALC_BOOT_OK');
 :root{--bg:#f3f5f8;--card:#fff;--ink:#18202b;--muted:#687386;--accent:#1463e8;--line:#dfe5ed;--dark:#111827}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
 header{background:var(--dark);color:#fff;padding:18px 16px 20px;position:sticky;top:0;z-index:5}
-header h1{font-size:28px;margin:0 0 4px}header p{margin:0;color:#c5cedb;font-size:13px}
+header h1{font-size:35px;margin:0 0 4px}header p{margin:0;color:#c5cedb;font-size:13px}
 main{max-width:720px;margin:auto;padding:14px 12px 100px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:12px;box-shadow:0 2px 8px #18202b08}
 h2{font-size:17px;margin:0 0 12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:5px}
 select,input,button{font:inherit}select,input[type=number],input[type=text]{width:100%;min-height:45px;border:1px solid #cbd4e0;border-radius:10px;padding:9px 10px;background:#fff;color:var(--ink)}
@@ -176,7 +176,7 @@ details summary{font-weight:700;cursor:pointer;padding:3px 0 10px}.save-note{fon
   }
 
   .header-title-row h1 {
-    font-size: clamp(18px, 4.5vw, 27px);
+   font-size: clamp(18px, 6vw, 32px);
   }
 
   .app-version {
@@ -1834,16 +1834,34 @@ $('basic').addEventListener('change', calculate);
   calculate();
 });
 
+function activateTab(tabId, remember = true) {
+  const allowedTabs = ['calc', 'prices', 'settings'];
+
+  if (!allowedTabs.includes(tabId)) {
+    tabId = 'calc';
+  }
+
+  document.querySelectorAll('.tabs button').forEach(button => {
+    button.classList.toggle('active', button.dataset.tab === tabId);
+  });
+
+  allowedTabs.forEach(id => {
+    $(id).classList.toggle('hidden', id !== tabId);
+  });
+
+  if (remember) {
+    localStorage.setItem('tireCalcActiveTab', tabId);
+  }
+}
+
 document.querySelectorAll('.tabs button').forEach(button => {
   button.addEventListener('click', () => {
-    document.querySelectorAll('.tabs button').forEach(tab => {
-      tab.classList.toggle('active', tab === button);
-    });
-    ['calc', 'prices', 'settings'].forEach(id => {
-      $(id).classList.toggle('hidden', button.dataset.tab !== id);
-    });
+    activateTab(button.dataset.tab);
   });
 });
+
+const savedTab = localStorage.getItem('tireCalcActiveTab') || 'calc';
+activateTab(savedTab, false);
   
 $('addCatalogExtra').onclick = () => {
   data.extras.push({ name: 'Новая услуга', price: 0, quantity: 0 });
