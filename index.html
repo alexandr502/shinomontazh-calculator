@@ -891,17 +891,10 @@ header {
 <div class="card">
 <h2>🚗 Параметры автомобиля и колеса</h2>
 <div class="grid">
-<div class="field"><label>Категория автомобиля</label><select id="vehicle"><option>Легковой</option><option>Кроссовер / SUV</option><option>Внедорожник</option><option>Микроавтобус</option><option>Коммерческий транспорт</option><option>Грузовой</option><option>Другая категория</option></select></div>
+<div class="field"><label>Категория автомобиля</label><select id="vehicle"></select></div>
 <div class="field wheel-field">
   <label><span aria-hidden="true">◉</span> Диаметр диска</label>
-  <select id="rim">
-    <option value="12-14">R12–R14</option>
-    <option value="15-16">R15–R16</option>
-    <option value="17-18" selected>R17–R18</option>
-    <option value="19-20">R19–R20</option>
-    <option value="21-22">R21–R22</option>
-    <option value="23+">R23+</option>
-  </select>
+  <select id="rim"></select>
 </div>
 <div class="field" style="grid-column:1/-1"><label>Категория шины</label><select id="tireCategory"><option value="standard">Обычная шина</option><option value="special">RunFlat / низкий профиль (&lt;45)</option></select></div>
 </div>
@@ -1152,7 +1145,33 @@ $('saveBusinessName').addEventListener('click', function () {
 applyBusinessName(
   localStorage.getItem('tireCalcBusinessName') || DEFAULT_BUSINESS_NAME
 );
-function activePrice(){return data.prices[$('vehicle').value][$('rim').value]||{}}
+function categoryRimsFor(vehicle) {
+  if (vehicle === 'Микроавтобус') return ['15-16'];
+
+  if (vehicle === 'Кроссовер' || vehicle === 'Внедорожник / SUV') {
+    return rims.filter(r => r !== '12-14');
+  }
+
+  return rims;
+}
+
+function renderCalculatorRims() {
+  const vehicle = $('vehicle').value;
+  const allowedRims = categoryRimsFor(vehicle);
+  const currentRim = $('rim').value;
+
+  $('rim').innerHTML = allowedRims
+    .map(r => `<option value="${r}">${labels[r]}</option>`)
+    .join('');
+
+  $('rim').value = allowedRims.includes(currentRim)
+    ? currentRim
+    : allowedRims[0];
+}
+
+function activePrice() {
+  return data.prices[$('vehicle').value]?.[$('rim').value] || {};
+}
 const serviceQty = {
   removeInstall: 0,
   mount: 0,
@@ -1600,8 +1619,14 @@ function renderSurcharges() {
 function renderCatalog(){let box=$('catalogExtras');box.innerHTML='';data.extras.forEach((e,i)=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<input type="text" data-name="${i}" value="${e.name}"><input type="number" min="0" data-extra-price="${i}" value="${e.price}"><button class="secondary" data-del="${i}" aria-label="Удалить">×</button>`;box.appendChild(row)});box.querySelectorAll('[data-name]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.name].name=i.value||'Услуга';save();renderExtras()}));box.querySelectorAll('[data-extra-price]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.extraPrice].price=+i.value||0;save();renderExtras()}));box.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{data.extras.splice(+b.dataset.del,1);save();renderCatalog();renderExtras()}));updatePriceAccess()}
 $('priceVehicle').innerHTML=vehicles.map(v=>`<option>${v}</option>`).join('');
 $('priceVehicle').addEventListener('change',renderPriceEditor);
-$('vehicle').addEventListener('change', calculate);
 
+$('vehicle').innerHTML = vehicles.map(v => `<option value="${v}">${v}</option>`).join('');
+
+$('vehicle').addEventListener('change', () => {
+  renderCalculatorRims();
+  syncRepairPrices();
+  calculate();
+});
 [
 'rim', 'tireCategory', 'basic'
 ].forEach(id => {
