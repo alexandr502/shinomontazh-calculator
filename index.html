@@ -1425,21 +1425,44 @@ function renderPriceEditor() {
   const box = $('priceEditor');
   box.innerHTML = '';
 
-  const names = [
-['remove', 'Снятие / установка'],
-['mount', 'Шиномонтаж'],
-['balance', 'Балансировка'],
-['one', 'Полный комплекс за 1 колесо'],
-['four', 'Полный комплекс за 4 колеса'],
-['rfOne', 'RunFlat за 1 колесо / от'],
-['rfFour', 'Комплекс RunFlat за 4 колеса']
-];
+  const categoryRims = v === 'Микроавтобус'
+    ? ['15-16']
+    : ['Кроссовер', 'Внедорожник / SUV'].includes(v)
+      ? rims.filter(r => r !== '12-14')
+      : rims;
 
+  if (!data.prices[v]) data.prices[v] = {};
+
+  categoryRims.forEach(r => {
+    data.prices[v][r] = {
+      remove: 0,
+      mount: 0,
+      balance: 0,
+      one: 0,
+      four: 0,
+      rfOne: 0,
+      rfFour: 0,
+      valve: 0,
+      ...(data.prices[v][r] || {})
+    };
+  });
+
+  save();
+
+  const names = [
+    ['remove', 'Снятие / установка'],
+    ['mount', 'Шиномонтаж'],
+    ['balance', 'Балансировка'],
+    ['one', 'Полный комплекс за 1 колесо'],
+    ['four', 'Полный комплекс за 4 колеса'],
+    ['rfOne', 'RunFlat за 1 колесо / от'],
+    ['rfFour', 'Комплекс RunFlat за 4 колеса']
+  ];
 
   const grid = document.createElement('div');
   grid.className = 'price-size-grid';
 
-  rims.forEach(r => {
+  categoryRims.forEach(r => {
     const card = document.createElement('div');
     card.className = 'price-size-card';
 
@@ -1485,7 +1508,8 @@ function renderPriceEditor() {
       calculate();
     });
   });
-    updatePriceAccess();
+
+  updatePriceAccess();
 }
 
 function renderSurcharges() {
