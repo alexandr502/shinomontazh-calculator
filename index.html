@@ -688,6 +688,80 @@ header {
 #prices #publishStatus.is-error {
   color: #f87171;
 }
+
+  /* Карточки размерных групп в прайсе */
+#prices #priceEditor {
+  margin-top: 16px;
+}
+
+#prices .price-size-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+#prices .price-size-card {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  box-shadow: 0 5px 18px #0003;
+}
+
+#prices .price-size-title {
+  margin: 0 0 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 16px;
+}
+
+#prices .price-size-services {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#prices .price-service-row {
+  grid-template-columns: minmax(0, 1fr) minmax(74px, 92px) 18px;
+  gap: 8px;
+  align-items: center;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #1c1e23;
+}
+
+#prices .price-service-row span:first-child {
+  min-width: 0;
+  color: var(--ink);
+  line-height: 1.35;
+}
+
+#prices .price-service-row input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #30333a;
+  color: var(--ink);
+}
+
+#prices .price-service-row .muted {
+  color: var(--muted);
+  text-align: right;
+}
+
+@media (max-width: 700px) {
+  #prices .price-size-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
   
 </style>
 </head>
@@ -1240,8 +1314,74 @@ function updatePriceAccess(){
   const publishCard=$('publishPriceCard');
   if(publishCard) publishCard.classList.toggle('hidden',!isOwner);
 }
-function renderPriceEditor(){let v=$('priceVehicle').value, box=$('priceEditor');box.innerHTML='';let names=[['remove','Снятие / установка'],['mount','Шиномонтаж'],['balance','Балансировка'],['one','Полный комплекс за 1 колесо'],['four','Полный комплекс за 4 колеса'],['rfOne','RunFlat за 1 колесо / от'],['rfFour','Комплекс RunFlat за 4 колеса'],['valve','Установка одного вентиля']];rims.forEach(r=>{let h=document.createElement('h3');h.style.fontSize='15px';h.textContent=labels[r];box.appendChild(h);names.forEach(([key,name])=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<span>${name}</span><input type="number" min="0" step="10" data-price="${r}|${key}" value="${data.prices[v][r][key]||0}" aria-label="${name}"><span class="muted">₽</span>`;box.appendChild(row)})});box.querySelectorAll('[data-price]').forEach(inp=>inp.addEventListener('change',()=>{let [r,k]=inp.dataset.price.split('|');data.prices[v][r][k]=Math.max(0,+inp.value||0);save();calculate()}));updatePriceAccess()}
-function renderSurcharges() {
+function renderPriceEditor() {
+  const v = $('priceVehicle').value;
+  const box = $('priceEditor');
+  box.innerHTML = '';
+
+  const names = [
+    ['remove', 'Снятие / установка'],
+    ['mount', 'Шиномонтаж'],
+    ['balance', 'Балансировка'],
+    ['one', 'Полный комплекс за 1 колесо'],
+    ['four', 'Полный комплекс за 4 колеса'],
+    ['rfOne', 'RunFlat за 1 колесо / от'],
+    ['rfFour', 'Комплекс RunFlat за 4 колеса'],
+    ['valve', 'Установка одного вентиля']
+  ];
+
+  const grid = document.createElement('div');
+  grid.className = 'price-size-grid';
+
+  rims.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'price-size-card';
+
+    const title = document.createElement('h3');
+    title.className = 'price-size-title';
+    title.textContent = labels[r];
+    card.appendChild(title);
+
+    const services = document.createElement('div');
+    services.className = 'price-size-services';
+
+    names.forEach(([key, name]) => {
+      const row = document.createElement('div');
+      row.className = 'price-row price-service-row';
+
+      row.innerHTML = `
+        <span>${name}</span>
+        <input
+          type="number"
+          min="0"
+          step="10"
+          data-price="${r}|${key}"
+          value="${data.prices[v][r][key] || 0}"
+          aria-label="${name}"
+        >
+        <span class="muted">₽</span>
+      `;
+
+      services.appendChild(row);
+    });
+
+    card.appendChild(services);
+    grid.appendChild(card);
+  });
+
+  box.appendChild(grid);
+
+  box.querySelectorAll('[data-price]').forEach(inp => {
+    inp.addEventListener('change', () => {
+      const [r, k] = inp.dataset.price.split('|');
+      data.prices[v][r][k] = Math.max(0, +inp.value || 0);
+      save();
+      calculate();
+    });
+  });
+
+  updatePriceAccess();
+}
   const box = $('surchargeEditor');
   box.innerHTML = '';
 
