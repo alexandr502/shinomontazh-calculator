@@ -1893,8 +1893,33 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
  const statusEl=$c('cloudStatus'); statusEl.style.cursor='default';
  const cfg=()=>({url:($c('cloudUrl').value||'').trim().replace(/\/$/,''),key:($c('cloudKey').value||'').trim()});
  function makeClient(){const c=cfg();if(!c.url||!c.key)throw Error('Введи адрес проекта и публичный anon key.');if(!window.supabase?.createClient)throw Error('Не загрузилась библиотека облака. Проверь интернет.');sb=window.supabase.createClient(c.url,c.key,{auth:{persistSession:true,autoRefreshToken:true}});localStorage.setItem('tireCloudUrl',c.url);localStorage.setItem('tireCloudKey',c.key);return sb;}
- async function fetchPrice(){if(busy)return;busy=true;try{if(!sb)makeClient();const {data:row,error}=await sb.from('shared_price').select('payload,updated_at').eq('id',1).maybeSingle();if(error)throw error;if(!row){status('В облаке пока нет прайса. Войди как владелец и нажми «Опубликовать».');return;}data=row.payload;localStorage.setItem('tireCalcData',JSON.stringify(data));renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();syncRepairPrices();calculate();status('Общий прайс загружен'+(row.updated_at?' · обновлён '+new Date(row.updated_at).toLocaleString('ru-RU'):''));}catch(e){status('Не удалось загрузить общий прайс: '+(e.message||e));}finally{busy=false;}}
-  async function publish(){
+   async function fetchPrice(){
+    if(busy)return;
+    busy=true;
+    try{
+      if(!sb)makeClient();
+      const {data:row,error}=await sb.from('shared_price').select('payload,updated_at').eq('id',1).maybeSingle();
+      if(error)throw error;
+      if(!row){
+        status('В облаке пока нет прайса. Войди как владелец и нажми «Опубликовать».');
+        return;
+      }
+      data=row.payload;
+      localStorage.setItem('tireCalcData',JSON.stringify(data));
+      renderPriceEditor();
+      renderCalculatorRims();
+      renderSurcharges();
+      renderCatalog();
+      renderExtras();
+      syncRepairPrices();
+      calculate();
+      status('Общий прайс загружен'+(row.updated_at?' · обновлён '+new Date(row.updated_at).toLocaleString('ru-RU'):''));
+    }catch(e){
+      status('Не удалось загрузить общий прайс: '+(e.message||e));
+    }finally{
+      busy=false;
+    }
+  }
   const button=$c('cloudPublish');
   const result=$c('publishStatus');
 
