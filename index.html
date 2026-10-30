@@ -1970,11 +1970,17 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
 
      owner = !!sessionData.session;syncOwnerAccess();
 
-     if (owner) {
-      status('Вход владельца восстановлен. Можно менять цены и публиковать их для всех.');
+           if (owner) {
+        $c('ownerAuthStatus').textContent='Вход владельца восстановлен. Можно менять цены и публиковать их для всех.';
+        $c('ownerAuthStatus').style.color='green';
+      } else {
+        $c('ownerAuthStatus').textContent='Вы не вошли в режим владельца.';
+        $c('ownerAuthStatus').style.color='';
+      }
+     } catch (e) {
+      $c('ownerAuthStatus').textContent='Не удалось восстановить сессию владельца: '+(e.message||e);
+      $c('ownerAuthStatus').style.color='#c0392b';
      }
-    } catch (e) {
-     status('Не удалось восстановить сессию владельца: ' + (e.message || e));
     }
    })();
 
