@@ -134,7 +134,7 @@ sendBootStatus('TIRECALC_BOOT_OK');
 :root{--bg:#f3f5f8;--card:#fff;--ink:#18202b;--muted:#687386;--accent:#1463e8;--line:#dfe5ed;--dark:#111827}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
 header{background:var(--dark);color:#fff;padding:18px 16px 20px;position:sticky;top:0;z-index:5}
-header h1{font-size:21px;margin:0 0 4px}header p{margin:0;color:#c5cedb;font-size:13px}
+header h1{font-size:35px;margin:0 0 4px}header p{margin:0;color:#c5cedb;font-size:13px}
 main{max-width:720px;margin:auto;padding:14px 12px 100px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:12px;box-shadow:0 2px 8px #18202b08}
 h2{font-size:17px;margin:0 0 12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:5px}
 select,input,button{font:inherit}select,input[type=number],input[type=text]{width:100%;min-height:45px;border:1px solid #cbd4e0;border-radius:10px;padding:9px 10px;background:#fff;color:var(--ink)}
@@ -176,13 +176,19 @@ details summary{font-weight:700;cursor:pointer;padding:3px 0 10px}.save-note{fon
   }
 
   .header-title-row h1 {
-    font-size: clamp(18px, 4.5vw, 27px);
+   font-size: clamp(18px, 6vw, 32px);
   }
 
   .app-version {
     font-size: 10px;
     padding-top: 4px;
   }
+}
+  #repairRim {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: none !important;
+  padding-right: 12px;
 }
 /* Новый дизайн калькулятора: графит и красные акценты */
 :root {
@@ -223,6 +229,225 @@ header p {
 #calc .field label,
 #calc .muted {
   color: var(--muted);
+}
+  /* Заголовок блока услуг и кнопка сброса */
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.section-heading h2 {
+  margin: 0;
+}
+
+.section-reset {
+  flex: 0 0 44px;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  font-size: 24px;
+  line-height: 1;
+}
+  /* Строки услуг */
+.service-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+  #extras {
+display: flex;
+flex-direction: column;
+gap: 8px;
+margin-top: 14px;
+}
+
+
+.service-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 24px;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #1c1e23;
+}
+
+.service-row label {
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.service-price {
+  color: #e8e9ec;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.service-row input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
+}
+
+.service-hint {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.quantity-control {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.quantity-control button {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #30333a;
+  color: #fff;
+  font-size: 23px;
+}
+
+.quantity-control output {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 700;
+}
+  .basic-toggle {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #30333a;
+  cursor: pointer;
+}
+
+.basic-toggle.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.service-row:has(.basic-toggle) {
+  grid-template-columns: minmax(0, 1fr) 44px;
+}
+
+.service-row:has(.basic-toggle) .basic-toggle {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.service-row:has(.basic-toggle) .service-hint {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+
+.service-row.is-active {
+  border-color: var(--accent);
+  background: #302124;
+}
+
+.service-row.is-disabled {
+  opacity: 0.45;
+}
+
+@media (min-width: 520px) {
+  .service-row {
+    grid-template-columns: minmax(0, 1fr) auto 24px auto;
+  }
+
+  .service-hint {
+    grid-column: 1 / -1;
+  }
+
+  .quantity-control {
+    grid-column: 4;
+    grid-row: 1;
+  }
+}
+  /* Заголовки блоков калькулятора */
+#calc .card > h2,
+#calc .section-heading h2 {
+  width: 100%;
+  text-align: center;
+  font-size: 21px;
+  line-height: 1.3;
+  font-weight: 800;
+  margin: 0;
+}
+
+#calc .section-heading {
+  position: relative;
+  justify-content: center;
+  min-height: 38px;
+}
+
+#calc .section-heading .section-reset {
+  position: absolute;
+  right: 0;
+}
+  /* Эффект нажатия верхних вкладок */
+.tabs button {
+  transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
+  transform-origin: center;
+}
+
+.tabs button:active {
+  transform: scale(.96);
+  box-shadow: none;
+}
+
+/* Заголовки блоков вкладки Прайс */
+#prices > .card:nth-child(-n+3) > h2 {
+  width: 100%;
+  text-align: center;
+  font-size: 21px;
+  line-height: 1.3;
+  font-weight: 800;
+  margin: 0 0 12px;
+}
+  /* Эффект нажатия кнопок калькулятора */
+#calc button {
+  transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
+  transform-origin: center;
+}
+
+#calc button:active {
+  transform: scale(.96);
+  box-shadow: none;
+}
+  /* Параметры автомобиля и колеса */
+#calc .card:first-child .field label {
+  color: #d5d8de;
+  font-size: 14px;
+  font-weight: 600;
+}
+ #calc .card:first-child h2 {
+  margin-bottom: 18px;
+} 
+
+#calc .card:first-child select {
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 15px;
+}
+
+#calc .card:first-child .muted {
+  line-height: 1.45;
 }
 
 #calc select,
@@ -433,13 +658,349 @@ header p {
 #settings hr {
   border-color: #3a3e46 !important;
 }
+  /* Оформление вкладки «Настройки» */
+#settings .card > h2 {
+  width: 100%;
+  text-align: center;
+  font-size: 21px;
+  line-height: 1.3;
+  font-weight: 800;
+  margin: 0 0 12px;
+}
+
+#settings button {
+  transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
+  transform-origin: center;
+}
+
+#settings button:active {
+  transform: scale(.96);
+  box-shadow: none;
+}
+  /* Этап 1: шапка и навигация */
+header {
+  position: static;
+  top: auto;
+}
+
+.header-title-row h1 {
+  font-size: 40px;
+  line-height: 1.2;
+}
+@media (max-width: 420px) {
+  .header-title-row h1 {
+    font-size: clamp(26px, 7.5vw, 32px);
+  }
+}
+
+.tabs {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  overflow: visible;
+}
+
+.tabs button {
+  flex: 1 1 0;
+  min-width: 0;
+  white-space: normal;
+  border-radius: 12px;
+  padding: 11px 6px;
+  text-align: center;
+}
+  .header-title-row h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-logo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  flex: 0 0 auto;
+  border-radius: 10px;
+}
+
+@media (max-width: 380px) {
+  .header-logo {
+    width: 42px;
+    height: 42px;
+  }
+}
+  /* Обратная связь при публикации общего прайса */
+#prices #cloudPublish {
+  transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
+  transform-origin: center;
+}
+
+#prices #cloudPublish:active {
+  transform: scale(.98);
+  box-shadow: 0 1px 0 #9f2522;
+}
+
+#prices #cloudPublish.is-publishing {
+  opacity: .72;
+  cursor: wait;
+}
+
+#prices #cloudPublish:disabled {
+  cursor: wait;
+}
+
+#prices #publishStatus {
+  min-height: 20px;
+  margin: 10px 0 0;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+#prices #publishStatus.is-pending {
+  color: #fbbf24;
+}
+
+#prices #publishStatus.is-success {
+  color: #4ade80;
+}
+
+#prices #publishStatus.is-error {
+  color: #f87171;
+}
+
+  /* Карточки размерных групп в прайсе */
+#prices #priceEditor {
+  margin-top: 16px;
+}
+
+#prices .price-size-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+#prices .price-size-card {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  box-shadow: 0 5px 18px #0003;
+}
+
+#prices .price-size-title {
+  margin: 0 0 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 16px;
+}
+
+#prices .price-size-services {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#prices .price-service-row {
+  grid-template-columns: minmax(0, 1fr) minmax(74px, 92px) 18px;
+  gap: 8px;
+  align-items: center;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #1c1e23;
+}
+
+#prices .price-service-row span:first-child {
+  min-width: 0;
+  color: var(--ink);
+  line-height: 1.35;
+}
+
+#prices .price-service-row input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #30333a;
+  color: var(--ink);
+}
+
+#prices .price-service-row .muted {
+  color: var(--muted);
+  text-align: right;
+}
+
+  #prices .repair-price-row {
+  grid-template-columns: minmax(0, 1fr) 18px minmax(74px, 92px) 42px;
+}
+
+#prices .repair-price-row .repair-from {
+  color: #a5abb5;
+  font-size: 13px;
+  text-align: right;
+}
+
+#prices #catalogExtras {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+#prices #catalogExtras .price-row {
+  grid-template-columns: minmax(0, 1fr) minmax(74px, 110px) 42px;
+  gap: 8px;
+  margin: 0;
+}
+
+#prices #catalogExtras input {
+  min-width: 0;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+#prices #addCatalogExtra {
+  width: 100%;
+  margin-top: 12px;
+  transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
+  transform-origin: center;
+}
+
+#prices #addCatalogExtra:active {
+  transform: scale(.98);
+  box-shadow: none;
+}
+  #prices #catalogExtras [data-del] {
+  transition: transform .12s ease, opacity .12s ease;
+  transform-origin: center;
+}
+
+#prices #catalogExtras [data-del]:active {
+  transform: scale(.92);
+  box-shadow: none;
+}
+
+#prices #addCatalogExtra:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+@media (max-width: 420px) {
+  #prices .repair-price-row {
+    grid-template-columns: minmax(0, 1fr) 18px minmax(70px, 88px) 38px;
+    gap: 6px;
+  }
+}
+@media (max-width: 700px) {
+  #prices .price-size-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+    /* Мобильная компоновка разделов калькулятора */
+@media (max-width: 420px) {
+  /* Услуги */
+  .service-list .service-row,
+  #calc > .card:nth-child(3) .service-row,
+  #calc > .card:nth-child(4) .service-row,
+  #extras .service-row {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 6px;
+    padding: 9px 10px;
+    align-items: center;
+  }
+
+  .service-list .service-row label,
+  #calc > .card:nth-child(3) .service-row label,
+  #calc > .card:nth-child(4) .service-row label,
+  #extras .service-row label {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    white-space: nowrap;
+    font-size: 13px;
+    line-height: 1.2;
+  }
+
+  .service-list .service-row .service-price,
+  #calc > .card:nth-child(3) .service-row .service-price,
+  #calc > .card:nth-child(4) .service-row .service-price,
+  #extras .service-row .service-price {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .service-list .service-row .quantity-control,
+  #calc > .card:nth-child(3) .service-row .quantity-control,
+  #calc > .card:nth-child(4) .service-row .quantity-control,
+  #extras .service-row .quantity-control {
+    grid-column: 3;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+  }
+
+  .service-list .quantity-control button,
+  #calc > .card:nth-child(3) .quantity-control button,
+  #calc > .card:nth-child(4) .quantity-control button,
+  #extras .quantity-control button {
+    width: 36px;
+    min-width: 36px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .service-list .quantity-control output,
+  #calc > .card:nth-child(3) .quantity-control output,
+  #calc > .card:nth-child(4) .quantity-control output,
+  #extras .quantity-control output {
+    min-width: 18px;
+    font-size: 14px;
+  }
+
+  /* Полный комплекс — отдельная компоновка */
+  .service-list .service-row:has(.basic-toggle) {
+    grid-template-columns: minmax(0, 1fr) 40px;
+  }
+
+  .service-list .service-row .basic-toggle {
+    grid-column: 2;
+    grid-row: 1;
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+  }
+
+  .service-list .service-row:has(.basic-toggle) .service-hint {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  /* Заголовок дополнительных услуг */
+  #calc > .card:nth-child(5) .section-heading h2 {
+    padding: 0 44px;
+    box-sizing: border-box;
+    font-size: 16px;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+}
 </style>
 </head>
 <body>
 <header>
   <div class="header-title-row">
-    <h1 id="businessNameTitle">🛞 Вулкашка 61</h1>
-    <span class="app-version">Версия 2.0.0</span>
+    <h1 id="businessNameTitle"><img class="header-logo" src="./header-wheel.jpg" alt="" /> Вулкашка 61</h1>
+    <span class="app-version">Версия 3.0.0</span>
   </div>
   <p>Шиномонтажный калькулятор</p>
   <p>Расчёт для клиента</p>
@@ -448,87 +1009,247 @@ header p {
 <div class="tabs"><button class="active" data-tab="calc">Калькулятор</button><button data-tab="prices">Прайс</button><button data-tab="settings">Настройки</button></div>
 <section id="calc">
 <div class="card">
-<h2>1. Автомобиль и колёса</h2>
+<h2>🚗 Параметры автомобиля и колеса</h2>
 <div class="grid">
-<div class="field"><label>Категория автомобиля</label><select id="vehicle"><option>Легковой</option><option>Кроссовер / SUV</option><option>Внедорожник</option><option>Микроавтобус</option><option>Коммерческий транспорт</option><option>Грузовой</option><option>Другая категория</option></select></div>
-<div class="field"><label>Диаметр диска</label><select id="rim"><option value="12-14">R12–R14</option><option value="15-16">R15–R16</option><option value="17-18" selected>R17–R18</option><option value="19-20">R19–R20</option><option value="21-22">R21–R22</option><option value="23+">R23+</option></select></div>
+<div class="field"><label>Категория автомобиля</label><select id="vehicle"></select></div>
+<div class="field wheel-field">
+  <label><span aria-hidden="true">◉</span> Диаметр диска</label>
+  <select id="rim"></select>
+</div>
 <div class="field" style="grid-column:1/-1"><label>Категория шины</label><select id="tireCategory"><option value="standard">Обычная шина</option><option value="special">RunFlat / низкий профиль (&lt;45)</option></select></div>
 </div>
 <div class="muted" style="margin-top:10px">RunFlat и низкий профиль (&lt;45) объединены в одну категорию специальных шин и используют общие расценки.</div>
 </div>
 <div class="card">
-<h2>2. Основные работы</h2>
-<div class="row chips" id="unitButtons"><button class="active" data-unit="4">Комплект · 4 колеса</button><button data-unit="1">За 1 колесо</button></div>
-<div class="check"><input type="checkbox" id="basic" checked><label for="basic">Полный шиномонтаж (снятие/установка + шиномонтаж + балансировка)</label></div>
-<div class="check"><input type="checkbox" id="removeInstall"><label for="removeInstall">Только снятие / установка</label></div>
-<div class="check"><input type="checkbox" id="mount"><label for="mount">Только шиномонтаж</label></div>
-<div class="check"><input type="checkbox" id="balance"><label for="balance">Только балансировка</label></div>
+<div class="section-heading">
+  <h2><span aria-hidden="true">🔧</span> Услуги</h2>
+  <button type="button" class="secondary section-reset" id="resetServices" title="Очистить выбор услуг" aria-label="Очистить выбор услуг">↻</button>
+</div>
+<div class="service-list">
+ <div class="service-row">
+  <label for="basic">Полный комплекс шиномонтажа</label>
+  <button
+    type="button"
+    id="basicToggle"
+    class="basic-toggle"
+    aria-label="Включить полный комплекс шиномонтажа"
+    aria-pressed="false"
+  ></button>
+  <span class="service-hint">Комплект из 4 колёс</span>
+  <input type="checkbox" id="basic" hidden>
+</div>
 
-<div class="field"><label>Количество колёс</label><input type="number" id="qty" min="1" max="24" value="4"></div>
+  <div class="service-row" data-service="removeInstall">
+    <label>Снятие / установка колеса</label>
+    <span class="service-price" id="removeInstallPrice">—</span>
+    <div class="quantity-control">
+      <button type="button" data-qty-minus="removeInstall">−</button>
+      <output id="removeInstallQty">0</output>
+      <button type="button" data-qty-plus="removeInstall">+</button>
+    </div>
+  </div>
+
+  <div class="service-row" data-service="mount">
+    <label>Шиномонтаж</label>
+    <span class="service-price" id="mountPrice">—</span>
+    <div class="quantity-control">
+      <button type="button" data-qty-minus="mount">−</button>
+      <output id="mountQty">0</output>
+      <button type="button" data-qty-plus="mount">+</button>
+    </div>
+  </div>
+
+  <div class="service-row" data-service="tireMount">
+    <label>Монтаж покрышки</label>
+    <span class="service-price" id="tireMountPrice">—</span>
+    <div class="quantity-control">
+      <button type="button" data-qty-minus="tireMount">−</button>
+      <output id="tireMountQty">0</output>
+      <button type="button" data-qty-plus="tireMount">+</button>
+    </div>
+  </div>
+
+  <div class="service-row" data-service="tireDemount">
+    <label>Демонтаж покрышки</label>
+    <span class="service-price" id="tireDemountPrice">—</span>
+    <div class="quantity-control">
+      <button type="button" data-qty-minus="tireDemount">−</button>
+      <output id="tireDemountQty">0</output>
+      <button type="button" data-qty-plus="tireDemount">+</button>
+    </div>
+  </div>
+
+  <div class="service-row" data-service="balance">
+    <label>Балансировка</label>
+    <span class="service-price" id="balancePrice">—</span>
+    <div class="quantity-control">
+      <button type="button" data-qty-minus="balance">−</button>
+      <output id="balanceQty">0</output>
+      <button type="button" data-qty-plus="balance">+</button>
+    </div>
+  </div>
+</div>
 </div>
 <div class="card">
-<h2>3. Правка дисков</h2>
-<div class="field"><label>Диаметр диска для правки</label><select id="repairRim"><option value="R13">R13</option><option value="R14">R14</option><option value="R15">R15</option><option value="R16">R16</option><option value="R17">R17</option><option value="R18">R18</option><option value="R19">R19</option><option value="R20">R20</option><option value="R21">R21</option><option value="R22">R22</option><option value="R23">R23</option></select></div>
-<div class="field"><label>Количество дисков для правки</label><input type="number" id="repairQty" min="1" max="24" value="1"></div>
-<div class="check"><input type="checkbox" id="rimRepair"><label for="rimRepair" style="flex:1">Правка диска</label></div>
-<div class="field"><label>Цена правки диска за 1 шт. (из прайса, можно изменить)</label><input type="number" id="rimRepairPrice" min="0" step="10" value="0"></div>
-<div class="check"><input type="checkbox" id="eightRepair"><label for="eightRepair" style="flex:1">Правка восьмёрки</label></div>
-<div class="field"><label>Цена правки восьмёрки за 1 шт. (из прайса, можно изменить)</label><input type="number" id="eightRepairPrice" min="0" step="10" value="0"></div>
-<div class="muted">При выборе диаметра цены автоматически подставляются из прайса. Перед расчётом можно изменить любую цену — изменение действует только для текущего расчёта и не меняет основной прайс.</div>
+  <div class="section-heading">
+    <h2><span aria-hidden="true">🛞</span> Правка дисков</h2>
+    <button type="button" class="secondary section-reset" id="resetRepairs"
+      title="Очистить правку дисков" aria-label="Очистить правку дисков">↻</button>
+  </div>
+
+  <div class="field">
+    <label>Диаметр диска для правки</label>
+    <select id="repairRim" disabled>
+      <option value="12-14">R12–R14</option>
+      <option value="15-16">R15–R16</option>
+      <option value="17-18">R17–R18</option>
+      <option value="19-20">R19–R20</option>
+      <option value="21-22">R21–R22</option>
+      <option value="23+">R23+</option>
+    </select>
+  </div>
+
+  <div class="service-row" style="margin-top:14px">
+
+    <label>Правка диска</label>
+    <span class="service-price" id="rimRepairPriceLabel">—</span>
+    <div class="quantity-control">
+      <button type="button" id="rimRepairMinus" aria-label="Уменьшить количество">−</button>
+      <output id="rimRepairQty">0</output>
+      <button type="button" id="rimRepairPlus" aria-label="Увеличить количество">+</button>
+    </div>
+  </div>
+   <input type="number" id="rimRepairPrice" min="0" step="10" value="0" hidden>
+  <div class="field" style="margin-top:14px">
+
+    <label>Итоговая сумма за правку дисков (₽)</label>
+    <input type="number" id="rimRepairTotal" min="0" step="10" value="0">
+  </div>
+
+    <div class="service-row" style="margin-top:14px">
+    <label>Правка восьмёрки</label>
+    <span class="service-price" id="eightRepairPriceLabel">—</span>
+    <div class="quantity-control">
+      <button type="button" id="eightRepairMinus" aria-label="Уменьшить количество">−</button>
+      <output id="eightRepairQty">0</output>
+      <button type="button" id="eightRepairPlus" aria-label="Увеличить количество">+</button>
+    </div>
+  </div>
+    <input type="number" id="eightRepairPrice" min="0" step="10" value="0" hidden>
+  <div class="field">
+    <label>Итоговая сумма за правку восьмёрки (₽)</label>
+    <input type="number" id="eightRepairTotal" min="0" step="10" value="0">
+  </div>
+ </div>
+
+<div class="card">
+  <div class="section-heading">
+    <h2><span aria-hidden="true">🔥</span> Аргоновая сварка</h2>
+  </div>
+
+  <div class="service-row" style="margin-top:14px">
+    <label>Количество трещин</label>
+    <span class="service-price" id="argonUnitPrice">1 500 ₽/шт.</span>
+    <div class="quantity-control">
+      <button type="button" id="argonMinus">−</button>
+      <output id="argonQty">0</output>
+      <button type="button" id="argonPlus">+</button>
+    </div>
+  </div>
+
+   <input type="number" id="argonPrice" min="0" step="50" value="1500" hidden>
+  <div class="field">
+    <label>Итоговая сумма за аргоновую сварку (₽)</label>
+    <input type="number" id="argonTotal" min="0" step="50" value="0">
+  </div>
+
 </div>
 <div class="card">
-<h2>4. Дополнительные работы</h2>
+<div class="section-heading">
+  <h2><span aria-hidden="true">🔧➕</span> Дополнительные услуги</h2>
+  <button type="button" class="secondary section-reset" id="resetExtras"
+    title="Очистить дополнительные услуги" aria-label="Очистить дополнительные услуги">↻</button>
+</div>
 <div id="extras"></div>
-<button class="secondary" id="addExtra">＋ Добавить работу вручную</button>
-<div class="muted" style="margin-top:7px">Укажите название и цену за единицу; количество регулируется отдельно.</div>
 </div>
 <div class="total"><small>ИТОГО К ОЗВУЧИВАНИЮ</small><div class="amount" id="total">0 ₽</div><div class="summary" id="summary">Выберите работы и параметры автомобиля.</div><button class="primary" id="share">Отправить расчёт</button><button class="secondary" id="saveCalculation" style="width:100%;margin-top:8px">Сохранить расчёт в файл (.txt)</button><button class="secondary" id="copy" style="width:100%;margin-top:8px">Скопировать расчёт</button></div>
-<button class="secondary" id="reset" style="width:100%">Очистить расчёт</button>
 </section>
 <section id="prices" class="hidden">
-<div class="card"><h2>Прайс по категориям</h2><p class="muted">Для легковых автомобилей внесены значения с вашей фотографии. Остальные категории оставлены пустыми для ручного заполнения. В каждой строке: цена за 1 колесо и за 4 колеса. Изменения сохраняются локально; после входа владельца их можно опубликовать в общий прайс.</p>
+<div class="card"><h2>Прайс по категориям</h2>
 <div class="field"><label>Категория для редактирования</label><select id="priceVehicle"></select></div>
 <div id="priceEditor"></div>
 </div>
-<div class="card"><h2>Доплаты и дополнительные услуги</h2><p class="muted">Можно задать единую доплату для категории RunFlat / низкий профиль (&lt;45) и настроить часто используемые услуги. Значения по умолчанию — 0 ₽.</p><div id="surchargeEditor"></div><button class="secondary" id="addCatalogExtra">＋ Добавить услугу в список</button><div id="catalogExtras"></div></div><div class="card" id="publishPriceCard">
+<div class="card"><h2>Правка дисков</h2><div id="surchargeEditor"></div></div>
+<div class="card"><h2>Дополнительные услуги</h2><button class="secondary" id="addCatalogExtra">＋ Добавить услугу в список</button><div id="catalogExtras"></div></div>
+<div class="card" id="publishPriceCard">
 <h2>Публикация общего прайса</h2>
 <p class="muted">После изменения цен владелец может опубликовать их для всех сотрудников.</p>
 <button class="primary" id="cloudPublish" style="width:100%">Опубликовать прайс</button>
 <p id="publishStatus" class="muted" aria-live="polite"></p>
 </div>
 </section><section id="settings" class="hidden">
+
+<div class="card" id="ownerLoginCard">
+  <h2>Вход владельца</h2>
+
+  <div class="field">
+    <label>Email владельца</label>
+    <input type="text" id="ownerEmail" autocomplete="username">
+  </div>
+
+  <div class="field" style="margin-top:8px">
+    <label>Пароль владельца Supabase Auth</label>
+    <input type="password" id="ownerPassword" autocomplete="current-password">
+  </div>
+
+  <div class="row" style="margin-top:8px">
+    <button class="secondary" id="ownerLogin" style="flex:1">Войти владельцем</button>
+    <button class="secondary" id="ownerLogout" style="flex:1">Выйти</button>
+  </div>
+
+  <p id="ownerAuthStatus" class="muted" aria-live="polite"></p>
+</div>
+
 <div class="card">
-<h2>Название организации</h2>
-<p class="muted">Название отображается в верхней части приложения.</p>
-<div class="field"><label for="businessNameInput">Название организации</label><input type="text" id="businessNameInput" maxlength="60" value="Вулкашка 61" placeholder="Введите название"></div>
-<button class="primary" id="saveBusinessName">Сохранить название</button>
-<p id="businessNameStatus" class="muted" aria-live="polite"></p>
-</div><div class="card" id="cloudPanel">
-<h2>Общий прайс — синхронизация</h2>
-<p class="muted">Здесь находятся вход владельца и инструменты управления общим прайсом.</p>
-<p id="cloudStatus" class="muted" aria-live="polite">Подключаем общий прайс…</p>
-<div id="ownerTools">
-<hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
-<h3 style="font-size:15px">Настройки владельца</h3>
-<div class="field"><label>Адрес Supabase проекта</label><input type="text" id="cloudUrl" value="https://lqqfgzioboqeeiuhijyi.supabase.co" placeholder="https://xxxxxxxx.supabase.co" autocomplete="url"></div>
-<div class="field" style="margin-top:8px"><label>Публичный anon key проекта</label><input type="text" id="cloudKey" value="sb_publishable_QcMaau9Phz4pQYjhF39N1w_bW6XlC3v" placeholder="sb_publishable_…" autocomplete="off"></div>
-<div class="row" style="margin-top:8px"><button class="secondary" id="cloudConnect" style="flex:1">Подключить общий прайс</button><button class="secondary" id="cloudRefresh" style="flex:1">Загрузить общий прайс</button></div>
-<div class="field" style="margin-top:8px"><label>Email владельца</label><input type="text" id="ownerEmail" autocomplete="username"></div>
-<div class="field" style="margin-top:8px"><label>Пароль владельца Supabase Auth</label><input type="password" id="ownerPassword" autocomplete="current-password"></div>
-<div class="row" style="margin-top:8px"><button class="secondary" id="ownerLogin" style="flex:1">Войти владельцем</button><button class="secondary" id="ownerLogout" style="flex:1">Выйти</button></div>
+  <h2>Название организации</h2>
+  <p class="muted">Название отображается в верхней части приложения.</p>
+  <div class="field">
+    <label for="businessNameInput">Название организации</label>
+    <input type="text" id="businessNameInput" maxlength="60" value="Вулкашка 61" placeholder="Введите название">
+  </div>
+  <button class="primary" id="saveBusinessName">Сохранить название</button>
+  <p id="businessNameStatus" class="muted" aria-live="polite"></p>
 </div>
-</div><div class="card">
-<h2>Резервное копирование</h2>
-<button class="secondary" id="export" style="width:100%">Экспортировать настройки (JSON)</button>
-<label class="muted" style="display:block;margin-top:12px">Импорт настроек из JSON-файла</label>
-<input type="file" id="importFile" accept=".json,application/json">
-<button class="secondary" id="defaults" style="width:100%;margin-top:12px">Восстановить исходный прайс</button>
-<p class="save-note">Важно: данные хранятся в браузере на этом телефоне. Для переноса на другое устройство используйте экспорт/импорт.</p>
+
+<div class="card" id="cloudPanel">
+  <h2>Общий прайс — синхронизация</h2>
+  <p id="cloudStatus" class="muted" aria-live="polite">Подключаем общий прайс…</p>
+
+  <div id="ownerTools">
+    <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+    <h3 style="font-size:15px">Настройки владельца</h3>
+
+    <div class="field">
+      <label>Адрес Supabase проекта</label>
+      <input type="text" id="cloudUrl" value="https://lqqfgzioboqeeiuhijyi.supabase.co" placeholder="https://xxxxxxxx.supabase.co" autocomplete="url">
+    </div>
+
+    <div class="field" style="margin-top:8px">
+      <label>Публичный anon key проекта</label>
+      <input type="text" id="cloudKey" value="sb_publishable_QcMaau9Phz4pQYjhF39N1w_bW6XlC3v" placeholder="sb_publishable_…" autocomplete="off">
+    </div>
+
+    <div class="row" style="margin-top:8px">
+      <button class="secondary" id="cloudConnect" style="flex:1">Подключить общий прайс</button>
+      <button class="secondary" id="cloudRefresh" style="flex:1">Загрузить общий прайс</button>
+    </div>
+  </div>
 </div>
+
 </section>
 </main>
 <script>
-const vehicles=['Легковой','Кроссовер / SUV','Внедорожник','Микроавтобус','Коммерческий транспорт','Грузовой','Другая категория'];
+const vehicles=['Легковой','Кроссовер','Внедорожник / SUV','Микроавтобус'];
 const rims=['12-14','15-16','17-18','19-20','21-22','23+'];
 const labels={'12-14':'R12–R14','15-16':'R15–R16','17-18':'R17–R18','19-20':'R19–R20','21-22':'R21–R22','23+':'R23+'};
 const base={
@@ -540,8 +1261,8 @@ const base={
 '23+':{remove:0,mount:0,balance:0,one:0,four:0,rfOne:0,rfFour:0,valve:200}
 };
 const emptyPrice=()=>Object.fromEntries(rims.map(r=>[r,{remove:0,mount:0,balance:0,one:0,four:0,rfOne:0,rfFour:0,valve:0}]));
-function fresh(){let prices={};vehicles.forEach(v=>prices[v]=emptyPrice());prices['Легковой']=JSON.parse(JSON.stringify(base));return {prices,surcharges:{special:0},rimRepair:Object.fromEntries(Array.from({length:11},(_,i)=>['R'+(i+13),{rim:0,eight:0}])),extras:[{name:'Установка вентиля',price:200},{name:'Ремонт прокола',price:0},{name:'Прочая работа',price:0}]};}
-let data;try{data=JSON.parse(localStorage.getItem('tireCalcData'))||fresh();if(!data.surcharges)data.surcharges={special:0};if(!data.surcharges.special)data.surcharges.special=+(data.surcharges.runflat||data.surcharges.low||data.surcharges.custom||0);if(!data.rimRepair)data.rimRepair=Object.fromEntries(Array.from({length:11},(_,i)=>['R'+(i+13),{rim:0,eight:0}]));for(let i=13;i<=23;i++){if(!data.rimRepair['R'+i])data.rimRepair['R'+i]={rim:0,eight:0}}}catch(e){data=fresh()}
+function fresh(){let prices={};vehicles.forEach(v=>prices[v]=emptyPrice());prices['Легковой']=JSON.parse(JSON.stringify(base));return {prices,surcharges:{special:0},rimRepair:Object.fromEntries(Array.from({length:11},(_,i)=>['R'+(i+13),{rim:0,eight:0}])),extras:[{name:'Установка вентиля',price:200},{name:'Ремонт прокола',price:0},{name:'Прочая работа',price:0}],calculatorExtras:[]};}
+let data;try{data=JSON.parse(localStorage.getItem('tireCalcData'))||fresh();if(!Array.isArray(data.calculatorExtras))data.calculatorExtras=[];if(!Array.isArray(data.extras))data.extras=fresh().extras;if(!data.surcharges)data.surcharges={special:0};if(!data.surcharges.special)data.surcharges.special=+(data.surcharges.runflat||data.surcharges.low||data.surcharges.custom||0);if(!data.rimRepair)data.rimRepair=Object.fromEntries(Array.from({length:11},(_,i)=>['R'+(i+13),{rim:0,eight:0}]));for(let i=13;i<=23;i++){if(!data.rimRepair['R'+i])data.rimRepair['R'+i]={rim:0,eight:0}}}catch(e){data=fresh();data.calculatorExtras=[]}
 let unit=4;
 const $=id=>document.getElementById(id);
 const money=n=>Math.round(n).toLocaleString('ru-RU')+' ₽';
@@ -552,7 +1273,7 @@ const DEFAULT_BUSINESS_NAME = 'Вулкашка 61';
 function applyBusinessName(name) {
   const cleanName = String(name || '').trim().slice(0, 60) || DEFAULT_BUSINESS_NAME;
 
-  $('businessNameTitle').textContent = '🛞 ' + cleanName;
+  $('businessNameTitle').lastChild.textContent = ' ' + cleanName;
   $('businessNameInput').value = cleanName;
 
   localStorage.setItem('tireCalcBusinessName', cleanName);
@@ -574,31 +1295,291 @@ $('saveBusinessName').addEventListener('click', function () {
 applyBusinessName(
   localStorage.getItem('tireCalcBusinessName') || DEFAULT_BUSINESS_NAME
 );
-function activePrice(){return data.prices[$('vehicle').value][$('rim').value]||{}}
-function renderExtras(){let box=$('extras');box.innerHTML='';data.extras.forEach((e,i)=>{let d=document.createElement('div');d.className='check';d.innerHTML=`<input type="checkbox" data-extra="${i}" id="ex${i}"><label for="ex${i}" style="flex:1">${e.name} <span class="muted">(${money(e.price)}/шт.)</span></label><input type="number" min="0" value="1" aria-label="Количество" data-extraqty="${i}" style="width:70px;min-height:38px">`;box.appendChild(d)});box.querySelectorAll('input').forEach(x=>x.addEventListener('change',calculate))}
-function calculate(){
- const p=activePrice(), qty=Math.max(1,parseInt($('qty').value)||1), v=$('vehicle').value, r=$('rim').value;
- let n=0, lines=[];
- const add=(name,price,count=qty)=>{if(price>0){n+=price*count;lines.push(`${name}: ${money(price*count)}`)}};
- const special=$('tireCategory').value==='special';
- // Для RunFlat / низкого профиля берём цену шиномонтажа из отдельной строки RunFlat.
- // Снятие/установка и балансировка всегда считаются по своим обычным расценкам.
- const mountPrice=special?(+p.rfOne||0):(+p.mount||0);
- if($('basic').checked){
-   add('Снятие / установка',+p.remove||0);
-   add(special?'Шиномонтаж RunFlat / низкий профиль':'Шиномонтаж',mountPrice);
-   add('Балансировка',+p.balance||0);
- }
- if($('removeInstall').checked)add('Снятие / установка',+p.remove||0);
- if($('mount').checked)add(special?'Шиномонтаж RunFlat / низкий профиль':'Шиномонтаж',mountPrice);
- if($('balance').checked)add('Балансировка',+p.balance||0);
- if(special){let surcharge=+data.surcharges.special||0;if(surcharge>0)add('Доплата за RunFlat / низкий профиль (<45)',surcharge)}
- const repairSize=$('repairRim').value, repairPrices=data.rimRepair[repairSize]||{}, repairQty=Math.max(1,Math.min(24,parseInt($('repairQty').value)||1));
- if($('rimRepair').checked)add(`Правка диска ${repairSize} (${repairQty} шт.)`,Math.max(0,+$('rimRepairPrice').value||0),repairQty);
- if($('eightRepair').checked)add(`Правка восьмёрки ${repairSize} (${repairQty} шт.)`,Math.max(0,+$('eightRepairPrice').value||0),repairQty);
- document.querySelectorAll('[data-extra]').forEach(ch=>{if(ch.checked){let i=+ch.dataset.extra, q=Math.max(1,parseInt(document.querySelector(`[data-extraqty="${i}"]`).value)||1);add(data.extras[i].name,+data.extras[i].price||0,q)}});
- $('total').textContent=money(n);
- $('summary').textContent=`${v} · ${labels[r]} · ${qty} колёс${special?' · RunFlat / низкий профиль (<45)':''}\n`+(lines.length?lines.join('\n'):'Выберите работы или заполните цены в настройках.');
+function categoryRimsFor(vehicle) {
+  if (vehicle === 'Микроавтобус') return ['15-16'];
+
+  if (vehicle === 'Кроссовер' || vehicle === 'Внедорожник / SUV') {
+    return rims.filter(r => r !== '12-14');
+  }
+
+  return rims;
+}
+
+function renderCalculatorRims() {
+  const vehicle = $('vehicle').value;
+  const allowedRims = categoryRimsFor(vehicle);
+  const currentRim = $('rim').value;
+
+  $('rim').innerHTML = allowedRims
+    .map(r => `<option value="${r}">${labels[r]}</option>`)
+    .join('');
+
+  $('rim').value = allowedRims.includes(currentRim)
+    ? currentRim
+    : allowedRims[0];
+}
+
+function activePrice() {
+  return data.prices[$('vehicle').value]?.[$('rim').value] || {};
+}
+const serviceQty = {
+  removeInstall: 0,
+  mount: 0,
+  tireMount: 0,
+  tireDemount: 0,
+  balance: 0,
+  argon: 0
+};
+function renderExtras() {
+  const box = $('extras');
+  box.innerHTML = '';
+
+  if (!Array.isArray(data.extras)) {
+    data.extras = [];
+  }
+
+  data.extras.forEach((e, i) => {
+    if (!Number.isFinite(Number(e.quantity))) {
+      e.quantity = 0;
+    }
+
+    const quantity = Math.max(0, Number(e.quantity) || 0);
+    const row = document.createElement('div');
+
+    row.className = 'service-row';
+    row.classList.toggle('is-active', quantity > 0);
+
+    row.innerHTML = `
+      <label></label>
+      <span class="service-price">${money(e.price)}/шт.</span>
+      <div class="quantity-control">
+        <button type="button" data-extra-minus="${i}"
+          aria-label="Уменьшить количество">−</button>
+        <output id="extraQty${i}">${quantity}</output>
+        <button type="button" data-extra-plus="${i}"
+          aria-label="Увеличить количество">+</button>
+      </div>
+    `;
+
+    row.querySelector('label').textContent = e.name;
+    box.appendChild(row);
+  });
+
+  box.querySelectorAll('[data-extra-minus]').forEach(button => {
+    button.addEventListener('click', () => {
+      const extra = data.extras[Number(button.dataset.extraMinus)];
+      if (!extra) return;
+
+      extra.quantity = Math.max(0, (Number(extra.quantity) || 0) - 1);
+      save();
+      renderExtras();
+      calculate();
+    });
+  });
+
+  box.querySelectorAll('[data-extra-plus]').forEach(button => {
+    button.addEventListener('click', () => {
+      const extra = data.extras[Number(button.dataset.extraPlus)];
+      if (!extra) return;
+
+      extra.quantity = Math.min(99, (Number(extra.quantity) || 0) + 1);
+      save();
+      renderExtras();
+      calculate();
+    });
+  });
+}
+  
+function updateServiceRows() {
+  const packageSelected = $('basic').checked;
+
+  [
+    'removeInstall',
+    'mount',
+    'tireMount',
+    'tireDemount',
+    'balance'
+  ].forEach(id => {
+    const row = document.querySelector(`[data-service="${id}"]`);
+
+    if (!row) return;
+
+    row.classList.toggle(
+      'is-active',
+      !packageSelected && serviceQty[id] > 0
+    );
+
+    row.classList.toggle('is-disabled', packageSelected);
+
+    row.querySelectorAll('[data-qty-minus], [data-qty-plus]')
+      .forEach(button => {
+        button.disabled = packageSelected;
+      });
+
+    if (packageSelected) {
+      serviceQty[id] = 0;
+    }
+
+    $(`${id}Qty`).textContent = serviceQty[id];
+  });
+
+  const packageRow = $('basic').closest('.service-row');
+  packageRow.classList.toggle('is-active', packageSelected);
+  const toggle = $('basicToggle');
+toggle.classList.toggle('is-active', packageSelected);
+toggle.setAttribute('aria-pressed', String(packageSelected));
+toggle.setAttribute(
+  'aria-label',
+  packageSelected
+    ? 'Отключить полный шиномонтаж'
+    : 'Включить полный шиномонтаж'
+);
+}
+  function updateServiceTotal(totalId) {
+  const config = {
+    rimRepairTotal: {
+      priceId: 'rimRepairPrice',
+      qtyId: 'rimRepairQty'
+    },
+    eightRepairTotal: {
+      priceId: 'eightRepairPrice',
+      qtyId: 'eightRepairQty'
+    },
+    argonTotal: {
+      priceId: 'argonPrice',
+      qtyId: null
+    }
+  };
+
+  const item = config[totalId];
+  if (!item) return;
+
+  const quantity = item.qtyId
+    ? Number($(item.qtyId).textContent) || 0
+    : Number(serviceQty.argon) || 0;
+
+  const price = Number($(item.priceId).value) || 0;
+  $(totalId).value = price * quantity;
+}
+
+function calculate() {
+  const p = activePrice();
+  const vehicle = $('vehicle').value;
+  const rim = $('rim').value;
+  const special = $('tireCategory').value === 'special';
+  const lines = [];
+  let total = 0;
+
+  const add = (name, price, count = 1) => {
+    price = Math.max(0, Number(price) || 0);
+    count = Math.max(0, Number(count) || 0);
+
+    if (price > 0 && count > 0) {
+      total += price * count;
+      lines.push(`${name} — ${money(price)} × ${count}`);
+    }
+  };
+  
+const addTotal = (name, amount, count) => {
+  amount = Math.max(0, Number(amount) || 0);
+  count = Math.max(0, Number(count) || 0);
+
+  if (amount > 0 && count > 0) {
+    total += amount;
+    lines.push(`${name} — ${money(amount / count)} × ${count}`);
+  }
+};
+
+  const removePrice = Number(p.remove) || 0;
+  const mountPrice = special
+    ? (Number(p.rfOne) || 0)
+    : (Number(p.mount) || 0);
+  const tireMountPrice = mountPrice * 0.5;
+  const tireDemountPrice = mountPrice * 0.5;
+  const balancePrice = Number(p.balance) || 0;
+  const packagePrice = special
+    ? (Number(p.rfFour) || 0)
+    : (Number(p.four) || 0);
+
+  $('removeInstallPrice').textContent = money(removePrice);
+  $('mountPrice').textContent = money(mountPrice);
+  $('tireMountPrice').textContent = money(tireMountPrice);
+  $('tireDemountPrice').textContent = money(tireDemountPrice);
+  $('balancePrice').textContent = money(balancePrice);
+
+  updateServiceRows();
+
+  if ($('basic').checked) {
+    if (packagePrice > 0) {
+      add(
+        special
+          ? 'Полный комплекс шиномонтажа RunFlat / низкий профиль'
+          : 'Полный комплекс шиномонтажа',
+        packagePrice
+      );
+    } else {
+      add('Снятие / установка колеса', removePrice, 4);
+      add('Шиномонтаж', mountPrice, 4);
+      add('Балансировка', balancePrice, 4);
+    }
+  } else {
+    add('Снятие / установка колеса', removePrice, serviceQty.removeInstall);
+    add(
+      special ? 'Шиномонтаж RunFlat / низкий профиль' : 'Шиномонтаж',
+      mountPrice,
+      serviceQty.mount
+    );
+    add('Монтаж покрышки', tireMountPrice, serviceQty.tireMount);
+    add('Демонтаж покрышки', tireDemountPrice, serviceQty.tireDemount);
+    add('Балансировка', balancePrice, serviceQty.balance);
+  }
+
+  const argonQty = serviceQty.argon;
+  $('argonQty').textContent = argonQty;
+  $('argonUnitPrice').textContent =
+    money(Number($('argonPrice').value) || 0) + '/шт.';
+
+ addTotal('Аргоновая сварка', $('argonTotal').value, argonQty);
+
+  const repairSize = $('repairRim').value;
+
+const rimRepairQty = Math.max(
+  0,
+  Math.min(24, parseInt($('rimRepairQty').textContent, 10) || 0)
+);
+
+const eightRepairQty = Math.max(
+  0,
+  Math.min(24, parseInt($('eightRepairQty').textContent, 10) || 0)
+);
+
+$('rimRepairQty').textContent = rimRepairQty;
+$('eightRepairQty').textContent = eightRepairQty;
+
+$('rimRepairPriceLabel').textContent =
+  money(Number($('rimRepairPrice').value) || 0) + '/шт.';
+$('eightRepairPriceLabel').textContent =
+  money(Number($('eightRepairPrice').value) || 0) + '/шт.';
+
+addTotal(`Правка диска ${repairSize}`, $('rimRepairTotal').value, rimRepairQty);
+addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').value, eightRepairQty);
+    data.extras.forEach((extra, i) => {
+  const quantity = Math.max(0, Number(extra.quantity) || 0);
+
+  if (quantity > 0) {
+    add(extra.name, extra.price, quantity);
+  }
+
+  const output = $(`extraQty${i}`);
+  if (output) output.textContent = quantity;
+});
+
+  $('total').textContent = money(total);
+  $('summary').textContent =
+    `${vehicle} · ${labels[rim]}${special ? ' · RunFlat / низкий профиль (<45)' : ''}\n` +
+    (lines.length
+      ? lines.join('\n')
+      : 'Выберите работы или заполните цены в настройках.');
 }
 function updatePriceAccess(){
   const isOwner=window.__tireCalcIsOwner===true;
@@ -608,30 +1589,411 @@ function updatePriceAccess(){
   const publishCard=$('publishPriceCard');
   if(publishCard) publishCard.classList.toggle('hidden',!isOwner);
 }
-function renderPriceEditor(){let v=$('priceVehicle').value, box=$('priceEditor');box.innerHTML='';let names=[['remove','Снятие / установка'],['mount','Шиномонтаж'],['balance','Балансировка'],['one','Полный комплекс за 1 колесо'],['four','Полный комплекс за 4 колеса'],['rfOne','RunFlat за 1 колесо / от'],['rfFour','Комплекс RunFlat за 4 колеса'],['valve','Установка одного вентиля']];rims.forEach(r=>{let h=document.createElement('h3');h.style.fontSize='15px';h.textContent=labels[r];box.appendChild(h);names.forEach(([key,name])=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<span>${name}</span><input type="number" min="0" step="10" data-price="${r}|${key}" value="${data.prices[v][r][key]||0}" aria-label="${name}"><span class="muted">₽</span>`;box.appendChild(row)})});box.querySelectorAll('[data-price]').forEach(inp=>inp.addEventListener('change',()=>{let [r,k]=inp.dataset.price.split('|');data.prices[v][r][k]=Math.max(0,+inp.value||0);save();calculate()}));updatePriceAccess()}
-function renderSurcharges(){let box=$('surchargeEditor');box.innerHTML='';
- let title=document.createElement('h3');title.textContent='Правка дисков — цены по диаметру';title.style.fontSize='15px';box.appendChild(title);
- for(let d=13;d<=23;d++){let size='R'+d;let h=document.createElement('h4');h.textContent=size;h.style.margin='12px 0 4px';box.appendChild(h);for(let [key,label] of [['rim','Правка диска'],['eight','Правка восьмёрки']]){let row=document.createElement('div');row.className='price-row';row.innerHTML=`<span>${label}</span><input type="number" min="0" step="10" data-repair-size="${size}" data-repair-type="${key}" value="${data.rimRepair[size][key]||0}"><span class="muted">₽/шт.</span>`;box.appendChild(row)}}
- box.querySelectorAll('[data-repair-size]').forEach(i=>i.addEventListener('change',()=>{data.rimRepair[i.dataset.repairSize][i.dataset.repairType]=Math.max(0,+i.value||0);save();calculate()}));[['special','Доплата за RunFlat / низкий профиль (<45)']].forEach(([k,n])=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<span>${n}</span><input type="number" min="0" step="10" data-surcharge="${k}" value="${data.surcharges[k]||0}"><span class="muted">₽/колесо</span>`;box.appendChild(row)});box.querySelectorAll('[data-surcharge]').forEach(i=>i.addEventListener('change',()=>{data.surcharges[i.dataset.surcharge]=+i.value||0;save();calculate()}));updatePriceAccess()}
+function renderPriceEditor() {
+  const v = $('priceVehicle').value;
+  const box = $('priceEditor');
+  box.innerHTML = '';
+
+  const categoryRims = v === 'Микроавтобус'
+    ? ['15-16']
+    : ['Кроссовер', 'Внедорожник / SUV'].includes(v)
+      ? rims.filter(r => r !== '12-14')
+      : rims;
+
+  if (!data.prices[v]) data.prices[v] = {};
+
+  categoryRims.forEach(r => {
+    data.prices[v][r] = {
+      remove: 0,
+      mount: 0,
+      balance: 0,
+      one: 0,
+      four: 0,
+      rfOne: 0,
+      rfFour: 0,
+      valve: 0,
+      ...(data.prices[v][r] || {})
+    };
+  });
+
+  save();
+
+  const names = [
+    ['remove', 'Снятие / установка'],
+    ['mount', 'Шиномонтаж'],
+    ['balance', 'Балансировка'],
+    ['one', 'Полный комплекс за 1 колесо'],
+    ['four', 'Полный комплекс за 4 колеса'],
+    ['rfOne', 'RunFlat за 1 колесо / от'],
+    ['rfFour', 'Комплекс RunFlat за 4 колеса']
+  ];
+
+  const grid = document.createElement('div');
+  grid.className = 'price-size-grid';
+
+  categoryRims.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'price-size-card';
+
+    const title = document.createElement('h3');
+    title.className = 'price-size-title';
+    title.textContent = labels[r];
+    card.appendChild(title);
+
+    const services = document.createElement('div');
+    services.className = 'price-size-services';
+
+    names.forEach(([key, name]) => {
+      const row = document.createElement('div');
+      row.className = 'price-row price-service-row';
+
+      row.innerHTML = `
+        <span>${name}</span>
+        <input
+          type="number"
+          min="0"
+          step="10"
+          data-price="${r}|${key}"
+          value="${data.prices[v][r][key] || 0}"
+          aria-label="${name}"
+        >
+        <span class="muted">₽</span>
+      `;
+
+      services.appendChild(row);
+    });
+
+    card.appendChild(services);
+    grid.appendChild(card);
+  });
+
+  box.appendChild(grid);
+
+  box.querySelectorAll('[data-price]').forEach(inp => {
+    inp.addEventListener('change', () => {
+      const [r, k] = inp.dataset.price.split('|');
+      data.prices[v][r][k] = Math.max(0, +inp.value || 0);
+      save();
+      calculate();
+    });
+  });
+
+  updatePriceAccess();
+}
+
+function renderSurcharges() {
+  const box = $('surchargeEditor');
+  box.innerHTML = '';
+
+  const ranges = [
+    { value: '12-14', label: 'R12–R14', sizes: ['R13', 'R14'], representative: 'R14' },
+    { value: '15-16', label: 'R15–R16', sizes: ['R15', 'R16'], representative: 'R15' },
+    { value: '17-18', label: 'R17–R18', sizes: ['R17', 'R18'], representative: 'R17' },
+    { value: '19-20', label: 'R19–R20', sizes: ['R19', 'R20'], representative: 'R19' },
+    { value: '21-22', label: 'R21–R22', sizes: ['R21', 'R22'], representative: 'R21' },
+    { value: '23+', label: 'R23+', sizes: ['R23'], representative: 'R23' }
+  ];
+
+  const grid = document.createElement('div');
+  grid.className = 'price-size-grid';
+
+  ranges.forEach(range => {
+    const card = document.createElement('div');
+    card.className = 'price-size-card';
+
+    const heading = document.createElement('h3');
+    heading.className = 'price-size-title';
+    heading.textContent = range.label;
+    card.appendChild(heading);
+
+    const services = document.createElement('div');
+    services.className = 'price-size-services';
+
+    [
+      ['rim', 'Правка диска'],
+      ['eight', 'Правка восьмёрки']
+    ].forEach(([type, label]) => {
+      const row = document.createElement('div');
+      row.className = 'price-row price-service-row repair-price-row';
+
+      const price = data.rimRepair[range.representative]?.[type] || 0;
+
+      row.innerHTML = `
+        <span>${label}</span>
+        <span class="repair-from">от</span>
+        <input
+          type="number"
+          min="0"
+          step="10"
+          data-repair-range="${range.value}"
+          data-repair-type="${type}"
+          value="${price}"
+          aria-label="${label}, ${range.label}"
+        >
+        <span class="muted">₽/шт.</span>
+      `;
+
+      services.appendChild(row);
+    });
+
+    card.appendChild(services);
+    grid.appendChild(card);
+  });
+
+  box.appendChild(grid);
+
+  box.querySelectorAll('[data-repair-range]').forEach(input => {
+    input.addEventListener('change', () => {
+      const range = ranges.find(
+        item => item.value === input.dataset.repairRange
+      );
+      const type = input.dataset.repairType;
+      const price = Math.max(0, Number(input.value) || 0);
+
+      range.sizes.forEach(size => {
+        if (!data.rimRepair[size]) {
+          data.rimRepair[size] = { rim: 0, eight: 0 };
+        }
+
+        data.rimRepair[size][type] = price;
+      });
+
+      save();
+      syncRepairPrices();
+    });
+  });
+
+  updatePriceAccess();
+}
+
 function renderCatalog(){let box=$('catalogExtras');box.innerHTML='';data.extras.forEach((e,i)=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<input type="text" data-name="${i}" value="${e.name}"><input type="number" min="0" data-extra-price="${i}" value="${e.price}"><button class="secondary" data-del="${i}" aria-label="Удалить">×</button>`;box.appendChild(row)});box.querySelectorAll('[data-name]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.name].name=i.value||'Услуга';save();renderExtras()}));box.querySelectorAll('[data-extra-price]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.extraPrice].price=+i.value||0;save();renderExtras()}));box.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{data.extras.splice(+b.dataset.del,1);save();renderCatalog();renderExtras()}));updatePriceAccess()}
 $('priceVehicle').innerHTML=vehicles.map(v=>`<option>${v}</option>`).join('');
 $('priceVehicle').addEventListener('change',renderPriceEditor);
-$('vehicle').addEventListener('change',calculate);['rim','tireCategory','qty','basic','removeInstall','mount','balance','repairQty','rimRepair','eightRepair','rimRepairPrice','eightRepairPrice'].forEach(id=>$(id).addEventListener('input',calculate));
-function syncRepairPrices(){const rp=data.rimRepair[$('repairRim').value]||{rim:0,eight:0};$('rimRepairPrice').value=rp.rim||0;$('eightRepairPrice').value=rp.eight||0;calculate()}
-$('repairRim').addEventListener('change',syncRepairPrices);
-$('unitButtons').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{unit=+b.dataset.unit;$('unitButtons').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));if(unit===4)$('qty').value=4;else if(+$('qty').value===4)$('qty').value=1;calculate()}));
-document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));['calc','prices','settings'].forEach(id=>$(id).classList.toggle('hidden',b.dataset.tab!==id))}));
-$('addExtra').onclick=()=>{data.extras.push({name:'Новая работа',price:0});save();renderExtras();renderCatalog()};
-$('addCatalogExtra').onclick=()=>{data.extras.push({name:'Новая услуга',price:0});save();renderCatalog();renderExtras()};
-function getCalculationText(){return `РАСЧЁТ ШИНОМОНТАЖА\n${$('summary').textContent}\n\nИТОГО: ${$('total').textContent}\n\nСтоимость предварительная.`; }
-$('share').onclick=async()=>{const text=getCalculationText();try{if(navigator.share){await navigator.share({title:'Расчёт шиномонтажа',text});}else{await navigator.clipboard.writeText(text);alert('Расчёт скопирован. Теперь вставьте его в сообщение.')}}catch(e){if(e.name!=='AbortError'){prompt('Скопируйте расчёт для отправки:',text)}}};
-$('saveCalculation').onclick=()=>{const text=getCalculationText();const blob=new Blob([text],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);const stamp=new Date().toLocaleDateString('ru-RU').replaceAll('.','-');a.download=`расчёт-шиномонтажа-${stamp}.txt`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);};
-$('copy').onclick=async()=>{let text=getCalculationText();try{await navigator.clipboard.writeText(text);$('copy').textContent='Скопировано!';setTimeout(()=>$('copy').textContent='Скопировать расчёт',1600)}catch(e){prompt('Скопируйте расчёт:',text)}};
-$('reset').onclick=()=>{['basic','removeInstall','mount','balance','rimRepair','eightRepair'].forEach(id=>$(id).checked=id==='basic');document.querySelectorAll('[data-extra]').forEach(x=>x.checked=false);$('qty').value=4;$('repairQty').value=1;unit=4;$('unitButtons').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x.dataset.unit==='4'));calculate()};
+
+$('vehicle').innerHTML = vehicles.map(v => `<option value="${v}">${v}</option>`).join('');
+
+$('vehicle').addEventListener('change', () => {
+  renderCalculatorRims();
+  syncRepairPrices();
+  calculate();
+});
+[
+'rim', 'tireCategory', 'basic'
+].forEach(id => {
+$(id).addEventListener('input', calculate);
+$(id).addEventListener('change', calculate);
+});
+
+document.querySelectorAll('[data-qty-minus], [data-qty-plus]').forEach(button => {
+  button.addEventListener('click', () => {
+    const id = button.dataset.qtyMinus || button.dataset.qtyPlus;
+    const delta = button.dataset.qtyPlus ? 1 : -1;
+
+    serviceQty[id] = Math.max(0, Math.min(24, serviceQty[id] + delta));
+
+    calculate();
+  });
+});
+$('argonMinus').addEventListener('click', () => {
+  serviceQty.argon = Math.max(0, serviceQty.argon - 1);
+  $('argonQty').textContent = serviceQty.argon;
+  updateQuantityHighlight('argonQty');
+  updateServiceTotal('argonTotal');
+  calculate();
+});
+
+$('argonPlus').addEventListener('click', () => {
+  serviceQty.argon = Math.min(24, serviceQty.argon + 1);
+  $('argonQty').textContent = serviceQty.argon;
+  updateQuantityHighlight('argonQty');
+  updateServiceTotal('argonTotal');
+  calculate();
+});
+
+$('argonPrice').addEventListener('input', () => {
+updateServiceTotal('argonTotal');
+calculate();
+});
+
+$('rimRepairPrice').addEventListener('input', () => {
+updateServiceTotal('rimRepairTotal');
+calculate();
+});
+
+$('eightRepairPrice').addEventListener('input', () => {
+updateServiceTotal('eightRepairTotal');
+calculate();
+});
+
+$('rimRepairTotal').addEventListener('input', calculate);
+$('eightRepairTotal').addEventListener('input', calculate);
+$('argonTotal').addEventListener('input', calculate);
+
+  
+function syncRepairPrices() {
+  const range = $('rim').value;
+  $('repairRim').value = range;
+
+  const representative = {
+    '12-14': 'R14',
+    '15-16': 'R15',
+    '17-18': 'R17',
+    '19-20': 'R19',
+    '21-22': 'R21',
+    '23+': 'R23'
+  };
+
+  const size = representative[range] || 'R17';
+  const prices = data.rimRepair[size] || { rim: 0, eight: 0 };
+
+  $('rimRepairPrice').value = prices.rim || 0;
+$('eightRepairPrice').value = prices.eight || 0;
+
+updateServiceTotal('rimRepairTotal');
+updateServiceTotal('eightRepairTotal');
+
+calculate();
+}
+
+$('repairRim').addEventListener('change', syncRepairPrices);
+$('rim').addEventListener('change', syncRepairPrices);
+
+function updateQuantityHighlight(id) {
+  const output = $(id);
+  const row = output.closest('.service-row');
+  const quantity = Number(output.textContent) || 0;
+
+  row.classList.toggle('is-active', quantity > 0);
+}
+
+function changeRepairQty(id, delta) {
+  const output = $(id);
+  const current = Number(output.textContent) || 0;
+
+ output.textContent = Math.max(0, Math.min(24, current + delta));
+updateQuantityHighlight(id);
+
+updateServiceTotal(
+  id === 'rimRepairQty' ? 'rimRepairTotal' : 'eightRepairTotal'
+);
+
+calculate();
+}
+
+$('rimRepairMinus').addEventListener('click', () => {
+  changeRepairQty('rimRepairQty', -1);
+});
+
+$('rimRepairPlus').addEventListener('click', () => {
+  changeRepairQty('rimRepairQty', 1);
+});
+
+$('eightRepairMinus').addEventListener('click', () => {
+  changeRepairQty('eightRepairQty', -1);
+});
+
+$('eightRepairPlus').addEventListener('click', () => {
+  changeRepairQty('eightRepairQty', 1);
+});
+
+$('resetRepairs').addEventListener('click', () => {
+  // Очищаем правку дисков
+  $('rimRepairQty').textContent = 0;
+  $('eightRepairQty').textContent = 0;
+
+  updateQuantityHighlight('rimRepairQty');
+  updateQuantityHighlight('eightRepairQty');
+
+  // Очищаем аргоновую сварку
+  serviceQty.argon = 0;
+  $('argonQty').textContent = 0;
+  $('argonTotal').value = 0;
+  updateQuantityHighlight('argonQty');
+
+  // Пересчитываем итог
+  syncRepairPrices();
+});
+
+$('basic').addEventListener('change', calculate);
+  $('basicToggle').addEventListener('click', () => {
+  const basic = $('basic');
+  basic.checked = !basic.checked;
+
+  const button = $('basicToggle');
+  button.classList.toggle('is-active', basic.checked);
+  button.setAttribute('aria-pressed', String(basic.checked));
+  button.setAttribute(
+    'aria-label',
+    basic.checked
+      ? 'Отключить полный комплекс шиномонтажа'
+      : 'Включить полный комплекс шиномонтажа'
+  );
+
+  calculate();
+});
+
+function activateTab(tabId, remember = true) {
+  const allowedTabs = ['calc', 'prices', 'settings'];
+
+  if (!allowedTabs.includes(tabId)) {
+    tabId = 'calc';
+  }
+
+  document.querySelectorAll('.tabs button').forEach(button => {
+    button.classList.toggle('active', button.dataset.tab === tabId);
+  });
+
+  allowedTabs.forEach(id => {
+    $(id).classList.toggle('hidden', id !== tabId);
+  });
+
+  if (remember) {
+    localStorage.setItem('tireCalcActiveTab', tabId);
+  }
+}
+
+document.querySelectorAll('.tabs button').forEach(button => {
+  button.addEventListener('click', () => {
+    activateTab(button.dataset.tab);
+  });
+});
+
+const savedTab = localStorage.getItem('tireCalcActiveTab') || 'calc';
+activateTab(savedTab, false);
+  
+$('addCatalogExtra').onclick = () => {
+  data.extras.push({ name: 'Новая услуга', price: 0, quantity: 0 });
+  save();
+  renderCatalog();
+  renderExtras();
+};
+
+$('resetServices').onclick = () => {
+$('basic').checked = false;
+Object.keys(serviceQty).forEach(id => serviceQty[id] = 0);
+
+$('argonQty').textContent = 0;
+updateServiceTotal('argonTotal');
+updateQuantityHighlight('argonQty');
+
+calculate();
+};
+  $('resetExtras').onclick = () => {
+  data.extras.forEach(extra => extra.quantity = 0);
+  renderExtras();
+  calculate();
+};
+  
 $('export').onclick=()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='прайс-шиномонтаж.json';a.click();URL.revokeObjectURL(a.href)};
 $('importFile').onchange=async e=>{try{let obj=JSON.parse(await e.target.files[0].text());if(!obj.prices||!obj.extras)throw Error();data=obj;save();if(!data.rimRepair)data.rimRepair=fresh().rimRepair;renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();syncRepairPrices();calculate();alert('Настройки импортированы')}catch(err){alert('Не удалось прочитать файл настроек')}};
 $('defaults').onclick=()=>{if(confirm('Восстановить исходные цены? Текущие настройки будут заменены.')){data=fresh();save();renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();calculate()}};
-renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();syncRepairPrices();calculate();
+renderPriceEditor();
+renderCalculatorRims();
+renderSurcharges();
+renderCatalog();
+renderExtras();
+syncRepairPrices();
+calculate();
 
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -647,13 +2009,111 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
  const statusEl=$c('cloudStatus'); statusEl.style.cursor='default';
  const cfg=()=>({url:($c('cloudUrl').value||'').trim().replace(/\/$/,''),key:($c('cloudKey').value||'').trim()});
  function makeClient(){const c=cfg();if(!c.url||!c.key)throw Error('Введи адрес проекта и публичный anon key.');if(!window.supabase?.createClient)throw Error('Не загрузилась библиотека облака. Проверь интернет.');sb=window.supabase.createClient(c.url,c.key,{auth:{persistSession:true,autoRefreshToken:true}});localStorage.setItem('tireCloudUrl',c.url);localStorage.setItem('tireCloudKey',c.key);return sb;}
- async function fetchPrice(){if(busy)return;busy=true;try{if(!sb)makeClient();const {data:row,error}=await sb.from('shared_price').select('payload,updated_at').eq('id',1).maybeSingle();if(error)throw error;if(!row){status('В облаке пока нет прайса. Войди как владелец и нажми «Опубликовать».');return;}data=row.payload;localStorage.setItem('tireCalcData',JSON.stringify(data));renderPriceEditor();renderSurcharges();renderCatalog();renderExtras();syncRepairPrices();calculate();status('Общий прайс загружен'+(row.updated_at?' · обновлён '+new Date(row.updated_at).toLocaleString('ru-RU'):''));}catch(e){status('Не удалось загрузить общий прайс: '+(e.message||e));}finally{busy=false;}}
- async function publish(){try{if(!sb)makeClient();const {data:sessionData}=await sb.auth.getSession();if(!sessionData.session){status('Сначала войди под аккаунтом владельца.');return;}const {error}=await sb.from('shared_price').upsert({id:1,payload:data,updated_at:new Date().toISOString()},{onConflict:'id'});if(error)throw error;localStorage.setItem('tireCalcData',JSON.stringify(data));status('Готово: общий прайс опубликован для всех пользователей.');}catch(e){status('Не удалось опубликовать: '+(e.message||e)+' · Проверь SQL-политики и аккаунт владельца.');}}
+   async function fetchPrice(){
+    if(busy)return;
+    busy=true;
+    try{
+      if(!sb)makeClient();
+      const {data:row,error}=await sb.from('shared_price').select('payload,updated_at').eq('id',1).maybeSingle();
+      if(error)throw error;
+      if(!row){
+        status('В облаке пока нет прайса. Войди как владелец и нажми «Опубликовать».');
+        return;
+      }
+      data=row.payload;
+      localStorage.setItem('tireCalcData',JSON.stringify(data));
+      renderPriceEditor();
+      renderCalculatorRims();
+      renderSurcharges();
+      renderCatalog();
+      renderExtras();
+      syncRepairPrices();
+      calculate();
+      status('Общий прайс загружен'+(row.updated_at?' · обновлён '+new Date(row.updated_at).toLocaleString('ru-RU'):''));
+    }catch(e){
+      status('Не удалось загрузить общий прайс: '+(e.message||e));
+    }finally{
+      busy=false;
+    }
+  }
+  async function publish(){
+  const button=$c('cloudPublish');
+  const result=$c('publishStatus');
+
+  if(button.dataset.busy==='true')return;
+
+  const originalLabel=button.textContent;
+
+  button.dataset.busy='true';
+  button.disabled=true;
+  button.setAttribute('aria-busy','true');
+  button.classList.add('is-publishing');
+  button.textContent='Публикуем…';
+
+  if(result){
+    result.className='publish-status is-pending';
+    result.textContent='⏳ Публикуем прайс…';
+  }
+
+  try{
+    if(!sb)makeClient();
+
+    const {data:sessionData}=await sb.auth.getSession();
+
+    if(!sessionData.session){
+      const message='Сначала войди под аккаунтом владельца.';
+      status(message);
+
+      if(result){
+        result.className='publish-status is-error';
+        result.textContent='❌ '+message;
+      }
+
+      return;
+    }
+
+    const {error}=await sb.from('shared_price').upsert({
+      id:1,
+      payload:data,
+      updated_at:new Date().toISOString()
+    },{onConflict:'id'});
+
+    if(error)throw error;
+
+    localStorage.setItem('tireCalcData',JSON.stringify(data));
+
+    status('Готово: общий прайс опубликован для всех пользователей.');
+
+    if(result){
+      result.className='publish-status is-success';
+      result.textContent='✅ Прайс успешно опубликован!';
+    }
+
+  }catch(e){
+    const reason=e&&e.message?e.message:String(e);
+
+    status('Не удалось опубликовать: '+reason+' · Проверь SQL-политики и аккаунт владельца.');
+
+    if(result){
+      result.className='publish-status is-error';
+      result.textContent='❌ Не удалось опубликовать прайс. '+reason;
+    }
+
+  }finally{
+    window.setTimeout(()=>{
+      button.disabled=false;
+      button.removeAttribute('aria-busy');
+      button.classList.remove('is-publishing');
+      button.textContent=originalLabel;
+      button.dataset.busy='false';
+    },350);
+  }
+ }
  $c('cloudUrl').value=localStorage.getItem('tireCloudUrl')||'https://lqqfgzioboqeeiuhijyi.supabase.co';$c('cloudKey').value=localStorage.getItem('tireCloudKey')||'sb_publishable_QcMaau9Phz4pQYjhF39N1w_bW6XlC3v';
  $c('cloudConnect').addEventListener('click',async()=>{try{makeClient();const {error}=await sb.from('shared_price').select('id').limit(1);if(error)throw error;status('Подключение успешно. Загружаю общий прайс…');await fetchPrice();}catch(e){status('Ошибка подключения: '+(e.message||e)+' · Выполни SQL из архива в Supabase.');}});
  $c('cloudRefresh').addEventListener('click',fetchPrice);
- $c('ownerLogin').addEventListener('click',async()=>{try{if(!sb)makeClient();const {data:res,error}=await sb.auth.signInWithPassword({email:$c('ownerEmail').value.trim(),password:$c('ownerPassword').value});if(error)throw error;owner=true;syncOwnerAccess();$c('ownerPassword').value='';status('Вход выполнен. Теперь можно менять цены и публиковать их для всех.');}catch(e){status('Вход не выполнен: '+(e.message||e));}});
- $c('ownerLogout').addEventListener('click',async()=>{try{if(sb)await sb.auth.signOut();owner=false;syncOwnerAccess();status('Вы вышли из режима владельца.');}catch(e){status(e.message||String(e));}});
+   $c('ownerLogin').addEventListener('click',async()=>{try{if(!sb)makeClient();const {data:res,error}=await sb.auth.signInWithPassword({email:$c('ownerEmail').value.trim(),password:$c('ownerPassword').value});if(error)throw error;owner=true;syncOwnerAccess();$c('ownerPassword').value='';$c('ownerAuthStatus').textContent='Вход выполнен. Теперь можно менять цены и публиковать их для всех.';$c('ownerAuthStatus').style.color='green';}catch(e){$c('ownerAuthStatus').textContent='Вход не выполнен: '+(e.message||e);$c('ownerAuthStatus').style.color='#c0392b';}});
+  $c('ownerLogout').addEventListener('click',async()=>{try{if(sb)await sb.auth.signOut();owner=false;syncOwnerAccess();$c('ownerAuthStatus').textContent='Вы вышли из режима владельца.';$c('ownerAuthStatus').style.color='';}catch(e){$c('ownerAuthStatus').textContent=e.message||String(e);$c('ownerAuthStatus').style.color='#c0392b';}});
  $c('cloudPublish').addEventListener('click',publish);
  // If a project was configured previously, load the shared price on start. Local price remains available offline.
   // При запуске загружаем общий прайс и восстанавливаем сессию владельца.
@@ -671,12 +2131,17 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
 
      owner = !!sessionData.session;syncOwnerAccess();
 
-     if (owner) {
-      status('Вход владельца восстановлен. Можно менять цены и публиковать их для всех.');
+           if (owner) {
+        $c('ownerAuthStatus').textContent='Вход владельца восстановлен. Можно менять цены и публиковать их для всех.';
+        $c('ownerAuthStatus').style.color='green';
+      } else {
+        $c('ownerAuthStatus').textContent='Вы не вошли в режим владельца.';
+        $c('ownerAuthStatus').style.color='';
+      }
+     } catch (e) {
+      $c('ownerAuthStatus').textContent='Не удалось восстановить сессию владельца: '+(e.message||e);
+      $c('ownerAuthStatus').style.color='#c0392b';
      }
-    } catch (e) {
-     status('Не удалось восстановить сессию владельца: ' + (e.message || e));
-    }
    })();
 
      } catch (e) {
@@ -690,7 +2155,7 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
 </script>
   <footer style="max-width:1100px;margin:18px auto 10px;padding:0 14px;text-align:right;font-size:11px;color:#6b7280">
   <span style="display:inline-block;border:1px solid #d8dee8;background:#f8fafc;border-radius:999px;padding:5px 9px">
-    Шиномонтаж · версия 2.0.0 · релиз 26.10.2026
+    Шиномонтаж · версия 3.0.0 · релиз 30.10.2026
   </span>
   </footer>
 </body></html>
