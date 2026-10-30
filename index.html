@@ -687,6 +687,11 @@ header {
   font-size: 40px;
   line-height: 1.2;
 }
+@media (max-width: 420px) {
+  .header-title-row h1 {
+    font-size: clamp(26px, 7.5vw, 32px);
+  }
+}
 
 .tabs {
   display: flex;
