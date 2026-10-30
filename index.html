@@ -901,47 +901,50 @@ header {
   }
 }
 
-  /* Мобильная компоновка раздела «Услуги» */
+    /* Мобильная компоновка раздела «Услуги» */
 @media (max-width: 420px) {
- .service-list .service-row {
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 4px 8px;
-  padding: 9px 10px;
-}
+  .service-list .service-row {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 6px;
+    padding: 9px 10px;
+    align-items: center;
+  }
 
-.service-list .service-row label {
-  grid-column: 1;
-  grid-row: 1;
-  font-size: 14px;
-  line-height: 1.25;
-}
-
-    .service-list .service-row .service-price {
+  .service-list .service-row label {
     grid-column: 1;
-    grid-row: 2;
+    grid-row: 1;
+    min-width: 0;
+    white-space: nowrap;
+    font-size: 13px;
+    line-height: 1.2;
+  }
+
+  .service-list .service-row .service-price {
+    grid-column: 2;
+    grid-row: 1;
     justify-self: end;
-    align-self: center;
     font-size: 12px;
     white-space: nowrap;
   }
 
-    .service-list .service-row .quantity-control {
-    grid-column: 2;
-    grid-row: 2;
-    align-self: center;
+  .service-list .service-row .quantity-control {
+    grid-column: 3;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
     justify-content: flex-end;
     gap: 5px;
   }
 
   .service-list .quantity-control button {
-    width: 40px;
-    min-width: 40px;
+    width: 36px;
+    min-width: 36px;
     height: 40px;
-    font-size: 21px;
+    font-size: 20px;
   }
 
   .service-list .quantity-control output {
-    min-width: 20px;
+    min-width: 18px;
     font-size: 14px;
   }
 
@@ -950,9 +953,16 @@ header {
   }
 
   .service-list .service-row .basic-toggle {
+    grid-column: 2;
+    grid-row: 1;
     width: 40px;
     min-width: 40px;
     height: 40px;
+  }
+
+  .service-list .service-row:has(.basic-toggle) .service-hint {
+    grid-column: 1 / -1;
+    grid-row: 2;
   }
 }
 </style>
