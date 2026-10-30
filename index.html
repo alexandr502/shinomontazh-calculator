@@ -1461,8 +1461,7 @@ function renderSurcharges() {
 
   updatePriceAccess();
 }
-  updatePriceAccess();
-}
+
 function renderCatalog(){let box=$('catalogExtras');box.innerHTML='';data.extras.forEach((e,i)=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<input type="text" data-name="${i}" value="${e.name}"><input type="number" min="0" data-extra-price="${i}" value="${e.price}"><button class="secondary" data-del="${i}" aria-label="Удалить">×</button>`;box.appendChild(row)});box.querySelectorAll('[data-name]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.name].name=i.value||'Услуга';save();renderExtras()}));box.querySelectorAll('[data-extra-price]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.extraPrice].price=+i.value||0;save();renderExtras()}));box.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{data.extras.splice(+b.dataset.del,1);save();renderCatalog();renderExtras()}));updatePriceAccess()}
 $('priceVehicle').innerHTML=vehicles.map(v=>`<option>${v}</option>`).join('');
 $('priceVehicle').addEventListener('change',renderPriceEditor);
