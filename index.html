@@ -1748,6 +1748,102 @@ addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').
       ? lines.join('\n')
       : 'Выберите работы или заполните цены в настройках.');
 }
+  
+// Формирование текста отчёта
+function getCalculationReport() {
+  const businessName =
+    localStorage.getItem('tireCalcBusinessName') || 'Шиномонтаж';
+
+  const summary = $('summary').textContent.trim();
+  const total = $('total').textContent.trim();
+
+  return [
+    businessName,
+    'РАСЧЁТ ШИНОМОНТАЖА',
+    '',
+    summary,
+    '',
+    `ИТОГО: ${total}`,
+    '',
+    'Стоимость предварительная.'
+  ].join('\n');
+}
+
+// Копирование отчёта
+async function copyCalculationReport() {
+  const report = getCalculationReport();
+
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(report);
+    } else {
+      throw new Error('Clipboard API недоступен');
+    }
+  } catch (error) {
+    const textarea = document.createElement('textarea');
+    textarea.value = report;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    const copied = document.execCommand('copy');
+    textarea.remove();
+
+    if (!copied) {
+      alert('Не удалось скопировать отчёт. Проверьте разрешения браузера.');
+      return false;
+    }
+  }
+
+  alert('Расчёт скопирован.');
+  return true;
+}
+
+// Сохранение отчёта в TXT
+$('saveCalculation').addEventListener('click', () => {
+  const report = getCalculationReport();
+  const blob = new Blob(
+    ['\uFEFF' + report],
+    { type: 'text/plain;charset=utf-8' }
+  );
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+
+  link.href = url;
+  link.download = `Расчёт-шиномонтаж-${new Date().toLocaleDateString('ru-RU').replace(/\./g, '-')}.txt`;
+
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+// Отправка отчёта
+$('share').addEventListener('click', async () => {
+  const report = getCalculationReport();
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: 'Расчёт шиномонтажа',
+        text: report
+      });
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        alert('Не удалось открыть меню отправки. Попробуйте скопировать отчёт.');
+      }
+    }
+  } else {
+    await copyCalculationReport();
+  }
+});
+
+// Кнопка копирования
+$('copy').addEventListener('click', copyCalculationReport);
+
 function updatePriceAccess(){
   const isOwner=window.__tireCalcIsOwner===true;
   document.querySelectorAll('#priceEditor input, #surchargeEditor input, #catalogExtras input, #catalogExtras button, #addCatalogExtra').forEach(el=>{
