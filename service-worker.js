@@ -4,7 +4,7 @@
    Чужие кэши не удаляем.
 */
 
-const CACHE = 'tirecalc-prod-v26';
+const CACHE = 'tirecalc-prod-v27';
 const CONTROL_CACHE = 'tirecalc-prod-control-v1';
 const CONTROL_KEY = './__tirecalc_prod_state__';
 
@@ -13,7 +13,10 @@ const FILES = [
   './index.html',
   './manifest.webmanifest',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './apple-touch-icon.png',
+  './favicon-32.png',
+  './favicon-64.png'
 ];
 
 const LEGACY_CACHE = 'tirecalc-shared-v3';
