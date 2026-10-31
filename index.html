@@ -1999,7 +1999,11 @@ $('argonTotal').addEventListener('input', calculate);
   
 function syncRepairPrices() {
   const range = $('rim').value;
-  $('repairRim').value = range;
+  const repairRim = $('repairRim');
+
+  repairRim.disabled = false;
+  repairRim.value = range;
+  repairRim.disabled = true;
 
   const representative = {
     '12-14': 'R14',
