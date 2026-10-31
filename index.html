@@ -1465,7 +1465,72 @@ button {
     padding-left: 3px;
   }
 }
+/* Универсальная адаптация строк услуг для мобильных экранов */
+@media (max-width: 700px) {
+  #calc .service-row,
+  #extras .service-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max-content max-content;
+    align-items: center;
+    gap: clamp(4px, 1.5vw, 8px);
+    min-width: 0;
+    padding: 8px;
+  }
 
+  #calc .service-row > label,
+  #extras .service-row > label {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: clamp(11px, 3.2vw, 14px);
+    line-height: 1.25;
+  }
+
+  #calc .service-row .service-price,
+  #extras .service-row .service-price {
+    min-width: 0;
+    white-space: nowrap;
+    font-size: clamp(10px, 2.9vw, 13px);
+  }
+
+  #calc .service-row .quantity-control,
+  #extras .service-row .quantity-control {
+    grid-column: auto;
+    grid-row: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: clamp(2px, 1vw, 5px);
+    min-width: 0;
+    white-space: nowrap;
+  }
+
+  #calc .service-row .quantity-control button,
+  #extras .service-row .quantity-control button {
+    flex: 0 0 clamp(30px, 8.5vw, 36px);
+    width: clamp(30px, 8.5vw, 36px);
+    min-width: clamp(30px, 8.5vw, 36px);
+    height: clamp(32px, 9vw, 38px);
+    min-height: clamp(32px, 9vw, 38px);
+    padding: 0;
+    font-size: 19px;
+  }
+
+  #calc .service-row .quantity-control output,
+  #extras .service-row .quantity-control output {
+    flex: 0 0 18px;
+    min-width: 18px;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  #calc .service-row .service-hint {
+    grid-column: 1 / -1;
+  }
+}
 </style>
 </head>
 <body>
