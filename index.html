@@ -4,7 +4,7 @@
 <script>
 (function () {
   let bootReported = false;
- const bootVersion = 'tirecalc-prod-v25';
+ const bootVersion = 'tirecalc-prod-v26';
   let bootStatus = null;
   let bootRetryTimer = null;
 
@@ -674,6 +674,7 @@ margin-top: 14px;
   font-weight: 600;
 }
 
+```css
 #prices #priceVehicle {
   background: #181a1f;
   color: #f5f5f5;
@@ -681,6 +682,39 @@ margin-top: 14px;
   color-scheme: dark;
   min-height: 48px;
 }
+
+/* Мобильное меню категории — оформление как в Калькуляторе */
+@media (max-width: 700px) {
+  #prices button.custom-select-trigger {
+    background: #181a1f;
+    color: #f5f5f5;
+    border: 1px solid #484d57;
+    min-height: 48px;
+  }
+
+  #prices .custom-select-menu {
+    background: #2b2e35;
+    border: 1px solid #484d57;
+  }
+
+  #prices button.custom-select-option {
+    background: transparent;
+    color: #f3f4f6;
+    border: 0;
+  }
+
+  #prices button.custom-select-option.is-selected {
+    background: #3a3e46;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  #prices button.custom-select-option:active {
+    background: #484d57;
+  }
+}
+```
+
   /* Оформление вкладки «Настройки» */
 #settings .card > h2 {
   width: 100%;
