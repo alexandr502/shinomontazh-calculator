@@ -2336,9 +2336,6 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
           if (select.value !== option.value) {
             select.value = option.value;
             select.dispatchEvent(
-              new Event('input', { bubbles: true })
-            );
-            select.dispatchEvent(
               new Event('change', { bubbles: true })
             );
           }
