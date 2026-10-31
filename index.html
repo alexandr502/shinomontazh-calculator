@@ -1156,6 +1156,381 @@ header {
     background: #484d57;
   }
 }
+  
+/* =========================================
+   АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ, ПЛАНШЕТОВ И ПК
+   Версия 1 — компактные экраны
+   ========================================= */
+
+/* Общая защита от горизонтального переполнения */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+main,
+#calc,
+#prices,
+#settings,
+.card {
+  min-width: 0;
+  max-width: 100%;
+}
+
+input,
+select,
+textarea,
+button {
+  max-width: 100%;
+}
+
+/* Узкие телефоны: 320–380 px */
+@media (max-width: 380px) {
+
+  header {
+    padding: 12px 9px 14px;
+  }
+
+  .header-title-row {
+    gap: 7px;
+    min-width: 0;
+  }
+
+  .header-title-row h1 {
+    min-width: 0;
+    font-size: clamp(19px, 6.2vw, 24px);
+  }
+
+  .header-logo {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+  }
+
+  .app-version {
+    font-size: 9px;
+  }
+
+  main {
+    padding: 10px 8px 80px;
+  }
+
+  .tabs {
+    gap: 5px;
+  }
+
+  .tabs button {
+    min-width: 0;
+    padding: 9px 4px;
+    font-size: 12px;
+  }
+
+  .card,
+  #calc .card {
+    min-width: 0;
+    padding: 10px;
+    border-radius: 13px;
+  }
+
+  #calc .card > h2,
+  #calc .section-heading h2,
+  #prices .card > h2,
+  #settings .card > h2 {
+    font-size: 17px;
+    line-height: 1.25;
+  }
+
+  /* Поля и элементы калькулятора */
+  #calc select,
+  #calc input {
+    min-width: 0;
+    font-size: 14px;
+  }
+
+  #calc .grid {
+    gap: 7px;
+  }
+
+  #calc .chips {
+    gap: 6px;
+  }
+
+  #calc .chips button {
+    min-height: 42px;
+    padding: 7px 5px;
+    font-size: 13px;
+  }
+
+  #calc .total {
+    padding: 13px 10px;
+  }
+
+  #calc .amount {
+    font-size: clamp(27px, 8vw, 34px);
+  }
+
+  /* Услуги и дополнительные услуги:
+     название, цена и количество — в одной строке */
+  .service-list .service-row,
+  #calc > .card:nth-child(3) .service-row,
+  #calc > .card:nth-child(4) .service-row,
+  #extras .service-row {
+    grid-template-columns: minmax(0, 1fr) max-content max-content;
+    gap: 4px;
+    padding: 7px 6px;
+    min-width: 0;
+  }
+
+  .service-row label {
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  .service-price {
+    min-width: 0;
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  .quantity-control {
+    grid-column: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .service-row .quantity-control button {
+    width: 29px;
+    min-width: 29px;
+    height: 34px;
+    min-height: 34px;
+    padding: 0;
+    font-size: 18px;
+  }
+
+  .quantity-control output {
+    min-width: 15px;
+    font-size: 12px;
+  }
+
+  .service-row .basic-toggle {
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    min-height: 34px;
+  }
+
+  .section-reset {
+    flex: 0 0 36px;
+    width: 36px;
+    min-height: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+
+  #extras {
+    gap: 6px;
+  }
+
+  /* Правка дисков и аргоновая сварка */
+  #calc .repair-row,
+  #calc .welding-row {
+    min-width: 0;
+  }
+
+  /* Вкладка «Прайс» */
+  #prices .price-size-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 9px;
+  }
+
+  #prices .price-size-card {
+    min-width: 0;
+    padding: 9px;
+  }
+
+  #prices .price-size-title {
+    font-size: 14px;
+  }
+
+  #prices .price-service-row {
+    grid-template-columns: minmax(0, 1fr) minmax(58px, 76px) 16px;
+    gap: 5px;
+    padding: 7px 5px;
+    min-width: 0;
+  }
+
+  #prices .price-service-row input {
+    min-width: 0;
+    width: 100%;
+    min-height: 38px;
+    padding: 5px;
+    font-size: 13px;
+  }
+
+  #prices .repair-price-row {
+    grid-template-columns: minmax(0, 1fr) 14px minmax(58px, 72px) 34px;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  #prices .repair-price-row input {
+    min-width: 0;
+    width: 100%;
+    padding: 4px;
+    font-size: 12px;
+  }
+
+  #prices #catalogExtras .price-row,
+  #prices .price-row {
+    grid-template-columns: minmax(0, 1fr) minmax(58px, 78px) 34px;
+    gap: 5px;
+    min-width: 0;
+  }
+
+  #prices .price-row input {
+    min-width: 0;
+    width: 100%;
+    padding: 5px;
+    font-size: 13px;
+  }
+
+  /* Вкладка «Настройки» */
+  #settings .card {
+    min-width: 0;
+  }
+
+  #settings input,
+  #settings select,
+  #settings textarea {
+    min-width: 0;
+    width: 100%;
+    font-size: 14px;
+  }
+
+  #settings button,
+  #prices button {
+    min-width: 0;
+    font-size: 13px;
+  }
+}
+
+/* Совсем узкие экраны: 320–340 px */
+@media (max-width: 340px) {
+
+  main {
+    padding-right: 6px;
+    padding-left: 6px;
+  }
+
+  .card,
+  #calc .card {
+    padding: 8px;
+  }
+
+  .service-row label {
+    font-size: 10px;
+  }
+
+  .service-price {
+    font-size: 9px;
+  }
+
+  .service-row .quantity-control button {
+    width: 27px;
+    min-width: 27px;
+    height: 32px;
+    min-height: 32px;
+  }
+
+  .quantity-control output {
+    min-width: 13px;
+    font-size: 11px;
+  }
+
+  .tabs button {
+    font-size: 11px;
+    padding-right: 3px;
+    padding-left: 3px;
+  }
+}
+/* Универсальная адаптация строк услуг для мобильных экранов */
+@media (max-width: 700px) {
+  #calc .service-row,
+  #extras .service-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max-content max-content;
+    align-items: center;
+    gap: clamp(4px, 1.5vw, 8px);
+    min-width: 0;
+    padding: 8px;
+  }
+
+  #calc .service-row > label,
+  #extras .service-row > label {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: clamp(11px, 3.2vw, 14px);
+    line-height: 1.25;
+  }
+
+  #calc .service-row .service-price,
+  #extras .service-row .service-price {
+    min-width: 0;
+    white-space: nowrap;
+    font-size: clamp(10px, 2.9vw, 13px);
+  }
+
+  #calc .service-row .quantity-control,
+  #extras .service-row .quantity-control {
+    grid-column: auto;
+    grid-row: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: clamp(2px, 1vw, 5px);
+    min-width: 0;
+    white-space: nowrap;
+  }
+
+  #calc .service-row .quantity-control button,
+  #extras .service-row .quantity-control button {
+    flex: 0 0 clamp(30px, 8.5vw, 36px);
+    width: clamp(30px, 8.5vw, 36px);
+    min-width: clamp(30px, 8.5vw, 36px);
+    height: clamp(32px, 9vw, 38px);
+    min-height: clamp(32px, 9vw, 38px);
+    padding: 0;
+    font-size: 19px;
+  }
+
+  #calc .service-row .quantity-control output,
+  #extras .service-row .quantity-control output {
+    flex: 0 0 18px;
+    min-width: 18px;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  #calc .service-row .service-hint {
+    grid-column: 1 / -1;
+  }
+}
 </style>
 </head>
 <body>
@@ -1456,11 +1831,7 @@ $('saveBusinessName').addEventListener('click', function () {
 
 const savedBusinessName = localStorage.getItem('tireCalcBusinessName');
 
-applyBusinessName(
-  !savedBusinessName || savedBusinessName === 'Вулкашка 61'
-    ? DEFAULT_BUSINESS_NAME
-    : savedBusinessName
-);
+applyBusinessName(savedBusinessName || DEFAULT_BUSINESS_NAME);
 
 function categoryRimsFor(vehicle) {
   if (vehicle === 'Микроавтобус') return ['15-16'];
