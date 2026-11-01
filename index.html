@@ -1887,15 +1887,12 @@ button {
     <input type="text" id="ownerEmail" autocomplete="username">
   </div>
 
-  <div class="field" style="margin-top:8px">
+    <div class="field" id="ownerPasswordField">
     <label>Пароль владельца Supabase Auth</label>
     <input type="password" id="ownerPassword" autocomplete="current-password">
   </div>
 
-  <div class="row" style="margin-top:8px">
-    <button class="secondary" id="ownerLogin" style="flex:1">Войти владельцем</button>
-    <button class="secondary" id="ownerLogout" style="flex:1">Выйти</button>
-  </div>
+  <button class="secondary" id="ownerLogin" style="width:100%; margin-top:8px">Войти владельцем</button>
 
   <p id="ownerAuthStatus" class="muted" aria-live="polite"></p>
 </div>
@@ -3041,9 +3038,11 @@ calculate();
 if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')) addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 (()=>{
  const $c=id=>document.getElementById(id); let sb=null, owner=false, busy=false;
-  function syncOwnerAccess(){
-  window.__tireCalcIsOwner=owner;
-  if(typeof updatePriceAccess==='function') updatePriceAccess();
+    function syncOwnerAccess(){
+   window.__tireCalcIsOwner=owner;
+   $c('ownerPasswordField').style.display=owner?'none':'';
+   $c('ownerLogin').textContent=owner?'Выйти':'Войти владельцем';
+   if(typeof updatePriceAccess==='function') updatePriceAccess();
   }
  const status=(s)=>{const el=$c('cloudStatus');if(el)el.textContent=s};
  const statusEl=$c('cloudStatus'); statusEl.style.cursor='default';
@@ -3157,8 +3156,37 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
  $c('cloudUrl').value=localStorage.getItem('tireCloudUrl')||'https://lqqfgzioboqeeiuhijyi.supabase.co';$c('cloudKey').value=localStorage.getItem('tireCloudKey')||'sb_publishable_QcMaau9Phz4pQYjhF39N1w_bW6XlC3v';
  $c('cloudConnect').addEventListener('click',async()=>{try{makeClient();const {error}=await sb.from('shared_price').select('id').limit(1);if(error)throw error;status('Подключение успешно. Загружаю общий прайс…');await fetchPrice();}catch(e){status('Ошибка подключения: '+(e.message||e)+' · Выполни SQL из архива в Supabase.');}});
  $c('cloudRefresh').addEventListener('click',fetchPrice);
-   $c('ownerLogin').addEventListener('click',async()=>{try{if(!sb)makeClient();const {data:res,error}=await sb.auth.signInWithPassword({email:$c('ownerEmail').value.trim(),password:$c('ownerPassword').value});if(error)throw error;owner=true;syncOwnerAccess();$c('ownerPassword').value='';$c('ownerAuthStatus').textContent='Вход выполнен. Теперь можно менять цены и публиковать их для всех.';$c('ownerAuthStatus').style.color='green';}catch(e){$c('ownerAuthStatus').textContent='Вход не выполнен: '+(e.message||e);$c('ownerAuthStatus').style.color='#c0392b';}});
-  $c('ownerLogout').addEventListener('click',async()=>{try{if(sb)await sb.auth.signOut();owner=false;syncOwnerAccess();$c('ownerAuthStatus').textContent='Вы вышли из режима владельца.';$c('ownerAuthStatus').style.color='';}catch(e){$c('ownerAuthStatus').textContent=e.message||String(e);$c('ownerAuthStatus').style.color='#c0392b';}});
+     $c('ownerLogin').addEventListener('click',async()=>{
+   if(owner){
+    try{
+     if(sb) await sb.auth.signOut();
+     owner=false;
+     syncOwnerAccess();
+     $c('ownerAuthStatus').textContent='Вы вышли из режима владельца.';
+     $c('ownerAuthStatus').style.color='';
+    }catch(e){
+     $c('ownerAuthStatus').textContent=e.message||String(e);
+     $c('ownerAuthStatus').style.color='#c0392b';
+    }
+   }else{
+    try{
+     if(!sb)makeClient();
+     const {data:res,error}=await sb.auth.signInWithPassword({
+      email:$c('ownerEmail').value.trim(),
+      password:$c('ownerPassword').value
+     });
+     if(error)throw error;
+     owner=true;
+     syncOwnerAccess();
+     $c('ownerPassword').value='';
+     $c('ownerAuthStatus').textContent='Вход выполнен. Теперь можно менять цены и публиковать их для всех.';
+     $c('ownerAuthStatus').style.color='green';
+    }catch(e){
+     $c('ownerAuthStatus').textContent='Вход не выполнен: '+(e.message||e);
+     $c('ownerAuthStatus').style.color='#c0392b';
+    }
+   }
+  });
  $c('cloudPublish').addEventListener('click',publish);
  // If a project was configured previously, load the shared price on start. Local price remains available offline.
   // При запуске загружаем общий прайс и восстанавливаем сессию владельца.
