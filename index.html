@@ -784,12 +784,13 @@ margin-top: 14px;
   transition: transform .22s ease;
 }
 
-.module-switch[aria-checked="true"] {
+#settings button.module-switch[aria-checked="true"] {
   background: #e53935;
+  background-color: #e53935;
   border-color: #e53935;
 }
 
-.module-switch[aria-checked="true"]::after {
+#settings button.module-switch[aria-checked="true"]::after {
   transform: translateX(24px);
 }
 
@@ -1615,6 +1616,10 @@ button {
 <main>
 <div class="tabs"><button class="active" data-tab="calc">Калькулятор</button><button data-tab="prices">Прайс</button><button data-tab="settings">Настройки</button></div>
 <section id="calc">
+  <div class="card hidden" id="paintingCalculatorModule">
+  <h2>🎨 Покраска дисков</h2>
+  <p class="muted">Раздел покраски дисков будет добавлен на следующем этапе.</p>
+  </div>
 <div class="card">
 <h2>🚗 Параметры автомобиля и колеса</h2>
 <div class="grid">
@@ -1627,10 +1632,6 @@ button {
 </div>
 <div class="muted" style="margin-top:10px">RunFlat и низкий профиль (&lt;45) объединены в одну категорию специальных шин и используют общие расценки.</div>
 </div>
-  <div class="card hidden" id="paintingCalculatorModule">
-  <h2>🎨 Покраска дисков</h2>
-  <p class="muted">Раздел покраски дисков будет добавлен на следующем этапе.</p>
-  </div>
 <div class="card">
 <div class="section-heading">
   <h2><span aria-hidden="true">🔧</span> Услуги</h2>
@@ -1786,16 +1787,16 @@ button {
 <div class="total"><small>ИТОГО К ОЗВУЧИВАНИЮ</small><div class="amount" id="total">0 ₽</div><div class="summary" id="summary">Выберите работы и параметры автомобиля.</div><button class="primary" id="share">Отправить расчёт</button><button class="secondary" id="saveCalculation" style="width:100%;margin-top:8px">Сохранить расчёт в файл (.txt)</button><button class="secondary" id="copy" style="width:100%;margin-top:8px">Скопировать расчёт</button></div>
 </section>
 <section id="prices" class="hidden">
+  <div class="card hidden" id="paintingPriceModule">
+  <h2 class="painting-price-title">Покраска дисков</h2>
+  <p class="muted">Настройки цен на покраску дисков будут добавлены на следующем этапе.</p>
+  </div>
 <div class="card"><h2>Прайс по категориям</h2>
 <div class="field"><label>Категория для редактирования</label><select id="priceVehicle"></select></div>
 <div id="priceEditor"></div>
 </div>
 <div class="card"><h2>Правка дисков</h2><div id="surchargeEditor"></div></div>
 <div class="card"><h2>Дополнительные услуги</h2><button class="secondary" id="addCatalogExtra">＋ Добавить услугу в список</button><div id="catalogExtras"></div></div>
-    <div class="card hidden" id="paintingPriceModule">
-  <h2 class="painting-price-title">Покраска дисков</h2>
-  <p class="muted">Настройки цен на покраску дисков будут добавлены на следующем этапе.</p>
-  </div>
 <div class="card" id="publishPriceCard">
 <h2>Публикация общего прайса</h2>
 <p class="muted">После изменения цен владелец может опубликовать их для всех сотрудников.</p>
