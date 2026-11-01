@@ -2941,7 +2941,12 @@ calculate();
 };
   
 $('export').onclick=()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='прайс-шиномонтаж.json';a.click();URL.revokeObjectURL(a.href)};
-$('importFile').onchange=async e=>{try{let obj=JSON.parse(await e.target.files[0].text());if(!obj.prices||!obj.extras)throw Error();data=obj;save();if(!data.rimRepair)data.rimRepair=fresh().rimRepair;renderPriceEditor();renderSurcharges();renderCatalog();
+$('importFile').onchange=async e=>{try{let obj=JSON.parse(await e.target.files[0].text());if(!obj.prices||!obj.extras)throw Error();data=obj;
+if (!Array.isArray(data.paintingServices)) {
+  data.paintingServices = [];
+}
+save();
+if (!data.rimRepair) data.rimRepair = fresh().rimRepair;renderPriceEditor();renderSurcharges();renderCatalog();
 renderPaintingCatalog();
 renderPaintingServices();
 renderExtras();
