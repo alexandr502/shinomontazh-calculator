@@ -746,7 +746,7 @@ margin-top: 14px;
   transform: scale(.96);
   box-shadow: none;
 }
-  .module-toggle-row {
+.module-toggle-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2712,7 +2712,7 @@ function renderOptionalModules() {
 
   $('paintingCalculatorModule').classList.toggle('hidden', !enabled);
   $('paintingPriceModule').classList.toggle('hidden', !enabled);
-  $('modulePaintingToggle').checked = enabled;
+  $('modulePaintingToggle').setAttribute('aria-checked', String(enabled));
 }
 
 function saveOptionalModules() {
@@ -2722,8 +2722,8 @@ function saveOptionalModules() {
   );
 }
 
-$('modulePaintingToggle').addEventListener('change', event => {
-  optionalModules.painting = event.target.checked;
+$('modulePaintingToggle').addEventListener('click', () => {
+  optionalModules.painting = !optionalModules.painting;
   saveOptionalModules();
   renderOptionalModules();
 });
