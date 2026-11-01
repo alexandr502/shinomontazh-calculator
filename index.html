@@ -2610,13 +2610,15 @@ function renderCatalog(){let box=$('catalogExtras');box.innerHTML='';data.extras
 
     row.innerHTML = `
       <input type="text" data-painting-name="${i}"
-        value="${String(service.name || '').replace(/"/g, '&quot;')}"
         placeholder="Название услуги">
-      <input type="number" min="0" data-painting-price="${i}"
-        value="${Number(service.price) || 0}">
+      <input type="number" min="0" data-painting-price="${i}">
       <button type="button" class="secondary"
         data-painting-delete="${i}" aria-label="Удалить">×</button>
     `;
+
+    row.querySelector('[data-painting-name]').value = service.name || '';
+    row.querySelector('[data-painting-price]').value =
+      Number(service.price) || 0;
 
     box.appendChild(row);
   });
@@ -2626,6 +2628,8 @@ function renderCatalog(){let box=$('catalogExtras');box.innerHTML='';data.extras
       data.paintingServices[Number(input.dataset.paintingName)].name =
         input.value.trim() || 'Услуга покраски';
       save();
+      renderPaintingServices();
+      calculate();
     });
   });
 
@@ -2634,19 +2638,25 @@ function renderCatalog(){let box=$('catalogExtras');box.innerHTML='';data.extras
       data.paintingServices[Number(input.dataset.paintingPrice)].price =
         Math.max(0, Number(input.value) || 0);
       save();
+      renderPaintingServices();
+      calculate();
     });
   });
 
   box.querySelectorAll('[data-painting-delete]').forEach(button => {
     button.addEventListener('click', () => {
-      data.paintingServices.splice(Number(button.dataset.paintingDelete), 1);
+      const index = Number(button.dataset.paintingDelete);
+      data.paintingServices.splice(index, 1);
+      paintingQuantities.splice(index, 1);
       save();
       renderPaintingCatalog();
+      renderPaintingServices();
+      calculate();
     });
   });
 
   updatePriceAccess();
-  }
+}
 $('priceVehicle').innerHTML=vehicles.map(v=>`<option>${v}</option>`).join('');
 $('priceVehicle').addEventListener('change',renderPriceEditor);
 
