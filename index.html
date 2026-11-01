@@ -2503,6 +2503,57 @@ function renderSurcharges() {
 }
 
 function renderCatalog(){let box=$('catalogExtras');box.innerHTML='';data.extras.forEach((e,i)=>{let row=document.createElement('div');row.className='price-row';row.innerHTML=`<input type="text" data-name="${i}" value="${e.name}"><input type="number" min="0" data-extra-price="${i}" value="${e.price}"><button class="secondary" data-del="${i}" aria-label="Удалить">×</button>`;box.appendChild(row)});box.querySelectorAll('[data-name]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.name].name=i.value||'Услуга';save();renderExtras()}));box.querySelectorAll('[data-extra-price]').forEach(i=>i.addEventListener('change',()=>{data.extras[+i.dataset.extraPrice].price=+i.value||0;save();renderExtras()}));box.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{data.extras.splice(+b.dataset.del,1);save();renderCatalog();renderExtras()}));updatePriceAccess()}
+  function renderPaintingCatalog() {
+  const box = $('paintingPriceEditor');
+  box.innerHTML = '';
+
+  if (!Array.isArray(data.paintingServices)) {
+    data.paintingServices = [];
+  }
+
+  data.paintingServices.forEach((service, i) => {
+    const row = document.createElement('div');
+    row.className = 'price-row';
+
+    row.innerHTML = `
+      <input type="text" data-painting-name="${i}"
+        value="${String(service.name || '').replace(/"/g, '&quot;')}"
+        placeholder="Название услуги">
+      <input type="number" min="0" data-painting-price="${i}"
+        value="${Number(service.price) || 0}">
+      <button type="button" class="secondary"
+        data-painting-delete="${i}" aria-label="Удалить">×</button>
+    `;
+
+    box.appendChild(row);
+  });
+
+  box.querySelectorAll('[data-painting-name]').forEach(input => {
+    input.addEventListener('change', () => {
+      data.paintingServices[Number(input.dataset.paintingName)].name =
+        input.value.trim() || 'Услуга покраски';
+      save();
+    });
+  });
+
+  box.querySelectorAll('[data-painting-price]').forEach(input => {
+    input.addEventListener('change', () => {
+      data.paintingServices[Number(input.dataset.paintingPrice)].price =
+        Math.max(0, Number(input.value) || 0);
+      save();
+    });
+  });
+
+  box.querySelectorAll('[data-painting-delete]').forEach(button => {
+    button.addEventListener('click', () => {
+      data.paintingServices.splice(Number(button.dataset.paintingDelete), 1);
+      save();
+      renderPaintingCatalog();
+    });
+  });
+
+  updatePriceAccess();
+  }
 $('priceVehicle').innerHTML=vehicles.map(v=>`<option>${v}</option>`).join('');
 $('priceVehicle').addEventListener('change',renderPriceEditor);
 
