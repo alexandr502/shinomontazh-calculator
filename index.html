@@ -2377,16 +2377,21 @@ function getCalculationReport() {
   const summary = $('summary').textContent.trim();
   const total = $('total').textContent.trim();
 
-  return [
+    const hasTireWork = summary.includes('ШИНОМОНТАЖНЫЕ РАБОТЫ');
+  const hasPainting = summary.includes('ПОКРАСКА ДИСКОВ');
+
+  const report = [
     businessName,
     'РАСЧЁТ РАБОТ',
     '',
-    summary,
-    '',
-    `ИТОГО: ${total}`,
-    '',
-    'Стоимость предварительная.'
-  ].join('\n');
+    summary
+  ];
+
+  if (hasTireWork && !hasPainting) {
+    report.push('', 'Стоимость предварительная.');
+  }
+
+  return report.join('\n');
 }
 
 // Копирование отчёта
