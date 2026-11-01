@@ -2029,6 +2029,57 @@ function renderExtras() {
     });
   });
 }
+  let paintingQuantities = [];
+
+function renderPaintingServices() {
+  const box = $('paintingServices');
+  box.innerHTML = '';
+
+  if (!Array.isArray(data.paintingServices)) {
+    data.paintingServices = [];
+  }
+
+  data.paintingServices.forEach((service, i) => {
+    const quantity = Math.max(0, Number(paintingQuantities[i]) || 0);
+    const row = document.createElement('div');
+
+    row.className = 'service-row';
+    row.classList.toggle('is-active', quantity > 0);
+
+    row.innerHTML = `
+      <label></label>
+      <span class="service-price">${money(service.price)}/шт.</span>
+      <div class="quantity-control">
+        <button type="button" data-paint-minus="${i}"
+          aria-label="Уменьшить количество">−</button>
+        <output>${quantity}</output>
+        <button type="button" data-paint-plus="${i}"
+          aria-label="Увеличить количество">+</button>
+      </div>
+    `;
+
+    row.querySelector('label').textContent = service.name;
+    box.appendChild(row);
+  });
+
+  box.querySelectorAll('[data-paint-minus]').forEach(button => {
+    button.addEventListener('click', () => {
+      const i = Number(button.dataset.paintMinus);
+      paintingQuantities[i] = Math.max(0, (Number(paintingQuantities[i]) || 0) - 1);
+      renderPaintingServices();
+      calculate();
+    });
+  });
+
+  box.querySelectorAll('[data-paint-plus]').forEach(button => {
+    button.addEventListener('click', () => {
+      const i = Number(button.dataset.paintPlus);
+      paintingQuantities[i] = Math.min(99, (Number(paintingQuantities[i]) || 0) + 1);
+      renderPaintingServices();
+      calculate();
+    });
+  });
+}
   
 function updateServiceRows() {
   const packageSelected = $('basic').checked;
