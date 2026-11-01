@@ -2902,13 +2902,21 @@ $('addCatalogExtra').onclick = () => {
   $('addPaintingService').onclick = () => {
   if (window.__tireCalcIsOwner !== true) return;
 
+  if (!Array.isArray(data.paintingServices)) {
+    data.paintingServices = [];
+  }
+
   data.paintingServices.push({
     name: 'Новая услуга покраски',
     price: 0
   });
 
+  paintingQuantities.push(0);
+
   save();
   renderPaintingCatalog();
+  renderPaintingServices();
+  calculate();
 };
 
 $('resetServices').onclick = () => {
