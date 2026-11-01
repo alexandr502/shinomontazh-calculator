@@ -415,7 +415,9 @@ margin-top: 14px;
 }
 
 /* Заголовки блоков вкладки Прайс */
-#prices > .card:nth-child(-n+3) > h2 {
+#prices > .price-categories-card > h2,
+#prices > .price-rim-repair-card > h2,
+#prices > .price-extras-card > h2 {
   width: 100%;
   text-align: center;
   font-size: 21px;
@@ -457,23 +459,23 @@ margin-top: 14px;
   box-shadow: none;
 }
   /* Параметры автомобиля и колеса */
-#calc .card:first-child .field label {
+#calc .car-parameters-card .field label {
   color: #d5d8de;
   font-size: 14px;
   font-weight: 600;
 }
- #calc .card:first-child h2 {
+ #calc .car-parameters-card h2 {
   margin-bottom: 18px;
 } 
 
-#calc .card:first-child select {
+#calc .car-parameters-card select {
   width: 100%;
   border-radius: 10px;
   padding: 10px 12px;
   font-size: 15px;
 }
 
-#calc .card:first-child .muted {
+#calc .car-parameters-card .muted {
   line-height: 1.45;
 }
 
@@ -1052,8 +1054,8 @@ header {
 @media (max-width: 420px) {
   /* Услуги */
   .service-list .service-row,
-  #calc > .card:nth-child(3) .service-row,
-  #calc > .card:nth-child(4) .service-row,
+  #calc > .rim-repair-card .service-row,
+  #calc > .argon-card .service-row,
   #extras .service-row {
     grid-template-columns: minmax(0, 1fr) auto auto;
     gap: 6px;
@@ -1062,8 +1064,8 @@ header {
   }
 
   .service-list .service-row label,
-  #calc > .card:nth-child(3) .service-row label,
-  #calc > .card:nth-child(4) .service-row label,
+  #calc > .rim-repair-card .service-row label,
+  #calc > .argon-card .service-row label,
   #extras .service-row label {
     grid-column: 1;
     grid-row: 1;
@@ -1074,8 +1076,8 @@ header {
   }
 
   .service-list .service-row .service-price,
-  #calc > .card:nth-child(3) .service-row .service-price,
-  #calc > .card:nth-child(4) .service-row .service-price,
+  #calc > .rim-repair-card .service-row .service-price,
+  #calc > .argon-card .service-row .service-price,
   #extras .service-row .service-price {
     grid-column: 2;
     grid-row: 1;
@@ -1085,8 +1087,8 @@ header {
   }
 
   .service-list .service-row .quantity-control,
-  #calc > .card:nth-child(3) .service-row .quantity-control,
-  #calc > .card:nth-child(4) .service-row .quantity-control,
+  #calc > .rim-repair-card .service-row .quantity-control,
+  #calc > .argon-card .service-row .quantity-control,
   #extras .service-row .quantity-control {
     grid-column: 3;
     grid-row: 1;
@@ -1097,8 +1099,8 @@ header {
   }
 
   .service-list .quantity-control button,
-  #calc > .card:nth-child(3) .quantity-control button,
-  #calc > .card:nth-child(4) .quantity-control button,
+  #calc > .rim-repair-card .quantity-control button,
+  #calc > .argon-card .quantity-control button,
   #extras .quantity-control button {
     width: 36px;
     min-width: 36px;
@@ -1107,8 +1109,8 @@ header {
   }
 
   .service-list .quantity-control output,
-  #calc > .card:nth-child(3) .quantity-control output,
-  #calc > .card:nth-child(4) .quantity-control output,
+  #calc > .rim-repair-card .quantity-control output,
+    #calc > .argon-card .quantity-control output,
   #extras .quantity-control output {
     min-width: 18px;
     font-size: 14px;
@@ -1366,8 +1368,8 @@ button {
   /* Услуги и дополнительные услуги:
      название, цена и количество — в одной строке */
   .service-list .service-row,
-  #calc > .card:nth-child(3) .service-row,
-  #calc > .card:nth-child(4) .service-row,
+  #calc > .rim-repair-card .service-row,
+  #calc > .argon-card .service-row,
   #extras .service-row {
     grid-template-columns: minmax(0, 1fr) max-content max-content;
     gap: 4px;
@@ -1643,7 +1645,7 @@ button {
     </div>
     <div id="paintingServices"></div>
   </div>
-<div class="card">
+<div class="card car-parameters-card">
 <h2>🚗 Параметры автомобиля и колеса</h2>
 <div class="grid">
 <div class="field"><label>Категория автомобиля</label><select id="vehicle"></select></div>
@@ -1655,7 +1657,7 @@ button {
 </div>
 <div class="muted" style="margin-top:10px">RunFlat и низкий профиль (&lt;45) объединены в одну категорию специальных шин и используют общие расценки.</div>
 </div>
-<div class="card">
+<div class="card services-card">
 <div class="section-heading">
   <h2><span aria-hidden="true">🔧</span> Услуги</h2>
   <button type="button" class="secondary section-reset" id="resetServices" title="Очистить выбор услуг" aria-label="Очистить выбор услуг">↻</button>
@@ -1725,7 +1727,7 @@ button {
   </div>
 </div>
 </div>
-<div class="card">
+<div class="card rim-repair-card">
   <div class="section-heading">
     <h2><span aria-hidden="true">🛞</span> Правка дисков</h2>
     <button type="button" class="secondary section-reset" id="resetRepairs"
@@ -1777,7 +1779,7 @@ button {
   </div>
  </div>
 
-<div class="card">
+<div class="card argon-card">
   <div class="section-heading">
     <h2><span aria-hidden="true">🔥</span> Аргоновая сварка</h2>
   </div>
@@ -1799,7 +1801,7 @@ button {
   </div>
 
 </div>
-<div class="card">
+<div class="card extras-card">
 <div class="section-heading">
   <h2><span aria-hidden="true">🔧➕</span> Дополнительные услуги</h2>
   <button type="button" class="secondary section-reset" id="resetExtras"
@@ -1818,12 +1820,12 @@ button {
     </div>
     <div id="paintingPriceEditor"></div>
   </div>
-<div class="card"><h2>Прайс по категориям</h2>
+<div class="card price-categories-card"><h2>Прайс по категориям</h2>
 <div class="field"><label>Категория для редактирования</label><select id="priceVehicle"></select></div>
 <div id="priceEditor"></div>
 </div>
-<div class="card"><h2>Правка дисков</h2><div id="surchargeEditor"></div></div>
-<div class="card"><h2>Дополнительные услуги</h2><button class="secondary" id="addCatalogExtra">＋ Добавить услугу в список</button><div id="catalogExtras"></div></div>
+<div class="card price-rim-repair-card"><h2>Правка дисков</h2><div id="surchargeEditor"></div></div>
+<div class="card price-extras-card"><h2>Дополнительные услуги</h2><button class="secondary" id="addCatalogExtra">＋ Добавить услугу в список</button><div id="catalogExtras"></div></div>
 <div class="card" id="publishPriceCard">
 <h2>Публикация общего прайса</h2>
 <p class="muted">После изменения цен владелец может опубликовать их для всех сотрудников.</p>
