@@ -1616,9 +1616,13 @@ button {
 <main>
 <div class="tabs"><button class="active" data-tab="calc">Калькулятор</button><button data-tab="prices">Прайс</button><button data-tab="settings">Настройки</button></div>
 <section id="calc">
-  <div class="card hidden" id="paintingCalculatorModule">
-  <h2>🎨 Покраска дисков</h2>
-  <p class="muted">Раздел покраски дисков будет добавлен на следующем этапе.</p>
+    <div class="card hidden" id="paintingCalculatorModule">
+    <div class="section-heading">
+      <h2>🎨 Покраска дисков</h2>
+      <button type="button" class="secondary section-reset" id="resetPainting"
+        title="Очистить выбор покраски" aria-label="Очистить выбор покраски">↻</button>
+    </div>
+    <div id="paintingServices"></div>
   </div>
 <div class="card">
 <h2>🚗 Параметры автомобиля и колеса</h2>
@@ -1787,9 +1791,13 @@ button {
 <div class="total"><small>ИТОГО К ОЗВУЧИВАНИЮ</small><div class="amount" id="total">0 ₽</div><div class="summary" id="summary">Выберите работы и параметры автомобиля.</div><button class="primary" id="share">Отправить расчёт</button><button class="secondary" id="saveCalculation" style="width:100%;margin-top:8px">Сохранить расчёт в файл (.txt)</button><button class="secondary" id="copy" style="width:100%;margin-top:8px">Скопировать расчёт</button></div>
 </section>
 <section id="prices" class="hidden">
-  <div class="card hidden" id="paintingPriceModule">
-  <h2 class="painting-price-title">Покраска дисков</h2>
-  <p class="muted">Настройки цен на покраску дисков будут добавлены на следующем этапе.</p>
+    <div class="card hidden" id="paintingPriceModule">
+    <div class="section-heading">
+      <h2 class="painting-price-title">Покраска дисков</h2>
+      <button type="button" class="secondary" id="addPaintingService"
+        aria-label="Добавить услугу покраски" title="Добавить услугу">＋</button>
+    </div>
+    <div id="paintingPriceEditor"></div>
   </div>
 <div class="card"><h2>Прайс по категориям</h2>
 <div class="field"><label>Категория для редактирования</label><select id="priceVehicle"></select></div>
