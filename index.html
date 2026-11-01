@@ -1709,6 +1709,10 @@ button {
 </div>
 <div id="extras"></div>
 </div>
+  <div class="card hidden" id="paintingCalculatorModule">
+  <h2>🎨 Покраска дисков</h2>
+  <p class="muted">Раздел покраски дисков будет добавлен на следующем этапе.</p>
+  </div>
 <div class="total"><small>ИТОГО К ОЗВУЧИВАНИЮ</small><div class="amount" id="total">0 ₽</div><div class="summary" id="summary">Выберите работы и параметры автомобиля.</div><button class="primary" id="share">Отправить расчёт</button><button class="secondary" id="saveCalculation" style="width:100%;margin-top:8px">Сохранить расчёт в файл (.txt)</button><button class="secondary" id="copy" style="width:100%;margin-top:8px">Скопировать расчёт</button></div>
 </section>
 <section id="prices" class="hidden">
@@ -1718,6 +1722,10 @@ button {
 </div>
 <div class="card"><h2>Правка дисков</h2><div id="surchargeEditor"></div></div>
 <div class="card"><h2>Дополнительные услуги</h2><button class="secondary" id="addCatalogExtra">＋ Добавить услугу в список</button><div id="catalogExtras"></div></div>
+  <div class="card hidden" id="paintingPriceModule">
+  <h2>🎨 Покраска дисков</h2>
+  <p class="muted">Настройки цен на покраску дисков будут добавлены на следующем этапе.</p>
+  </div>
 <div class="card" id="publishPriceCard">
 <h2>Публикация общего прайса</h2>
 <p class="muted">После изменения цен владелец может опубликовать их для всех сотрудников.</p>
@@ -1725,7 +1733,15 @@ button {
 <p id="publishStatus" class="muted" aria-live="polite"></p>
 </div>
 </section><section id="settings" class="hidden">
-
+<div class="card" id="optionalModulesCard">
+  <h2>Дополнительные модули</h2>
+  <label class="check">
+    <input type="checkbox" id="modulePaintingToggle">
+    <span>Покраска дисков</span>
+  </label>
+  <p class="muted">Включение модуля отображает раздел покраски на этом устройстве.</p>
+</div>
+  
 <div class="card" id="ownerLoginCard">
   <h2>Вход владельца</h2>
 
