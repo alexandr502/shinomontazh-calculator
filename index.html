@@ -423,14 +423,29 @@ margin-top: 14px;
   font-weight: 800;
   margin: 0 0 12px;
 }
-  #paintingPriceModule > .painting-price-title {
+  /* Заголовок раздела «Покраска дисков» во вкладке «Прайс» */
+#prices #paintingPriceModule .section-heading {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  margin-bottom: 12px;
+}
+
+#prices #paintingPriceModule .painting-price-title {
   width: 100%;
   text-align: center;
   font-size: 21px;
   line-height: 1.3;
   font-weight: 800;
-  margin: 0 0 12px;
-  }
+  margin: 0;
+}
+
+#prices #paintingPriceModule .section-heading button {
+  position: absolute;
+  right: 0;
+}
   /* Эффект нажатия кнопок калькулятора */
 #calc button {
   transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
