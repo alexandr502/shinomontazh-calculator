@@ -1912,25 +1912,15 @@ button {
   <h2>Общий прайс — синхронизация</h2>
   <p id="cloudStatus" class="muted" aria-live="polite">Подключаем общий прайс…</p>
 
-  <div id="ownerTools">
-    <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
-    <h3 style="font-size:15px">Настройки владельца</h3>
-
-    <div class="field">
-      <label>Адрес Supabase проекта</label>
-      <input type="text" id="cloudUrl" value="https://lqqfgzioboqeeiuhijyi.supabase.co" placeholder="https://xxxxxxxx.supabase.co" autocomplete="url">
-    </div>
-
-    <div class="field" style="margin-top:8px">
-      <label>Публичный anon key проекта</label>
-      <input type="text" id="cloudKey" value="sb_publishable_QcMaau9Phz4pQYjhF39N1w_bW6XlC3v" placeholder="sb_publishable_…" autocomplete="off">
-    </div>
-
-    <div class="row" style="margin-top:8px">
-      <button class="secondary" id="cloudConnect" style="flex:1">Подключить общий прайс</button>
-      <button class="secondary" id="cloudRefresh" style="flex:1">Загрузить общий прайс</button>
-    </div>
+    <div id="ownerTools" style="display:none">
+    <input type="text" id="cloudUrl" value="https://lqqfgzioboqeeiuhijyi.supabase.co">
+    <input type="text" id="cloudKey" value="sb_publishable_QcMaau9Phz4pQYjhF39N1w_bW6XlC3v">
+    <button id="cloudConnect" type="button">Подключить общий прайс</button>
   </div>
+
+  <button class="secondary" id="cloudRefresh" style="width:100%;margin-top:10px">
+    Обновить общий прайс
+  </button>
 </div>
 
 </section>
