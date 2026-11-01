@@ -2265,13 +2265,52 @@ addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').
   if (output) output.textContent = quantity;
 });
 
-  $('total').textContent = money(total);
-  $('summary').textContent =
-    `${vehicle} · ${labels[rim]}${special ? ' · RunFlat / низкий профиль (<45)' : ''}\n` +
-    (lines.length
-      ? lines.join('\n')
-      : 'Выберите работы или заполните цены в настройках.');
-}
+    const tireTotal = total;
+  const paintingLines = [];
+  let paintingTotal = 0;
+
+  data.paintingServices.forEach((service, i) => {
+    const quantity = Math.max(0, Number(paintingQuantities[i]) || 0);
+    const price = Math.max(0, Number(service.price) || 0);
+
+    if (quantity > 0 && price > 0) {
+      paintingTotal += price * quantity;
+      paintingLines.push(
+        `${service.name} — ${money(price)} × ${quantity}`
+      );
+    }
+  });
+
+  const grandTotal = tireTotal + paintingTotal;
+  $('total').textContent = money(grandTotal);
+
+  const vehicleInfo =
+    `${vehicle} · ${labels[rim]}${special ? ' · RunFlat / низкий профиль (<45)' : ''}`;
+
+  let summary = '';
+
+  if (tireTotal > 0 && paintingTotal > 0) {
+    summary =
+      `${vehicleInfo}\n` +
+      `Шиномонтаж и дополнительные работы:\n${lines.join('\n')}\n` +
+      `Итого за шиномонтаж и дополнительные работы: ${money(tireTotal)}\n\n` +
+      `Покраска дисков:\n${paintingLines.join('\n')}\n` +
+      `Итого за покраску: ${money(paintingTotal)}`;
+  } else if (paintingTotal > 0) {
+    summary =
+      `Покраска дисков:\n${paintingLines.join('\n')}`;
+  } else if (tireTotal > 0) {
+    summary =
+      `${vehicleInfo}\n${lines.join('\n')}`;
+  } else {
+    summary = 'Выберите работы или заполните цены в настройках.';
+  }
+
+  if (tireTotal > 0 && paintingTotal > 0) {
+    summary += `\n\nОБЩАЯ СУММА: ${money(grandTotal)}`;
+  }
+
+  $('summary').textContent = summary;
   
 // Формирование текста отчёта
 function getCalculationReport() {
