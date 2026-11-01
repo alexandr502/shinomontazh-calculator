@@ -1128,16 +1128,19 @@ header {
   min-width: 36px;
   height: 40px;
 }
-  #calc .section-heading .section-reset {
-  width: 36px;
-  min-width: 36px;
-  height: 40px;
-  min-height: 40px;
-  flex: 0 0 36px;
-  padding: 0;
-  font-size: 20px;
-  line-height: 1;
-}
+    #calc .section-heading .section-reset {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+    min-height: 36px;
+    flex: 0 0 36px;
+    padding: 0;
+    font-size: 20px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
   .service-list .service-row:has(.basic-toggle) .service-hint {
     grid-column: 1 / -1;
@@ -1153,8 +1156,13 @@ header {
     min-width: 0;
   }
 
-  #calc .section-heading h2 {
+    #calc .extras-card .section-heading h2 {
     min-width: 0;
+    padding: 0 44px;
+    box-sizing: border-box;
+    font-size: 16px;
+    line-height: 1.2;
+    white-space: nowrap;
   }
 }
   /* Собственные выпадающие списки на мобильных устройствах */
@@ -1643,7 +1651,7 @@ button {
       <button type="button" class="secondary section-reset" id="resetPainting"
         title="Очистить выбор покраски" aria-label="Очистить выбор покраски">↻</button>
     </div>
-    <div id="paintingServices"></div>
+      <div id="paintingServices" style="margin-top:18px"></div>
   </div>
 <div class="card car-parameters-card">
 <h2>🚗 Параметры автомобиля и колеса</h2>
