@@ -2319,7 +2319,9 @@ $('copy').addEventListener('click', copyCalculationReport);
 
 function updatePriceAccess(){
   const isOwner=window.__tireCalcIsOwner===true;
-  document.querySelectorAll('#priceEditor input, #surchargeEditor input, #catalogExtras input, #catalogExtras button, #addCatalogExtra').forEach(el=>{
+  document.querySelectorAll(
+    '#priceEditor input, #surchargeEditor input, #catalogExtras input, #catalogExtras button, #addCatalogExtra, #paintingPriceEditor input, #paintingPriceEditor button, #addPaintingService'
+  ).forEach(el=>{
     el.disabled=!isOwner;
   });
   const publishCard=$('publishPriceCard');
@@ -2796,6 +2798,17 @@ $('addCatalogExtra').onclick = () => {
   renderCatalog();
   renderExtras();
 };
+  $('addPaintingService').onclick = () => {
+  if (window.__tireCalcIsOwner !== true) return;
+
+  data.paintingServices.push({
+    name: 'Новая услуга покраски',
+    price: 0
+  });
+
+  save();
+  renderPaintingCatalog();
+};
 
 $('resetServices').onclick = () => {
 $('basic').checked = false;
@@ -2850,11 +2863,15 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
         return;
       }
       data=row.payload;
+      if (!Array.isArray(data.paintingServices)) {
+  data.paintingServices = [];
+      }
       localStorage.setItem('tireCalcData',JSON.stringify(data));
       renderPriceEditor();
       renderCalculatorRims();
       renderSurcharges();
       renderCatalog();
+      renderPaintingCatalog();
       renderExtras();
       syncRepairPrices();
       calculate();
