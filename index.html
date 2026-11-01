@@ -2614,6 +2614,44 @@ document.querySelectorAll('.tabs button').forEach(button => {
 
 const savedTab = localStorage.getItem('tireCalcActiveTab') || 'calc';
 activateTab(savedTab, false);
+  // Дополнительные модули: настройки хранятся отдельно на каждом устройстве.
+const OPTIONAL_MODULES_KEY = 'tireCalcOptionalModules';
+
+function loadOptionalModules() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(OPTIONAL_MODULES_KEY)) || {};
+    return {
+      painting: saved.painting === true
+    };
+  } catch (error) {
+    return { painting: false };
+  }
+}
+
+const optionalModules = loadOptionalModules();
+
+function renderOptionalModules() {
+  const enabled = optionalModules.painting;
+
+  $('paintingCalculatorModule').classList.toggle('hidden', !enabled);
+  $('paintingPriceModule').classList.toggle('hidden', !enabled);
+  $('modulePaintingToggle').checked = enabled;
+}
+
+function saveOptionalModules() {
+  localStorage.setItem(
+    OPTIONAL_MODULES_KEY,
+    JSON.stringify(optionalModules)
+  );
+}
+
+$('modulePaintingToggle').addEventListener('change', event => {
+  optionalModules.painting = event.target.checked;
+  saveOptionalModules();
+  renderOptionalModules();
+});
+
+renderOptionalModules();
   
 $('addCatalogExtra').onclick = () => {
   data.extras.push({ name: 'Новая услуга', price: 0, quantity: 0 });
