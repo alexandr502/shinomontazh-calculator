@@ -3627,7 +3627,7 @@ renderPaintingPriceEditors();
 renderPaintingCatalog();
 renderPaintingServices();
 renderExtras();
-syncRepairPrices();calculate();alert('Настройки импортированы')}catch(err){alert('Не удалось прочитать файл настроек')}};
+syncRepairPrices();syncPaintingRepairPrices();calculate();alert('Настройки импортированы')}catch(err){alert('Не удалось прочитать файл настроек')}};
 $('defaults').onclick = () => {
   if (confirm('Восстановить исходные цены? Текущие настройки будут заменены.')) {
     data = fresh();
