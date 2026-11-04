@@ -2279,11 +2279,11 @@ $('paintingRim').addEventListener('change', calculate);
 $('paintingWheelAdjustment').addEventListener('input', calculate);
 $('paintingCaliperType').addEventListener('change', calculate);
 $('paintingCaliperAdjustment').addEventListener('input', calculate);
+$('paintingInscriptionEnabled').addEventListener('change', calculate);
+$('paintingInscriptionAmount').addEventListener('input', calculate);
   
 function updateServiceRows() {
   const packageSelected = $('basic').checked;
-$('paintingInscriptionEnabled').addEventListener('change', calculate);
-$('paintingInscriptionAmount').addEventListener('input', calculate);
 
   [
     'removeInstall',
