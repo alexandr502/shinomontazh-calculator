@@ -2739,6 +2739,102 @@ function renderCatalog(){let box=$('catalogExtras');box.innerHTML='';data.extras
 
   updatePriceAccess();
 }
+function renderPaintingPriceEditors() {
+  const sizes = [
+    ['R15', 'R15'],
+    ['R16-R17', 'R16–R17'],
+    ['R18', 'R18'],
+    ['R19', 'R19'],
+    ['R20', 'R20'],
+    ['R21', 'R21'],
+    ['R22', 'R22'],
+    ['R23', 'R23']
+  ];
+
+  const sections = [
+    ['basic', 'paintingBasicPriceEditor'],
+    ['cut', 'paintingCutPriceEditor'],
+    ['lip', 'paintingLipPriceEditor']
+  ];
+
+  sections.forEach(([type, id]) => {
+    const box = $(id);
+    box.innerHTML = '';
+
+    sizes.forEach(([key, label]) => {
+      const row = document.createElement('div');
+      row.className = 'price-row';
+      row.innerHTML = `
+        <span>${label}</span>
+        <input type="number" min="0"
+          data-painting-price-type="${type}"
+          data-painting-price-key="${key}">
+      `;
+
+      row.querySelector('input').value =
+        Number(data.paintingPrices[type][key]) || 0;
+
+      box.appendChild(row);
+    });
+  });
+
+  const caliperNames = [
+    ['bracket', 'Скобные'],
+    ['aluminum', 'Алюминиевые'],
+    ['sixPiston', '6-ти поршневые'],
+    ['bracketDisassembled', 'Разобранные скобные'],
+    ['aluminumDisassembled', 'Разобранные алюминиевые'],
+    ['sixPistonDisassembled', 'Разобранные 6-ти поршневые']
+  ];
+
+  const caliperBox = $('paintingCaliperPriceEditor');
+  caliperBox.innerHTML = '';
+
+  caliperNames.forEach(([key, label]) => {
+    const row = document.createElement('div');
+    row.className = 'price-row';
+    row.innerHTML = `
+      <span>${label}</span>
+      <input type="number" min="0"
+        data-caliper-price="${key}">
+    `;
+
+    row.querySelector('input').value =
+      Number(data.paintingPrices.calipers[key]) || 0;
+
+    caliperBox.appendChild(row);
+  });
+
+  const inscriptionBox = $('paintingInscriptionPriceEditor');
+  inscriptionBox.innerHTML = `
+    <div class="price-row">
+      <span>Надпись на суппортах — от</span>
+      <input type="number" min="0" data-inscription-price>
+    </div>
+  `;
+
+  inscriptionBox.querySelector('input').value =
+    Number(data.paintingPrices.inscription) || 5000;
+
+  document.querySelectorAll(
+    '[data-painting-price-type], [data-caliper-price], [data-inscription-price]'
+  ).forEach(input => {
+    input.addEventListener('change', () => {
+      const type = input.dataset.paintingPriceType;
+      const key = input.dataset.paintingPriceKey;
+      const caliper = input.dataset.caliperPrice;
+      const value = Math.max(0, Number(input.value) || 0);
+
+      if (type) data.paintingPrices[type][key] = value;
+      if (caliper) data.paintingPrices.calipers[caliper] = value;
+      if (input.hasAttribute('data-inscription-price')) {
+        data.paintingPrices.inscription = value;
+      }
+
+      save();
+    });
+  });
+  }
 $('priceVehicle').innerHTML=vehicles.map(v=>`<option>${v}</option>`).join('');
 $('priceVehicle').addEventListener('change',renderPriceEditor);
 
