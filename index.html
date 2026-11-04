@@ -2609,12 +2609,19 @@ addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').
     );
   }
 
+    const inscriptionAmount =
+    $('paintingInscriptionEnabled').checked
+      ? Math.max(0, Number($('paintingInscriptionAmount').value) || 0)
+      : 0;
+
+  let caliperSubtotal = 0;
+
   if (paintingSelection.caliperSelected) {
     const caliperType = $('paintingCaliperType').value;
 
-    paintingTotal += paintingSelection.caliperTotal;
+    caliperSubtotal += paintingSelection.caliperTotal;
 
-       paintingLines.push(
+    paintingLines.push(
       `${{
         bracket: 'Покраска скобных суппортов',
         aluminum: 'Покраска алюминиевых суппортов',
@@ -2622,21 +2629,22 @@ addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').
         bracketDisassembled: 'Покраска разобранных скобных суппортов',
         aluminumDisassembled: 'Покраска разобранных алюминиевых суппортов',
         sixPistonDisassembled: 'Покраска разобранных 6-ти поршневых суппортов'
-      }[caliperType]} — ${money(paintingSelection.caliperTotal)}`,
-      `Итого за суппорта: ${money(paintingSelection.caliperTotal)}`
+      }[caliperType]} — ${money(paintingSelection.caliperTotal)}`
     );
   }
 
-  if ($('paintingInscriptionEnabled').checked) {
-    const inscriptionAmount =
-      Math.max(0, Number($('paintingInscriptionAmount').value) || 0);
+  if (inscriptionAmount > 0) {
+    caliperSubtotal += inscriptionAmount;
+    paintingLines.push(
+      `Надпись на суппортах — ${money(inscriptionAmount)}`
+    );
+  }
 
-    if (inscriptionAmount > 0) {
-      paintingTotal += inscriptionAmount;
-      paintingLines.push(
-        `Надпись на суппортах — ${money(inscriptionAmount)}`
-      );
-    }
+  if (caliperSubtotal > 0) {
+    paintingTotal += caliperSubtotal;
+    paintingLines.push(
+      `Итого за суппорта: ${money(caliperSubtotal)}`
+    );
   }
 
   const grandTotal = tireTotal + paintingTotal;
