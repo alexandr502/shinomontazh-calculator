@@ -2529,7 +2529,14 @@ addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').
     paintingTotal += paintingSelection.caliperTotal;
 
     paintingLines.push(
-      `Покраска суппортов`,
+      `${{
+  bracket: 'Покраска скобных суппортов',
+  aluminum: 'Покраска алюминиевых суппортов',
+  sixPiston: 'Покраска 6-ти поршневых суппортов',
+  bracketDisassembled: 'Покраска разобранных скобных суппортов',
+  aluminumDisassembled: 'Покраска разобранных алюминиевых суппортов',
+  sixPistonDisassembled: 'Покраска разобранных 6-ти поршневых суппортов'
+}[caliperType]}`,
       `Автоматическая сумма: ${money(automaticPrice)}`,
       `Корректировка: ${money(adjustment)}`,
       `Итого за суппорта: ${money(paintingSelection.caliperTotal)}`
