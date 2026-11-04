@@ -2181,6 +2181,24 @@ function renderPaintingServices() {
     });
   });
 }
+function updatePaintingWheelPrice() {
+  const type = $('paintingType').value;
+  const rim = $('paintingRim').value;
+
+  const priceKey =
+    rim === 'R16' || rim === 'R17'
+      ? 'R16-R17'
+      : rim;
+
+  const price =
+    Number(data.paintingPrices?.[type]?.[priceKey]) || 0;
+
+  $('paintingWheelPrice').textContent =
+    `Цена за комплект из 4 дисков: ${money(price)}`;
+}
+
+$('paintingType').addEventListener('change', calculate);
+$('paintingRim').addEventListener('change', calculate);
   
 function updateServiceRows() {
   const packageSelected = $('basic').checked;
