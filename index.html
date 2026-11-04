@@ -2282,6 +2282,8 @@ $('paintingCaliperAdjustment').addEventListener('input', calculate);
   
 function updateServiceRows() {
   const packageSelected = $('basic').checked;
+$('paintingInscriptionEnabled').addEventListener('change', calculate);
+$('paintingInscriptionAmount').addEventListener('input', calculate);
 
   [
     'removeInstall',
