@@ -3103,9 +3103,10 @@ function renderPaintingPriceEditors() {
 
   const inscriptionBox = $('paintingInscriptionPriceEditor');
   inscriptionBox.innerHTML = `
-    <div class="price-row">
+    <div class="price-row price-service-row">
       <span>Надпись на суппортах — от</span>
       <input type="number" min="0" data-inscription-price>
+      <span class="muted">₽</span>
     </div>
   `;
 
