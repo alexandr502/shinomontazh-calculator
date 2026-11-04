@@ -3698,6 +3698,7 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
       renderPaintingServices();
       renderExtras();
       syncRepairPrices();
+      syncPaintingRepairPrices();
       calculate();
       status('Общий прайс загружен'+(row.updated_at?' · обновлён '+new Date(row.updated_at).toLocaleString('ru-RU'):''));
     }catch(e){
