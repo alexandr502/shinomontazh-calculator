@@ -2573,12 +2573,12 @@ addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').
     const type = $('paintingType').value;
     const rim = $('paintingRim').value;
 
-    paintingLines.push(
+        paintingLines.push(
       `${{
         basic: 'Покраска дисков',
         cut: 'Покраска дисков с проточкой',
         lip: 'Покраска дисков с кантом'
-      }[type]} (${rim})`
+      }[type]} (${rim}) — ${money(paintingSelection.wheelTotal)}`
     );
   }
 
