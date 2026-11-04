@@ -2494,6 +2494,55 @@ addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').
     const tireTotal = total;
   const paintingLines = [];
   let paintingTotal = 0;
+    if (paintingSelection.wheelSelected) {
+    const type = $('paintingType').value;
+    const rim = $('paintingRim').value;
+    const priceKey =
+      rim === 'R16' || rim === 'R17' ? 'R16-R17' : rim;
+
+    const automaticPrice =
+      Number(data.paintingPrices?.[type]?.[priceKey]) || 0;
+    const adjustment =
+      Number($('paintingWheelAdjustment').value) || 0;
+
+    paintingTotal += paintingSelection.wheelTotal;
+
+    paintingLines.push(
+      `Покраска дисков (${rim})`,
+      `Автоматическая сумма: ${money(automaticPrice)}`,
+      `Корректировка: ${money(adjustment)}`,
+      `Итого за покраску дисков: ${money(paintingSelection.wheelTotal)}`
+    );
+  }
+
+  if (paintingSelection.caliperSelected) {
+    const caliperType = $('paintingCaliperType').value;
+    const automaticPrice =
+      Number(data.paintingPrices?.calipers?.[caliperType]) || 0;
+    const adjustment =
+      Number($('paintingCaliperAdjustment').value) || 0;
+
+    paintingTotal += paintingSelection.caliperTotal;
+
+    paintingLines.push(
+      `Покраска суппортов`,
+      `Автоматическая сумма: ${money(automaticPrice)}`,
+      `Корректировка: ${money(adjustment)}`,
+      `Итого за суппорта: ${money(paintingSelection.caliperTotal)}`
+    );
+  }
+
+  if ($('paintingInscriptionEnabled').checked) {
+    const inscriptionAmount =
+      Math.max(0, Number($('paintingInscriptionAmount').value) || 0);
+
+    if (inscriptionAmount > 0) {
+      paintingTotal += inscriptionAmount;
+      paintingLines.push(
+        `Надпись на суппортах — ${money(inscriptionAmount)}`
+      );
+    }
+  }
 
   data.paintingServices.forEach((service, i) => {
     const quantity = Math.max(0, Number(paintingQuantities[i]) || 0);
