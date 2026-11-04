@@ -2451,7 +2451,10 @@ function updatePaintingWheelPrice() {
 }
 
 $('paintingType').addEventListener('change', calculate);
-$('paintingRim').addEventListener('change', calculate);
+$('paintingRim').addEventListener('change', () => {
+  syncPaintingRepairPrices();
+  calculate();
+});
 $('paintingWheelAdjustment').addEventListener('input', calculate);
 $('paintingCaliperType').addEventListener('change', calculate);
 $('paintingCaliperAdjustment').addEventListener('input', calculate);
