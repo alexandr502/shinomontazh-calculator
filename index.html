@@ -2249,11 +2249,29 @@ function updatePaintingWheelPrice() {
       ? 'R16-R17'
       : rim;
 
-  const price =
+  const wheelPrice =
     Number(data.paintingPrices?.[type]?.[priceKey]) || 0;
 
-  $('paintingWheelPrice').textContent =
-    `Цена за комплект из 4 дисков: ${money(price)}`;
+  const wheelAdjustment =
+    Number($('paintingWheelAdjustment').value) || 0;
+
+  const wheelTotal = Math.max(0, wheelPrice + wheelAdjustment);
+
+  $('paintingWheelPrice').textContent = money(wheelPrice);
+  $('paintingWheelTotal').textContent = money(wheelTotal);
+
+  const caliperType = $('paintingCaliperType').value;
+
+  const caliperPrice =
+    Number(data.paintingPrices?.calipers?.[caliperType]) || 0;
+
+  const caliperAdjustment =
+    Number($('paintingCaliperAdjustment').value) || 0;
+
+  const caliperTotal = Math.max(0, caliperPrice + caliperAdjustment);
+
+  $('paintingCaliperPrice').textContent = money(caliperPrice);
+  $('paintingCaliperTotal').textContent = money(caliperTotal);
 }
 
 $('paintingType').addEventListener('change', calculate);
