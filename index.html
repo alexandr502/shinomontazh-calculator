@@ -3656,6 +3656,8 @@ renderPriceEditor();
 renderCalculatorRims();
 renderSurcharges();
 renderCatalog();
+data.extras.forEach(extra => extra.quantity = 0);
+save();
 renderExtras();
 renderPaintingCatalog();
 renderPaintingPriceEditors();
