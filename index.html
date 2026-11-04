@@ -1718,6 +1718,48 @@ button {
     <strong id="paintingWheelTotal">0 ₽</strong>
   </div>
 </div>
+  <div class="card painting-price-card" style="margin-top:18px">
+  <h3>Расчёт покраски суппортов</h3>
+
+  <div class="field">
+    <label for="paintingCaliperType">Тип суппортов</label>
+    <select id="paintingCaliperType">
+      <option value="bracket">Скобные</option>
+      <option value="aluminum">Алюминиевые</option>
+      <option value="sixPiston">6-ти поршневые</option>
+      <option value="bracketDisassembled">Разобранные скобные</option>
+      <option value="aluminumDisassembled">Разобранные алюминиевые</option>
+      <option value="sixPistonDisassembled">Разобранные 6-ти поршневые</option>
+    </select>
+  </div>
+
+  <div class="service-row">
+    <label>Автоматическая сумма за комплект</label>
+    <span class="service-price" id="paintingCaliperPrice">—</span>
+  </div>
+
+  <div class="service-row">
+    <label for="paintingCaliperAdjustment">Корректировка</label>
+    <input type="number" id="paintingCaliperAdjustment"
+      value="0" step="100" inputmode="numeric">
+  </div>
+
+  <div class="service-row">
+    <label>Итого за суппорта</label>
+    <strong id="paintingCaliperTotal">0 ₽</strong>
+  </div>
+
+  <div class="service-row">
+    <label for="paintingInscriptionEnabled">Надпись на суппортах</label>
+    <input type="checkbox" id="paintingInscriptionEnabled">
+  </div>
+
+  <div class="field">
+    <label for="paintingInscriptionAmount">Стоимость надписи</label>
+    <input type="number" id="paintingInscriptionAmount"
+      value="5000" min="0" step="100" inputmode="numeric">
+  </div>
+</div>
 
 <div id="paintingServices" style="margin-top:18px"></div>
   </div>
