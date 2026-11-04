@@ -2781,7 +2781,11 @@ addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').
 
   $('paintingWheelTotal').textContent = money(paintingWheelSubtotal);
 
-  if (paintingSelection.wheelSelected || paintingServicesTotal > 0) {
+ if (
+  paintingSelection.wheelSelected ||
+  paintingRepairsTotal > 0 ||
+  paintingServicesTotal > 0
+) {
     paintingTotal += paintingWheelSubtotal;
 
     paintingLines.push(
