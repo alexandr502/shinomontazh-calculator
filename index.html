@@ -3318,6 +3318,17 @@ calculate();
 };
   $('resetPainting').onclick = () => {
   paintingQuantities = [];
+
+  $('paintingType').selectedIndex = 0;
+  $('paintingRim').selectedIndex = 0;
+  $('paintingCaliperType').selectedIndex = 0;
+
+  $('paintingWheelAdjustment').value = 0;
+  $('paintingCaliperAdjustment').value = 0;
+
+  $('paintingInscriptionEnabled').checked = false;
+  $('paintingInscriptionAmount').value = 5000;
+
   renderPaintingServices();
   calculate();
 };
