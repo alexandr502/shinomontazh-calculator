@@ -2508,7 +2508,11 @@ addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').
     paintingTotal += paintingSelection.wheelTotal;
 
     paintingLines.push(
-      `Покраска дисков (${rim})`,
+      `${{
+  basic: 'Покраска дисков',
+  cut: 'Покраска дисков с проточкой',
+  lip: 'Покраска дисков с кантом'
+}[type]} (${rim})`,
       `Автоматическая сумма: ${money(automaticPrice)}`,
       `Корректировка: ${money(adjustment)}`,
       `Итого за покраску дисков: ${money(paintingSelection.wheelTotal)}`
