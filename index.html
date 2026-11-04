@@ -2723,9 +2723,11 @@ addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').
   let paintingTotal = 0;
   let paintingServicesTotal = 0;
 
+    const paintingRim = $('paintingRim').value;
+
   if (paintingSelection.wheelSelected) {
     const type = $('paintingType').value;
-    const rim = $('paintingRim').value;
+    const rim = paintingRim;
 
         paintingLines.push(
       `${{
@@ -2748,13 +2750,13 @@ addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').
 
   if (paintingRimRepairTotal > 0) {
     paintingLines.push(
-      `Правка диска (${rim}) — ${money(paintingRimRepairTotal)}`
+          `Правка диска (${paintingRim}) — ${money(paintingRimRepairTotal)}`
     );
   }
 
   if (paintingEightRepairTotal > 0) {
     paintingLines.push(
-      `Правка восьмёрки (${rim}) — ${money(paintingEightRepairTotal)}`
+          `Правка восьмёрки (${paintingRim}) — ${money(paintingEightRepairTotal)}`
     );
   }
 
