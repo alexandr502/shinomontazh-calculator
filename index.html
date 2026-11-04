@@ -1769,6 +1769,62 @@ button {
     <strong id="paintingWheelTotal">0 ₽</strong>
   </div>
 </div>
+  <div class="card rim-repair-card painting-rim-repair-card">
+  <div class="section-heading">
+    <h2>🛞 Правка дисков</h2>
+    <button type="button" class="secondary section-reset"
+      id="resetPaintingRepairs"
+      title="Очистить правку дисков"
+      aria-label="Очистить правку дисков">↻</button>
+  </div>
+
+  <div class="field">
+    <label>Диаметр диска для правки</label>
+    <select id="paintingRepairRim" disabled>
+      <option value="15-16">R15–R16</option>
+      <option value="17-18">R17–R18</option>
+      <option value="19-20">R19–R20</option>
+      <option value="21-22">R21–R22</option>
+      <option value="23+">R23+</option>
+    </select>
+  </div>
+
+  <div class="service-row" style="margin-top:14px">
+    <label>Правка диска</label>
+    <span class="service-price" id="paintingRimRepairPriceLabel">—</span>
+    <div class="quantity-control">
+      <button type="button" id="paintingRimRepairMinus">−</button>
+      <output id="paintingRimRepairQty">0</output>
+      <button type="button" id="paintingRimRepairPlus">+</button>
+    </div>
+  </div>
+
+  <input type="number" id="paintingRimRepairPrice" hidden>
+
+  <div class="field" style="margin-top:14px">
+    <label>Итоговая сумма за правку дисков (₽)</label>
+    <input type="number" id="paintingRimRepairTotal"
+      min="0" step="10" value="0">
+  </div>
+
+  <div class="service-row" style="margin-top:14px">
+    <label>Правка восьмёрки</label>
+    <span class="service-price" id="paintingEightRepairPriceLabel">—</span>
+    <div class="quantity-control">
+      <button type="button" id="paintingEightRepairMinus">−</button>
+      <output id="paintingEightRepairQty">0</output>
+      <button type="button" id="paintingEightRepairPlus">+</button>
+    </div>
+  </div>
+
+  <input type="number" id="paintingEightRepairPrice" hidden>
+
+  <div class="field">
+    <label>Итоговая сумма за правку восьмёрки (₽)</label>
+    <input type="number" id="paintingEightRepairTotal"
+      min="0" step="10" value="0">
+  </div>
+</div>
   <div class="card painting-price-card">
   <h2>Расчёт покраски суппортов</h2>
 
