@@ -1699,8 +1699,25 @@ button {
   </div>
 </div>
 
-<div id="paintingWheelPrice" class="service-price"
-  style="margin-top:12px;text-align:right"></div>
+<div class="card painting-price-card" style="margin-top:18px">
+  <h3>Расчёт покраски дисков</h3>
+
+  <div class="service-row">
+    <label>Автоматическая сумма</label>
+    <span class="service-price" id="paintingWheelPrice">—</span>
+  </div>
+
+  <div class="service-row">
+    <label for="paintingWheelAdjustment">Корректировка</label>
+    <input type="number" id="paintingWheelAdjustment"
+      value="0" step="100" inputmode="numeric">
+  </div>
+
+  <div class="service-row">
+    <label>Итого за покраску дисков</label>
+    <strong id="paintingWheelTotal">0 ₽</strong>
+  </div>
+</div>
 
 <div id="paintingServices" style="margin-top:18px"></div>
   </div>
