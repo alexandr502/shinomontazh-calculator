@@ -2565,49 +2565,64 @@ addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').
 });
 
     const tireTotal = total;
-  const paintingLines = [];
+    const paintingLines = [];
   let paintingTotal = 0;
-    if (paintingSelection.wheelSelected) {
+  let paintingServicesTotal = 0;
+
+  if (paintingSelection.wheelSelected) {
     const type = $('paintingType').value;
     const rim = $('paintingRim').value;
-    const priceKey =
-      rim === 'R16' || rim === 'R17' ? 'R16-R17' : rim;
-
-    const automaticPrice =
-      Number(data.paintingPrices?.[type]?.[priceKey]) || 0;
-    const adjustment =
-      Number($('paintingWheelAdjustment').value) || 0;
-
-    paintingTotal += paintingSelection.wheelTotal;
 
     paintingLines.push(
       `${{
-  basic: 'Покраска дисков',
-  cut: 'Покраска дисков с проточкой',
-  lip: 'Покраска дисков с кантом'
-}[type]} (${rim})`,
-      `Итого за покраску дисков: ${money(paintingSelection.wheelTotal)}`
+        basic: 'Покраска дисков',
+        cut: 'Покраска дисков с проточкой',
+        lip: 'Покраска дисков с кантом'
+      }[type]} (${rim})`
+    );
+  }
+
+  data.paintingServices.forEach((service, i) => {
+    const quantity = Math.max(0, Number(paintingQuantities[i]) || 0);
+    const price = Math.max(0, Number(service.price) || 0);
+
+    if (quantity > 0 && price > 0) {
+      const serviceTotal = price * quantity;
+      paintingServicesTotal += serviceTotal;
+
+      paintingLines.push(
+        `${service.name} — ${money(price)} × ${quantity}`
+      );
+    }
+  });
+
+  const paintingWheelSubtotal =
+    paintingSelection.wheelTotal + paintingServicesTotal;
+
+  $('paintingWheelTotal').textContent = money(paintingWheelSubtotal);
+
+  if (paintingSelection.wheelSelected || paintingServicesTotal > 0) {
+    paintingTotal += paintingWheelSubtotal;
+
+    paintingLines.push(
+      `Итого за покраску дисков: ${money(paintingWheelSubtotal)}`
     );
   }
 
   if (paintingSelection.caliperSelected) {
     const caliperType = $('paintingCaliperType').value;
-    const automaticPrice =
-      Number(data.paintingPrices?.calipers?.[caliperType]) || 0;
-    const adjustment =
-      Number($('paintingCaliperAdjustment').value) || 0;
 
     paintingTotal += paintingSelection.caliperTotal;
 
     paintingLines.push(
       `${{
-  bracket: 'Покраска скобных суппортов',
-  aluminum: 'Покраска алюминиевых суппортов',
-  sixPiston: 'Покраска 6-ти поршневых суппортов',
-  bracketDisassembled: 'Покраска разобранных скобных суппортов',
-  aluminumDisassembled: 'Покраска разобранных алюминиевых суппортов',
-  sixPistonDisassembled: 'Покраска разобранных 6-ти поршневых суппортов'
-}[caliperType]}`,
+        bracket: 'Покраска скобных суппортов',
+        aluminum: 'Покраска алюминиевых суппортов',
+        sixPiston: 'Покраска 6-ти поршневых суппортов',
+        bracketDisassembled: 'Покраска разобранных скобных суппортов',
+        aluminumDisassembled: 'Покраска разобранных алюминиевых суппортов',
+        sixPistonDisassembled: 'Покраска разобранных 6-ти поршневых суппортов'
+      }[caliperType]}`,
       `Итого за суппорта: ${money(paintingSelection.caliperTotal)}`
     );
   }
@@ -2623,18 +2638,6 @@ addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').
       );
     }
   }
-
-  data.paintingServices.forEach((service, i) => {
-    const quantity = Math.max(0, Number(paintingQuantities[i]) || 0);
-    const price = Math.max(0, Number(service.price) || 0);
-
-    if (quantity > 0 && price > 0) {
-      paintingTotal += price * quantity;
-      paintingLines.push(
-        `${service.name} — ${money(price)} × ${quantity}`
-      );
-    }
-  });
 
   const grandTotal = tireTotal + paintingTotal;
   $('total').textContent = money(grandTotal);
