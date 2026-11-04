@@ -3087,11 +3087,12 @@ function renderPaintingPriceEditors() {
 
   caliperNames.forEach(([key, label]) => {
     const row = document.createElement('div');
-    row.className = 'price-row';
+    row.className = 'price-row price-service-row';
     row.innerHTML = `
       <span>${label}</span>
       <input type="number" min="0"
         data-caliper-price="${key}">
+      <span class="muted">₽</span>
     `;
 
     row.querySelector('input').value =
