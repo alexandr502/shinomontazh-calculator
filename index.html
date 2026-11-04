@@ -3293,8 +3293,10 @@ function renderPaintingPriceEditors() {
     </div>
   `;
 
-  inscriptionBox.querySelector('input').value =
-    Number(data.paintingPrices.inscription) || 5000;
+    const inscriptionPrice = Number(data.paintingPrices.inscription) || 5000;
+
+  inscriptionBox.querySelector('input').value = inscriptionPrice;
+  $('paintingInscriptionAmount').value = inscriptionPrice;
 
   document.querySelectorAll(
     '[data-painting-price-type], [data-caliper-price], [data-inscription-price]'
