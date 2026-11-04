@@ -2736,6 +2736,30 @@ addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').
     );
   }
 
+    const paintingRimRepairQty =
+    Number($('paintingRimRepairQty').textContent) || 0;
+  const paintingEightRepairQty =
+    Number($('paintingEightRepairQty').textContent) || 0;
+
+  const paintingRimRepairTotal =
+    Math.max(0, Number($('paintingRimRepairTotal').value) || 0);
+  const paintingEightRepairTotal =
+    Math.max(0, Number($('paintingEightRepairTotal').value) || 0);
+
+  if (paintingRimRepairTotal > 0) {
+    paintingLines.push(
+      `Правка диска (${rim}) — ${money(paintingRimRepairTotal)}`
+    );
+  }
+
+  if (paintingEightRepairTotal > 0) {
+    paintingLines.push(
+      `Правка восьмёрки (${rim}) — ${money(paintingEightRepairTotal)}`
+    );
+  }
+
+  const paintingRepairsTotal =
+    paintingRimRepairTotal + paintingEightRepairTotal;
   data.paintingServices.forEach((service, i) => {
     const quantity = Math.max(0, Number(paintingQuantities[i]) || 0);
     const price = Math.max(0, Number(service.price) || 0);
