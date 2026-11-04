@@ -3617,7 +3617,8 @@ calculate();
 
     $('paintingInscriptionEnabled').checked = false;
   updatePaintingInscriptionToggle();
-  $('paintingInscriptionAmount').value = 5000;
+    $('paintingInscriptionAmount').value =
+    Number(data.paintingPrices?.inscription) || 5000;
 
   renderPaintingServices();
   calculate();
