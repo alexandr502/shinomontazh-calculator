@@ -2412,6 +2412,43 @@ function updatePaintingWheelPrice() {
     caliperTotal
   };
 }
+  function syncPaintingRepairPrices() {
+  const rim = $('paintingRim').value;
+
+  const priceSize = {
+    R15: 'R15',
+    R16: 'R15',
+    R17: 'R17',
+    R18: 'R17',
+    R19: 'R19',
+    R20: 'R19',
+    R21: 'R21',
+    R22: 'R21',
+    R23: 'R23'
+  };
+
+  const size = priceSize[rim];
+  const prices = data.rimRepair?.[size] || { rim: 0, eight: 0 };
+
+  $('paintingRepairRim').value = rim;
+
+  $('paintingRimRepairPrice').value = prices.rim || 0;
+  $('paintingEightRepairPrice').value = prices.eight || 0;
+
+  $('paintingRimRepairPriceLabel').textContent =
+    money(prices.rim || 0) + '/шт.';
+
+  $('paintingEightRepairPriceLabel').textContent =
+    money(prices.eight || 0) + '/шт.';
+
+  const rimQty = Number($('paintingRimRepairQty').textContent) || 0;
+  const eightQty = Number($('paintingEightRepairQty').textContent) || 0;
+
+  $('paintingRimRepairTotal').value = (prices.rim || 0) * rimQty;
+  $('paintingEightRepairTotal').value = (prices.eight || 0) * eightQty;
+
+  calculate();
+}
 
 $('paintingType').addEventListener('change', calculate);
 $('paintingRim').addEventListener('change', calculate);
