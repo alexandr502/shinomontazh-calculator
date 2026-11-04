@@ -2455,6 +2455,55 @@ $('paintingRim').addEventListener('change', () => {
   syncPaintingRepairPrices();
   calculate();
 });
+function changePaintingRepairQty(id, delta) {
+  const output = $(id);
+  const current = Number(output.textContent) || 0;
+  output.textContent = Math.max(0, Math.min(24, current + delta));
+
+  const row = output.closest('.service-row');
+  row.classList.toggle('is-active', Number(output.textContent) > 0);
+
+  const priceId = id === 'paintingRimRepairQty'
+    ? 'paintingRimRepairPrice'
+    : 'paintingEightRepairPrice';
+
+  const totalId = id === 'paintingRimRepairQty'
+    ? 'paintingRimRepairTotal'
+    : 'paintingEightRepairTotal';
+
+  const price = Number($(priceId).value) || 0;
+  $(totalId).value = price * Number(output.textContent);
+
+  calculate();
+}
+
+$('paintingRimRepairMinus').addEventListener('click', () => {
+  changePaintingRepairQty('paintingRimRepairQty', -1);
+});
+$('paintingRimRepairPlus').addEventListener('click', () => {
+  changePaintingRepairQty('paintingRimRepairQty', 1);
+});
+$('paintingEightRepairMinus').addEventListener('click', () => {
+  changePaintingRepairQty('paintingEightRepairQty', -1);
+});
+$('paintingEightRepairPlus').addEventListener('click', () => {
+  changePaintingRepairQty('paintingEightRepairQty', 1);
+});
+
+$('resetPaintingRepairs').addEventListener('click', () => {
+  ['paintingRimRepairQty', 'paintingEightRepairQty'].forEach(id => {
+    $(id).textContent = 0;
+    $(id).closest('.service-row').classList.remove('is-active');
+  });
+
+  $('paintingRimRepairTotal').value = 0;
+  $('paintingEightRepairTotal').value = 0;
+  calculate();
+});
+
+$('paintingRimRepairTotal').addEventListener('input', calculate);
+$('paintingEightRepairTotal').addEventListener('input', calculate);
+
 $('paintingWheelAdjustment').addEventListener('input', calculate);
 $('paintingCaliperType').addEventListener('change', calculate);
 $('paintingCaliperAdjustment').addEventListener('input', calculate);
