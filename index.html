@@ -1472,28 +1472,31 @@ button {
     height: 34px;
     min-height: 34px;
   }
-      #paintingCalculatorModule .service-row:has(#paintingInscriptionToggle) {
-    grid-template-columns: 34px minmax(0, 1fr) 34px;
+        #paintingCalculatorModule .service-row:has(#paintingInscriptionToggle) {
+    grid-template-columns: 36px minmax(0, 1fr) 36px;
+    align-items: center;
   }
 
   #paintingCalculatorModule .service-row:has(#paintingInscriptionToggle) label {
     grid-column: 2;
     text-align: center;
+    align-self: center;
+    transform: translateY(4px);
   }
 
   #paintingCalculatorModule #paintingInscriptionToggle {
     grid-column: 3;
     justify-self: center;
-    width: 34px;
-    min-width: 34px;
-    height: 34px;
-    min-height: 34px;
+    align-self: center;
+    width: 36px;
+    min-width: 36px;
+    height: 40px;
+    min-height: 40px;
   }
 
   #paintingCalculatorModule #paintingInscriptionToggle + input {
     display: none;
   }
-
   .section-reset {
     flex: 0 0 36px;
     width: 36px;
