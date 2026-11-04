@@ -2493,7 +2493,7 @@ $('copy').addEventListener('click', copyCalculationReport);
 function updatePriceAccess(){
   const isOwner=window.__tireCalcIsOwner===true;
   document.querySelectorAll(
-    '#priceEditor input, #surchargeEditor input, #catalogExtras input, #catalogExtras button, #addCatalogExtra, #paintingPriceEditor input, #paintingPriceEditor button, #addPaintingService'
+    '#priceEditor input, #surchargeEditor input, #catalogExtras input, #catalogExtras button, #addCatalogExtra, #paintingPriceEditor input, #paintingPriceEditor button, #addPaintingService, #paintingBasicPriceEditor input, #paintingCutPriceEditor input, #paintingLipPriceEditor input, #paintingCaliperPriceEditor input, #paintingInscriptionPriceEditor input'
   ).forEach(el=>{
     el.disabled=!isOwner;
   });
