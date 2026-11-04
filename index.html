@@ -2774,8 +2774,10 @@ addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').
     }
   });
 
-  const paintingWheelSubtotal =
-    paintingSelection.wheelTotal + paintingServicesTotal;
+ const paintingWheelSubtotal =
+  paintingSelection.wheelTotal +
+  paintingRepairsTotal +
+  paintingServicesTotal;
 
   $('paintingWheelTotal').textContent = money(paintingWheelSubtotal);
 
