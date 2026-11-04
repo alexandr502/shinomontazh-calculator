@@ -1158,18 +1158,20 @@ header {
   }
 
   /* Полный комплекс — отдельная компоновка */
-  .service-list .service-row:has(.basic-toggle) {
+    .service-list .service-row:has(.basic-toggle),
+  #paintingCalculatorModule .service-row:has(.basic-toggle) {
     grid-template-columns: minmax(0, 1fr) 36px;
   }
 
-    .service-list .service-row .basic-toggle {
-  grid-column: 2;
-  grid-row: 1 / span 2;
-  align-self: center;
-  width: 36px;
-  min-width: 36px;
-  height: 40px;
-}
+  .service-list .service-row .basic-toggle,
+  #paintingCalculatorModule .service-row .basic-toggle {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+    width: 36px;
+    min-width: 36px;
+    height: 40px;
+  }
     #calc .section-heading .section-reset {
     width: 36px;
     min-width: 36px;
