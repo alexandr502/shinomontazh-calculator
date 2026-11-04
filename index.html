@@ -3607,6 +3607,13 @@ calculate();
 
   $('paintingWheelAdjustment').value = 0;
   $('paintingCaliperAdjustment').value = 0;
+      ['paintingRimRepairQty', 'paintingEightRepairQty'].forEach(id => {
+    $(id).textContent = 0;
+    $(id).closest('.service-row').classList.remove('is-active');
+  });
+
+  $('paintingRimRepairTotal').value = 0;
+  $('paintingEightRepairTotal').value = 0;
 
     $('paintingInscriptionEnabled').checked = false;
   updatePaintingInscriptionToggle();
