@@ -2834,6 +2834,7 @@ function renderPaintingPriceEditors() {
       save();
     });
   });
+  updatePriceAccess();
   }
 $('priceVehicle').innerHTML=vehicles.map(v=>`<option>${v}</option>`).join('');
 $('priceVehicle').addEventListener('change',renderPriceEditor);
@@ -3125,6 +3126,7 @@ if (!Array.isArray(data.paintingServices)) {
 }
 save();
 if (!data.rimRepair) data.rimRepair = fresh().rimRepair;renderPriceEditor();renderSurcharges();renderCatalog();
+renderPaintingPriceEditors();                                       
 renderPaintingCatalog();
 renderPaintingServices();
 renderExtras();
@@ -3137,6 +3139,7 @@ $('defaults').onclick = () => {
     renderSurcharges();
     renderCatalog();
     renderPaintingCatalog();
+    renderPaintingPriceEditors();
     renderPaintingServices();
     renderExtras();
     calculate();
@@ -3148,6 +3151,7 @@ renderSurcharges();
 renderCatalog();
 renderExtras();
 renderPaintingCatalog();
+renderPaintingPriceEditors();
 renderPaintingServices();
 syncRepairPrices();
 calculate();
@@ -3190,6 +3194,7 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
       renderSurcharges();
       renderCatalog();
       renderPaintingCatalog();
+      renderPaintingPriceEditors();
       renderPaintingServices();
       renderExtras();
       syncRepairPrices();
