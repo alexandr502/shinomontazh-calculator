@@ -3309,8 +3309,9 @@ function renderPaintingPriceEditors() {
 
       if (type) data.paintingPrices[type][key] = value;
       if (caliper) data.paintingPrices.calipers[caliper] = value;
-      if (input.hasAttribute('data-inscription-price')) {
+            if (input.hasAttribute('data-inscription-price')) {
         data.paintingPrices.inscription = value;
+        $('paintingInscriptionAmount').value = value;
       }
 
       save();
