@@ -3056,13 +3056,14 @@ function renderPaintingPriceEditors() {
     box.innerHTML = '';
 
     sizes.forEach(([key, label]) => {
-      const row = document.createElement('div');
-      row.className = 'price-row';
+    const row = document.createElement('div');
+      row.className = 'price-row price-service-row';
       row.innerHTML = `
         <span>${label}</span>
         <input type="number" min="0"
           data-painting-price-type="${type}"
           data-painting-price-key="${key}">
+        <span class="muted">₽</span>
       `;
 
       row.querySelector('input').value =
