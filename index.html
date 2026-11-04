@@ -3392,12 +3392,10 @@ calculate();
   $('resetPainting').onclick = () => {
   paintingQuantities = [];
 
-      ['paintingType', 'paintingRim', 'paintingCaliperType'].forEach(id => {
-    const oldSelect = $(id);
-    const newSelect = oldSelect.cloneNode(true);
-    newSelect.selectedIndex = 0;
-    oldSelect.replaceWith(newSelect);
-    newSelect.addEventListener('change', calculate);
+        ['paintingType', 'paintingRim', 'paintingCaliperType'].forEach(id => {
+    const select = $(id);
+    select.value = '';
+    select.dispatchEvent(new Event('change', { bubbles: true }));
   });
 
   $('paintingWheelAdjustment').value = 0;
