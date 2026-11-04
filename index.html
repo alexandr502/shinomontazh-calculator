@@ -1751,9 +1751,16 @@ button {
     <strong id="paintingCaliperTotal">0 ₽</strong>
   </div>
 
-  <div class="service-row">
-    <label for="paintingInscriptionEnabled">Надпись на суппортах</label>
-    <input type="checkbox" id="paintingInscriptionEnabled">
+    <div class="service-row">
+    <label>Надпись на суппортах</label>
+    <button
+      type="button"
+      id="paintingInscriptionToggle"
+      class="basic-toggle"
+      aria-label="Добавить надпись на суппортах"
+      aria-pressed="false"
+    ></button>
+    <input type="checkbox" id="paintingInscriptionEnabled" hidden>
   </div>
 
   <div class="field">
