@@ -2247,34 +2247,54 @@ function updatePaintingWheelPrice() {
   const type = $('paintingType').value;
   const rim = $('paintingRim').value;
 
+  const wheelSelected = Boolean(type && rim);
+
   const priceKey =
     rim === 'R16' || rim === 'R17'
       ? 'R16-R17'
       : rim;
 
-  const wheelPrice =
-    Number(data.paintingPrices?.[type]?.[priceKey]) || 0;
+  const wheelPrice = wheelSelected
+    ? Number(data.paintingPrices?.[type]?.[priceKey]) || 0
+    : 0;
 
   const wheelAdjustment =
     Number($('paintingWheelAdjustment').value) || 0;
 
-  const wheelTotal = Math.max(0, wheelPrice + wheelAdjustment);
+  const wheelTotal = wheelSelected
+    ? Math.max(0, wheelPrice + wheelAdjustment)
+    : 0;
 
-  $('paintingWheelPrice').textContent = money(wheelPrice);
+  $('paintingWheelPrice').textContent =
+    wheelSelected ? money(wheelPrice) : '—';
+
   $('paintingWheelTotal').textContent = money(wheelTotal);
 
   const caliperType = $('paintingCaliperType').value;
+  const caliperSelected = Boolean(caliperType);
 
-  const caliperPrice =
-    Number(data.paintingPrices?.calipers?.[caliperType]) || 0;
+  const caliperPrice = caliperSelected
+    ? Number(data.paintingPrices?.calipers?.[caliperType]) || 0
+    : 0;
 
   const caliperAdjustment =
     Number($('paintingCaliperAdjustment').value) || 0;
 
-  const caliperTotal = Math.max(0, caliperPrice + caliperAdjustment);
+  const caliperTotal = caliperSelected
+    ? Math.max(0, caliperPrice + caliperAdjustment)
+    : 0;
 
-  $('paintingCaliperPrice').textContent = money(caliperPrice);
+  $('paintingCaliperPrice').textContent =
+    caliperSelected ? money(caliperPrice) : '—';
+
   $('paintingCaliperTotal').textContent = money(caliperTotal);
+
+  return {
+    wheelSelected,
+    wheelTotal,
+    caliperSelected,
+    caliperTotal
+  };
 }
 
 $('paintingType').addEventListener('change', calculate);
