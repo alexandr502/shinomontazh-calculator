@@ -2308,7 +2308,29 @@ $('paintingRim').addEventListener('change', calculate);
 $('paintingWheelAdjustment').addEventListener('input', calculate);
 $('paintingCaliperType').addEventListener('change', calculate);
 $('paintingCaliperAdjustment').addEventListener('input', calculate);
-$('paintingInscriptionEnabled').addEventListener('change', calculate);
+function updatePaintingInscriptionToggle() {
+  const enabled = $('paintingInscriptionEnabled').checked;
+  const button = $('paintingInscriptionToggle');
+  const row = button.closest('.service-row');
+
+  button.classList.toggle('is-active', enabled);
+  row.classList.toggle('is-active', enabled);
+  button.setAttribute('aria-pressed', String(enabled));
+  button.setAttribute(
+    'aria-label',
+    enabled
+      ? 'Убрать надпись на суппортах'
+      : 'Добавить надпись на суппортах'
+  );
+}
+
+$('paintingInscriptionToggle').addEventListener('click', () => {
+  const checkbox = $('paintingInscriptionEnabled');
+  checkbox.checked = !checkbox.checked;
+
+  updatePaintingInscriptionToggle();
+  calculate();
+});
 $('paintingInscriptionAmount').addEventListener('input', calculate);
   
 function updateServiceRows() {
