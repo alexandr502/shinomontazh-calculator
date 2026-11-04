@@ -3392,9 +3392,12 @@ calculate();
   $('resetPainting').onclick = () => {
   paintingQuantities = [];
 
-  $('paintingType').value = '';
-  $('paintingRim').value = '';
-  $('paintingCaliperType').value = '';
+    ['paintingType', 'paintingRim', 'paintingCaliperType'].forEach(id => {
+    const select = $(id);
+    select.selectedIndex = 0;
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+    select.blur();
+  });
 
   $('paintingWheelAdjustment').value = 0;
   $('paintingCaliperAdjustment').value = 0;
