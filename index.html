@@ -2453,8 +2453,8 @@ function updatePaintingWheelPrice() {
   $('paintingCaliperPrice').textContent =
     caliperSelected ? money(caliperPrice) : '—';
 
-    const inscriptionTotal = $('paintingInscriptionEnabled').checked
-    ? Math.max(0, Number(data.paintingPrices?.inscription) || 0)
+  const inscriptionTotal = $('paintingInscriptionEnabled').checked
+    ? Math.max(0, Number($('paintingInscriptionAmount').value) || 0)
     : 0;
 
   $('paintingCaliperTotal').textContent =
