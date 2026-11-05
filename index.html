@@ -4,7 +4,7 @@
 <script>
 (function () {
   let bootReported = false;
- const bootVersion = 'tirecalc-prod-v44';
+ const bootVersion = 'tirecalc-prod-v45';
   let bootStatus = null;
   let bootRetryTimer = null;
 
@@ -1043,6 +1043,18 @@ header {
   color: #a5abb5;
   font-size: 13px;
   text-align: right;
+}
+#prices .repair-price-wrap {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+#prices .repair-price-wrap input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
 }
 
 #prices #catalogExtras {
@@ -3152,17 +3164,20 @@ function renderSurcharges() {
 
       const price = data.rimRepair[range.representative]?.[type] || 0;
 
-            row.innerHTML = `
-        <span>${label} <span class="repair-from">от</span></span>
-        <input
-          type="number"
-          min="0"
-          step="10"
-          data-repair-range="${range.value}"
-          data-repair-type="${type}"
-          value="${price}"
-          aria-label="${label}, ${range.label}"
-        >
+      row.innerHTML = `
+        <span>${label}</span>
+        <span class="repair-price-wrap">
+          <span class="repair-from">от</span>
+          <input
+            type="number"
+            min="0"
+            step="10"
+            data-repair-range="${range.value}"
+            data-repair-type="${type}"
+            value="${price}"
+            aria-label="${label}, ${range.label}"
+          >
+        </span>
         <span class="muted">₽/шт.</span>
       `;
 
