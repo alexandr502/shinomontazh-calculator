@@ -1767,8 +1767,12 @@ button {
 
   <div class="service-row">
     <label for="paintingWheelAdjustment">Корректировка</label>
-    <input type="number" id="paintingWheelAdjustment"
-      value="0" step="100" inputmode="numeric">
+    <div class="adjustment-control">
+      <button type="button" class="adjustment-sign"
+        id="paintingWheelSign">+</button>
+      <input type="number" id="paintingWheelAdjustment"
+        value="0" step="100" inputmode="numeric">
+    </div>
   </div>
 
   <div class="service-row">
