@@ -3662,6 +3662,8 @@ calculate();
 
   $('paintingWheelAdjustment').value = 0;
   $('paintingCaliperAdjustment').value = 0;
+  $('paintingWheelSign').classList.remove('is-active');
+  $('paintingCaliperSign').classList.remove('is-active');
       ['paintingRimRepairQty', 'paintingEightRepairQty'].forEach(id => {
     $(id).textContent = 0;
     $(id).closest('.service-row').classList.remove('is-active');
