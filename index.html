@@ -1869,6 +1869,11 @@ button {
     </select>
   </div>
 
+    <div class="service-row">
+    <label>Автоматическая сумма</label>
+    <span class="service-price" id="paintingCaliperPrice">—</span>
+  </div>
+
   <div class="service-row">
     <label for="paintingCaliperAdjustment">Корректировка</label>
     <div class="adjustment-control">
@@ -1879,17 +1884,7 @@ button {
     </div>
   </div>
 
-    <div class="service-row">
-    <label>Автоматическая сумма</label>
-    <span class="service-price" id="paintingCaliperPrice">—</span>
-  </div>
-
   <div class="service-row">
-    <label>ИТОГО ЗА СУППОРТА</label>
-    <strong id="paintingCaliperTotal">0 ₽</strong>
-  </div>
-
-    <div class="service-row">
     <label>Надпись на суппортах</label>
     <button
       type="button"
@@ -1902,9 +1897,14 @@ button {
   </div>
 
   <div class="field">
-    <label for="paintingInscriptionAmount">Стоимость надписи</label>
+    <label for="paintingInscriptionAmount">Сумма за надпись на суппортах</label>
     <input type="number" id="paintingInscriptionAmount"
       value="5000" min="0" step="100" inputmode="numeric">
+  </div>
+
+  <div class="service-row">
+    <label>ИТОГО ЗА СУППОРТА</label>
+    <strong id="paintingCaliperTotal">0 ₽</strong>
   </div>
 </div>
 
