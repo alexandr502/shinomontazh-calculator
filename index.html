@@ -2432,12 +2432,14 @@ function updatePaintingWheelPrice() {
   const caliperType = $('paintingCaliperType').value;
   const caliperSelected = Boolean(caliperType);
 
-  const caliperPrice = caliperSelected
-    ? Number(data.paintingPrices?.calipers?.[caliperType]) || 0
-    : 0;
+  const caliperAdjustmentValue =
+    Math.abs(Number($('paintingCaliperAdjustment').value) || 0);
+  const caliperAdjustment = $('paintingCaliperSign').classList.contains('is-active')
+    ? caliperAdjustmentValue
+    : -caliperAdjustmentValue;
 
-  const caliperAdjustment =
-    Number($('paintingCaliperAdjustment').value) || 0;
+  const caliperTotal = caliperSelected
+    ? Math.max(0, caliperPrice + caliperAdjustment)
 
   const caliperTotal = caliperSelected
     ? Math.max(0, caliperPrice + caliperAdjustment)
