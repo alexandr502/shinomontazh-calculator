@@ -4,7 +4,7 @@
 <script>
 (function () {
   let bootReported = false;
- const bootVersion = 'tirecalc-prod-v48';
+ const bootVersion = 'tirecalc-prod-v49';
   let bootStatus = null;
   let bootRetryTimer = null;
 
@@ -1079,6 +1079,24 @@ header {
 #prices #paintingPriceModule #paintingCaliperPriceEditor > *,
 #prices #paintingPriceModule #paintingInscriptionPriceEditor > *,
 #prices #paintingPriceModule #paintingPriceEditor > * {
+  margin: 0;
+}
+/* Расстояние между последними строками покраски суппортов */
+#prices #paintingCaliperPriceEditor + #paintingInscriptionPriceEditor {
+  margin-top: 8px;
+}
+
+/* Адаптация заголовка дополнительных услуг покраски */
+#prices #paintingPriceModule .section-heading h2 {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding-right: 48px;
+  text-align: center;
+  font-size: clamp(14px, 4.5vw, 17px);
+  line-height: 1.2;
+  white-space: normal;
+  overflow-wrap: anywhere;
   margin: 0;
 }
 #prices #catalogExtras {
