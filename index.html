@@ -1057,6 +1057,25 @@ header {
   min-width: 0;
 }
 
+#prices #paintingPriceModule #paintingBasicPriceEditor,
+#prices #paintingPriceModule #paintingCutPriceEditor,
+#prices #paintingPriceModule #paintingLipPriceEditor,
+#prices #paintingPriceModule #paintingCaliperPriceEditor,
+#prices #paintingPriceModule #paintingInscriptionPriceEditor,
+#prices #paintingPriceModule #paintingPriceEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#prices #paintingPriceModule #paintingBasicPriceEditor > *,
+#prices #paintingPriceModule #paintingCutPriceEditor > *,
+#prices #paintingPriceModule #paintingLipPriceEditor > *,
+#prices #paintingPriceModule #paintingCaliperPriceEditor > *,
+#prices #paintingPriceModule #paintingInscriptionPriceEditor > *,
+#prices #paintingPriceModule #paintingPriceEditor > * {
+  margin: 0;
+}
 #prices #catalogExtras {
   display: flex;
   flex-direction: column;
