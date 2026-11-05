@@ -2181,7 +2181,24 @@ ensurePaintingPrices();
 let unit=4
 const $=id=>document.getElementById(id);
 const money=n=>Math.round(n).toLocaleString('ru-RU')+' ₽';
-function save(){localStorage.setItem('tireCalcData',JSON.stringify(data))}
+function persistentData() {
+  const copy = JSON.parse(JSON.stringify(data));
+
+  if (Array.isArray(copy.extras)) {
+    copy.extras.forEach(extra => {
+      delete extra.quantity;
+    });
+  }
+
+  return copy;
+}
+
+function save() {
+  localStorage.setItem(
+    'tireCalcData',
+    JSON.stringify(persistentData())
+  );
+}
   // Название организации хранится отдельно на каждом устройстве.
 const DEFAULT_BUSINESS_NAME = 'Шиномонтаж';
 
