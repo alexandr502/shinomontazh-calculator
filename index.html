@@ -2549,6 +2549,16 @@ $('paintingEightRepairTotal').addEventListener('input', calculate);
 $('paintingWheelAdjustment').addEventListener('input', calculate);
 $('paintingCaliperType').addEventListener('change', calculate);
 $('paintingCaliperAdjustment').addEventListener('input', calculate);
+
+$('paintingWheelSign').addEventListener('click', () => {
+  $('paintingWheelSign').classList.toggle('is-active');
+  calculate();
+});
+
+$('paintingCaliperSign').addEventListener('click', () => {
+  $('paintingCaliperSign').classList.toggle('is-active');
+  calculate();
+});
 function updatePaintingInscriptionToggle() {
   const enabled = $('paintingInscriptionEnabled').checked;
   const button = $('paintingInscriptionToggle');
