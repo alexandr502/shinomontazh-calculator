@@ -3721,15 +3721,15 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
         status('В облаке пока нет прайса. Войди как владелец и нажми «Опубликовать».');
         return;
       }
-      data=row.payload;
-if (Array.isArray(data.extras)) {
-  data.extras.forEach(extra => extra.quantity = 0);
-}
+            data=row.payload;
+      if (Array.isArray(data.extras)) {
+        data.extras.forEach(extra => delete extra.quantity);
+      }
       ensurePaintingPrices();
       if (!Array.isArray(data.paintingServices)) {
-  data.paintingServices = [];
+        data.paintingServices = [];
       }
-      localStorage.setItem('tireCalcData',JSON.stringify(data));
+      save();
       renderPriceEditor();
       renderCalculatorRims();
       renderSurcharges();
