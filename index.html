@@ -1045,16 +1045,9 @@ header {
   text-align: right;
 }
 #prices .repair-price-wrap {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  min-width: 0;
-}
-
-#prices .repair-price-wrap input {
-  flex: 1;
-  width: 100%;
-  min-width: 0;
+#prices .repair-price-row {
+  grid-template-columns: minmax(0, 1fr) auto minmax(74px, 92px) 42px;
+  gap: 6px;
 }
 
 #prices #catalogExtras {
@@ -1585,6 +1578,10 @@ button {
     gap: 5px;
     min-width: 0;
   }
+  #prices .repair-price-row {
+    grid-template-columns: minmax(0, 1fr) auto minmax(58px, 76px) 38px;
+    gap: 4px;
+    }
 
   #prices #paintingPriceEditor .price-row {
     grid-template-columns: minmax(0, 1fr) minmax(58px, 78px) 18px 34px;
@@ -3166,18 +3163,16 @@ function renderSurcharges() {
 
       row.innerHTML = `
         <span>${label}</span>
-        <span class="repair-price-wrap">
-          <span class="repair-from">от</span>
-          <input
-            type="number"
-            min="0"
-            step="10"
-            data-repair-range="${range.value}"
-            data-repair-type="${type}"
-            value="${price}"
-            aria-label="${label}, ${range.label}"
-          >
-        </span>
+        <span class="repair-from">от</span>
+        <input
+          type="number"
+          min="0"
+          step="10"
+          data-repair-range="${range.value}"
+          data-repair-type="${type}"
+          value="${price}"
+          aria-label="${label}, ${range.label}"
+        >
         <span class="muted">₽/шт.</span>
       `;
 
