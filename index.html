@@ -3162,16 +3162,18 @@ function renderSurcharges() {
 
       row.innerHTML = `
         <span>${label}</span>
-        <span class="repair-from">от</span>
-        <input
-          type="number"
-          min="0"
-          step="10"
-          data-repair-range="${range.value}"
-          data-repair-type="${type}"
-          value="${price}"
-          aria-label="${label}, ${range.label}"
-        >
+        <span class="repair-price-value">
+          <span class="repair-from">от</span>
+          <input
+            type="number"
+            min="0"
+            step="10"
+            data-repair-range="${range.value}"
+            data-repair-type="${type}"
+            value="${price}"
+            aria-label="${label}, ${range.label}"
+          >
+        </span>
         <span class="muted">₽/шт.</span>
       `;
 
