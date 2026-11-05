@@ -2860,9 +2860,9 @@ addTotal(`Правка восьмёрки ${repairSize}`, $('eightRepairTotal').
     );
   }
 
-      const inscriptionAmount =
+    const inscriptionAmount =
     $('paintingInscriptionEnabled').checked
-      ? Math.max(0, Number(data.paintingPrices?.inscription) || 0)
+      ? Math.max(0, Number($('paintingInscriptionAmount').value) || 0)
       : 0;
 
   let caliperSubtotal = 0;
