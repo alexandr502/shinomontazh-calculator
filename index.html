@@ -4,7 +4,7 @@
 <script>
 (function () {
   let bootReported = false;
- const bootVersion = 'tirecalc-prod-v34';
+ const bootVersion = 'tirecalc-prod-v35';
   let bootStatus = null;
   let bootRetryTimer = null;
 
@@ -3784,15 +3784,15 @@ if (Array.isArray(data.extras)) {
       return;
     }
 
-    const {error}=await sb.from('shared_price').upsert({
+        const {error}=await sb.from('shared_price').upsert({
       id:1,
-      payload:data,
+      payload:persistentData(),
       updated_at:new Date().toISOString()
     },{onConflict:'id'});
 
     if(error)throw error;
 
-    localStorage.setItem('tireCalcData',JSON.stringify(data));
+    save();
 
     status('Готово: общий прайс опубликован для всех пользователей.');
 
