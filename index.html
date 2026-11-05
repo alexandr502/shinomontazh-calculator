@@ -1111,8 +1111,27 @@ header {
 }
 @media (max-width: 420px) {
   #prices .repair-price-row {
-    grid-template-columns: minmax(0, 1fr) 18px minmax(70px, 88px) 38px;
-    gap: 6px;
+    grid-template-columns: minmax(0, 1fr) 16px minmax(80px, 90px) 42px;
+    gap: 5px;
+    padding: 8px;
+  }
+
+  #prices .repair-price-row > span:first-child {
+    min-width: 0;
+    font-size: 14px;
+    line-height: 1.25;
+  }
+
+  #prices .repair-price-row .repair-from,
+  #prices .repair-price-row .muted {
+    white-space: nowrap;
+  }
+
+  #prices .repair-price-row input {
+    min-width: 0;
+    width: 100%;
+    padding: 6px;
+    font-size: 14px;
   }
 }
 @media (max-width: 700px) {
