@@ -2431,6 +2431,9 @@ function updatePaintingWheelPrice() {
 
   const caliperType = $('paintingCaliperType').value;
   const caliperSelected = Boolean(caliperType);
+  const caliperPrice = caliperSelected
+    ? Number(data.paintingPrices?.calipers?.[caliperType]) || 0
+    : 0;
 
   const caliperAdjustmentValue =
     Math.abs(Number($('paintingCaliperAdjustment').value) || 0);
