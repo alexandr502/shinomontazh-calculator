@@ -4,7 +4,7 @@
 <script>
 (function () {
   let bootReported = false;
- const bootVersion = 'tirecalc-prod-v49';
+ const bootVersion = 'tirecalc-prod-v50';
   let bootStatus = null;
   let bootRetryTimer = null;
 
@@ -1081,23 +1081,46 @@ header {
 #prices #paintingPriceModule #paintingPriceEditor > * {
   margin: 0;
 }
-/* Расстояние между последними строками покраски суппортов */
-#prices #paintingCaliperPriceEditor + #paintingInscriptionPriceEditor {
-  margin-top: 8px;
+/* Единый интервал между строками в карточке покраски суппортов */
+#prices #paintingPriceModule > .painting-price-card:has(#paintingCaliperPriceEditor) {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-/* Адаптация заголовка дополнительных услуг покраски */
-#prices #paintingPriceModule .section-heading h2 {
+/* Заголовок дополнительных услуг: отдельное место под кнопку */
+#prices #paintingPriceModule > .painting-price-card:last-child .section-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 42px;
+  align-items: center;
+  gap: 8px;
+  min-height: 0;
+}
+
+#prices #paintingPriceModule > .painting-price-card:last-child .section-heading h2 {
+  grid-column: 1;
+  grid-row: 1;
   width: 100%;
   min-width: 0;
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
-  padding-right: 48px;
   text-align: center;
-  font-size: clamp(14px, 4.5vw, 17px);
+  font-size: clamp(13px, 4.2vw, 17px);
   line-height: 1.2;
   white-space: normal;
-  overflow-wrap: anywhere;
-  margin: 0;
+  overflow-wrap: break-word;
+}
+
+#prices #paintingPriceModule > .painting-price-card:last-child .section-heading button {
+  position: static;
+  grid-column: 2;
+  grid-row: 1;
+  width: 42px;
+  min-width: 42px;
+  height: 42px;
+  min-height: 42px;
+  padding: 0;
 }
 #prices #catalogExtras {
   display: flex;
