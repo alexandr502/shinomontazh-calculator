@@ -1042,11 +1042,19 @@ header {
 #prices .repair-price-row .repair-from {
   color: #a5abb5;
   font-size: 13px;
-  text-align: right;
+  white-space: nowrap;
 }
-#prices .repair-price-row {
-  grid-template-columns: minmax(0, 1fr) auto minmax(74px, 92px) 42px;
-  gap: 6px;
+
+#prices .repair-price-value {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+#prices .repair-price-value input {
+  flex: 1;
+  min-width: 0;
 }
 
 #prices #catalogExtras {
@@ -1577,10 +1585,6 @@ button {
     gap: 5px;
     min-width: 0;
   }
-  #prices .repair-price-row {
-    grid-template-columns: minmax(0, 1fr) auto minmax(58px, 76px) 38px;
-    gap: 4px;
-    }
 
   #prices #paintingPriceEditor .price-row {
     grid-template-columns: minmax(0, 1fr) minmax(58px, 78px) 18px 34px;
