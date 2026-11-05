@@ -1039,10 +1039,6 @@ header {
   text-align: right;
 }
 
-  #prices .repair-price-row {
-  grid-template-columns: minmax(0, 1fr) 18px minmax(74px, 92px) 42px;
-}
-
 #prices .repair-price-row .repair-from {
   color: #a5abb5;
   font-size: 13px;
@@ -1109,31 +1105,7 @@ header {
   opacity: .6;
   cursor: not-allowed;
 }
-@media (max-width: 420px) {
-  #prices .repair-price-row {
-    grid-template-columns: minmax(0, 1fr) 16px minmax(80px, 90px) 42px;
-    gap: 5px;
-    padding: 8px;
-  }
 
-  #prices .repair-price-row > span:first-child {
-    min-width: 0;
-    font-size: 14px;
-    line-height: 1.25;
-  }
-
-  #prices .repair-price-row .repair-from,
-  #prices .repair-price-row .muted {
-    white-space: nowrap;
-  }
-
-  #prices .repair-price-row input {
-    min-width: 0;
-    width: 100%;
-    padding: 6px;
-    font-size: 14px;
-  }
-}
 @media (max-width: 700px) {
   #prices .price-size-grid {
     grid-template-columns: minmax(0, 1fr);
@@ -1593,20 +1565,6 @@ button {
     min-height: 38px;
     padding: 5px;
     font-size: 13px;
-  }
-
-    #prices .repair-price-row {
-    grid-template-columns: minmax(0, 1fr) 16px minmax(80px, 90px) 42px;
-    gap: 5px;
-    padding: 8px;
-    min-width: 0;
-  }
-
-  #prices .repair-price-row input {
-    min-width: 0;
-    width: 100%;
-    padding: 4px;
-    font-size: 12px;
   }
 
   #prices #catalogExtras .price-row,
@@ -3194,9 +3152,8 @@ function renderSurcharges() {
 
       const price = data.rimRepair[range.representative]?.[type] || 0;
 
-      row.innerHTML = `
-        <span>${label}</span>
-        <span class="repair-from">от</span>
+            row.innerHTML = `
+        <span>${label} <span class="repair-from">от</span></span>
         <input
           type="number"
           min="0"
