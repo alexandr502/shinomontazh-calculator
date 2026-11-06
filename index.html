@@ -3774,7 +3774,8 @@ renderPaintingCatalog();
 renderPaintingServices();
 renderExtras();
 syncRepairPrices();syncPaintingRepairPrices();calculate();alert('Настройки импортированы')}catch(err){alert('Не удалось прочитать файл настроек')}};
-$('defaults').onclick = () => {
+const defaultsButton = $('defaults');
+if (defaultsButton) defaultsButton.onclick = () => {
   if (confirm('Восстановить исходные цены? Текущие настройки будут заменены.')) {
     data = fresh();
     save();
