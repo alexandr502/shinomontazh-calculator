@@ -3749,7 +3749,8 @@ calculate();
   calculate();
 };
   
-  $('export').onclick=()=>{
+  const exportButton = $('export');
+if (exportButton) exportButton.onclick=()=>{
     let blob=new Blob([JSON.stringify(persistentData(),null,2)],{type:'application/json'}),
         a=document.createElement('a');
     a.href=URL.createObjectURL(blob);
