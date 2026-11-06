@@ -3759,7 +3759,8 @@ if (exportButton) exportButton.onclick=()=>{
     URL.revokeObjectURL(a.href);
   };
 
-  $('importFile').onchange=async e=>{
+  const importFile = $('importFile');
+if (importFile) importFile.onchange=async e=>{
     try {
       let obj=JSON.parse(await e.target.files[0].text());
       if(!obj.prices||!obj.extras)throw Error();
